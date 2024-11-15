@@ -22,6 +22,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation("com.spotify.android:auth:2.1.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -33,6 +34,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+
         }
     }
 }
@@ -47,6 +49,9 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["redirectSchemeName"] = "kmp-spotify-janitor"
+        manifestPlaceholders["redirectHostName"] = "callback"
+        manifestPlaceholders["appAuthRedirectScheme"] = "kmp-spotify-janitor"
     }
     packaging {
         resources {
@@ -65,6 +70,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.browser)
     debugImplementation(compose.uiTooling)
 }
 

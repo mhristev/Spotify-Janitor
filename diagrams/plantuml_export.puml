@@ -1,0 +1,164 @@
+@startuml
+package "Models" {
+    class SpotifyUser {
+        - id: String
+        - displayName: String
+        - email: String
+        - country: String
+        - product: String
+        - followers: Int
+        - imageUrl: String
+    }
+    class Track {
+        - id: String
+        - name: String
+        - artists: List<String>
+        - albumArtwork: String
+        - isFavorite: Boolean
+        - albumArtUrl: String
+    }
+}
+
+package "Database" {
+    interface SpotifyUserDao {
+        + insertUser(user: SpotifyUser): void
+        + getUser(): SpotifyUser
+    }
+
+    interface TrackDao {
+        + insertTrack(track: Track): void
+        + deleteTrack(trackId: String): void
+        + getTracks(): List<Track>
+    }
+
+    interface LocalDataSource {
+        + getSpotifyUserDao(): SpotifyUserDao
+        + getTrackDao(): TrackDao
+    }
+    class RoomDatabaseImpl implements LocalDataSource {
+        + getSpotifyUserDao(): SpotifyUserDao
+        + getTrackDao(): TrackDao
+    }
+}
+
+package "Services/Managers" {
+    interface AuthManager {
+        + login(accessToken: String, refreshToken: String, expireIn: Long): void
+        + logout(): void
+        + getAccessToken(): String
+        + refreshAccessToken(): String
+        + isTokenExpired(): Boolean
+    }
+    class AuthManagerImpl implements AuthManager {
+        - vault: KVault
+    }
+    
+    interface SpotifyAPIClient {
+        + setTokens(accessToken: String, refreshToken: String, expireIn: Long): void
+        + getUserProfile(): SpotifyUser
+        + getTracks(): List<Track>
+        + searchTracks(query: String): List<Track>
+        + addFavoriteTrack(track: Track): void
+        + removeFavoriteTrack(track: Track): void
+    }
+    class SpotifyAPIClientImpl implements SpotifyAPIClient {
+        - httpClient: HttpClient
+        - authManager: AuthManager
+    }
+
+    interface ImageManager<T> {
+        + save(entity: T, imageUrl: String): String
+    }
+    
+    class SpotifyUserImageManager implements ImageManager {
+      + save(spotifyUser: SpotifyUser): String
+    }
+    
+    class TrackImageManager implements ImageManager {
+      + save(track: Track): String
+    }
+    
+}
+
+package "Repositories" {
+    interface TrackRepository {
+        + getTracks(): List<Track>
+        + addTrackToFavorites(track: Track): void
+        + removeTrackFromFavorites(track: Track): void
+        + syncTracks(): void
+    }
+    class TrackRepositoryImpl implements TrackRepository {
+        - trackDao: TrackDao
+        - apiClient: SpotifyAPIClient
+        - imageManager: ImageManager
+    }
+
+    interface UserRepository {
+        + getUser(): SpotifyUser
+        + syncUser(): void
+    }
+    class UserRepositoryImpl implements UserRepository {
+        - userDao: SpotifyUserDao
+        - apiClient: SpotifyAPIClient
+        - imageManager: ImageManager
+    }
+}
+
+package "ViewModels" {
+    class SavedTracksViewModel {
+        - trackRepository: TrackRepository
+        + getSavedTracks(): List<Track>
+        + removeTrack(trackId: String): void
+        + undoRemoveTrack(trackId: String): void
+    }
+    class TrackSearchViewModel {
+        - trackRepository: TrackRepository
+        + searchTracks(query: String): List<Track>
+        + addFavorite(trackId: String): void
+        + removeFavorite(trackId: String): void
+    }
+    class UserViewModel {
+        - userRepository: UserRepository
+        + getUserDetails(): SpotifyUser
+        + logout(): void
+    }
+}
+
+package "Dependency Injection" {
+    class KoinModule {
+        + provideAuthManager(): AuthManager
+        + provideSpotifyAPIClient(httpClient: HttpClient): SpotifyAPIClient
+        + provideTrackRepository(trackDao: TrackDao, apiClient: SpotifyAPIClient, imageManager: ImageManager): TrackRepository
+        + provideUserRepository(userDao: SpotifyUserDao, apiClient: SpotifyAPIClient, imageManager: ImageManager): UserRepository
+        + provideImageManager(): ImageManager
+        + provideRoomDatabase(): LocalDataSource
+        + provideSavedTracksViewModel(trackRepository: TrackRepository): SavedTracksViewModel
+        + provideTrackSearchViewModel(trackRepository: TrackRepository): TrackSearchViewModel
+        + provideUserViewModel(userRepository: UserRepository): UserViewModel
+    }
+}
+
+RoomDatabaseImpl --|> SpotifyUserDao
+RoomDatabaseImpl --|> TrackDao
+
+TrackDao -- Track : saves
+SpotifyUserDao -- SpotifyUser : saves
+
+TrackRepositoryImpl --> TrackDao : uses
+TrackRepositoryImpl --> SpotifyAPIClient : fetches/syncs
+TrackRepositoryImpl --> ImageManager : saves album images
+
+UserRepositoryImpl --> SpotifyUserDao : uses
+UserRepositoryImpl --> SpotifyAPIClient : fetches/syncs
+UserRepositoryImpl --> ImageManager : saves user profile images
+
+SpotifyAPIClientImpl --|> HttpClient : uses
+SpotifyAPIClientImpl --|> AuthManager : uses
+
+AuthManagerImpl --> HttpClient : interacts for refresh
+
+SavedTracksViewModel --> TrackRepository : interacts
+TrackSearchViewModel --> TrackRepository : interacts
+UserViewModel --> UserRepository : interacts
+
+@enduml
