@@ -11,7 +11,6 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.CODE
-import org.internship.kmp.martin.services.TokenManager
 import org.internship.kmp.martin.services.TokenManagerImpl
 
 class MainActivity : ComponentActivity() {

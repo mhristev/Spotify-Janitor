@@ -8,7 +8,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.runBlocking
-import org.internship.kmp.martin.models.SpotifyUser
+import org.internship.kmp.martin.data.domain.SpotifyUser
 import kotlin.test.Test
 
 import kotlin.test.assertEquals

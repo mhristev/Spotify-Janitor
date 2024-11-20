@@ -1,5 +1,4 @@
 import kotlinx.coroutines.runBlocking
-import org.internship.kmp.martin.Greeting
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -1,4 +1,4 @@
-package org.internship.kmp.martin.models
+package org.internship.kmp.martin.data.domain
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

@@ -9,8 +9,8 @@
 //import io.ktor.http.HttpHeaders
 //import io.ktor.http.HttpStatusCode
 //import kotlinx.serialization.json.Json
-//import org.internship.kmp.martin.models.SpotifyUser
-//import org.internship.kmp.martin.models.Track
+//import org.internship.kmp.martin.data.domain.SpotifyUser
+//import org.internship.kmp.martin.data.domain.Track
 //import org.internship.kmp.martin.services.SpotifyApiService
 //import org.internship.kmp.martin.services.TokenManager
 //
