@@ -55,6 +55,8 @@ kotlin {
         androidMain.dependencies {
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
+//            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
 
         }
         iosMain.dependencies {
@@ -90,6 +92,8 @@ room {
 
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.lifecycle.livedata.core.ktx)
     add("kspCommonMainMetadata", libs.room.compiler)
     add("kspAndroid", libs.room.compiler)
 }

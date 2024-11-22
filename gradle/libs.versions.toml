@@ -31,6 +31,7 @@ kmpObservableViewmodel = "1.0.0-BETA-7"
 
 #Koin
 koin = "4.0.0"
+lifecycleLivedataCoreKtx = "2.8.7"
 
 
 [libraries]
@@ -66,6 +67,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 kmp-observable-viewmodel = { module = "com.rickclephas.kmp:kmp-observableviewmodel-core", version.ref = "kmpObservableViewmodel" }
+androidx-lifecycle-livedata-core-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-core-ktx", version.ref = "lifecycleLivedataCoreKtx" }
 
 
 [plugins]

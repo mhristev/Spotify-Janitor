@@ -7,7 +7,7 @@ import org.internship.kmp.martin.data.network.SpotifyApi
 import org.internship.kmp.martin.data.repository.TrackRepository
 import org.internship.kmp.martin.data.repository.images.ImageManager
 
-class TrackRepositoryImpl(trackDao: FavoriteTrackDao, spotifyApi: SpotifyApi, imageManager: ImageManager<Track>): TrackRepository {
+class TrackRepositoryImpl(trackDao: FavoriteTrackDao, spotifyApi: SpotifyApi): TrackRepository {
     override fun getFavoriteTracks(): Flow<List<Track>> {
         TODO("Not yet implemented")
     }
@@ -17,6 +17,10 @@ class TrackRepositoryImpl(trackDao: FavoriteTrackDao, spotifyApi: SpotifyApi, im
     }
 
     override fun removeFavoriteTrack(track: Track) {
+        TODO("Not yet implemented")
+    }
+
+    override fun searchTracks(query: String): Flow<List<String>> {
         TODO("Not yet implemented")
     }
 }
