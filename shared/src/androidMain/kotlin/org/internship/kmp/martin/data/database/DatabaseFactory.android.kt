@@ -25,4 +25,24 @@ actual class DatabaseFactory(private val context: Context) {
             name = dbFileSpUser.absolutePath
         )
     }
+
+    actual fun createAlbumDatabase(): RoomDatabase.Builder<RoomAppDatabase> {
+        val appContext = context.applicationContext
+        val dbFile = appContext.getDatabasePath(RoomAppDatabase.DB_NAME_ALBUM)
+
+        return Room.databaseBuilder(
+            context = appContext,
+            name = dbFile.absolutePath
+        )
+    }
+
+    actual fun createArtistDatabase(): RoomDatabase.Builder<RoomAppDatabase> {
+        val appContext = context.applicationContext
+        val dbFile = appContext.getDatabasePath(RoomAppDatabase.DB_NAME_ARTIST)
+
+        return Room.databaseBuilder(
+            context = appContext,
+            name = dbFile.absolutePath
+        )
+    }
 }

@@ -14,7 +14,6 @@ class KVaultAuthManager(private val kvault: KVault): AuthManager {
     }
 
     override fun getAccessToken(): String? {
-        TODO()
-//        return kVault.string("auth_token")
+        return kvault.string("auth_token")
     }
 }

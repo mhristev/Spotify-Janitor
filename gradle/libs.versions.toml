@@ -32,6 +32,10 @@ kmpObservableViewmodel = "1.0.0-BETA-7"
 #Koin
 koin = "4.0.0"
 lifecycleLivedataCoreKtx = "2.8.7"
+roomCommon = "2.6.1"
+
+#Test
+coil3 = "3.0.0-alpha06"
 
 
 [libraries]
@@ -68,6 +72,13 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 
 kmp-observable-viewmodel = { module = "com.rickclephas.kmp:kmp-observableviewmodel-core", version.ref = "kmpObservableViewmodel" }
 androidx-lifecycle-livedata-core-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-core-ktx", version.ref = "lifecycleLivedataCoreKtx" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
+
+#Test here
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
 
 
 [plugins]

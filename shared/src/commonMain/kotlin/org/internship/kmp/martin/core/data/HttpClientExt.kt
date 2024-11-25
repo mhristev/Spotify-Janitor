@@ -24,7 +24,6 @@ suspend inline fun <reified T> safeCall(
         coroutineContext.ensureActive()
         return Result.Error(DataError.Remote.UNKNOWN)
     }
-
     return responseToResult(response)
 }
 

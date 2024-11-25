@@ -43,13 +43,22 @@ kotlin {
             implementation("io.ktor:ktor-client-content-negotiation:3.0.1")
             // KVault dependencies for saving the token
             implementation("com.liftric:kvault:1.12.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
 
+//            implementation("io.coil-kt:coil-compose:3.0.3")
+
             implementation(libs.koin.core)
             api(libs.kmp.observable.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodel)
+
+            //Test gere
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.network.ktor)
 
         }
         androidMain.dependencies {
@@ -94,6 +103,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.lifecycle.livedata.core.ktx)
+    implementation(libs.androidx.room.common)
     add("kspCommonMainMetadata", libs.room.compiler)
     add("kspAndroid", libs.room.compiler)
 }

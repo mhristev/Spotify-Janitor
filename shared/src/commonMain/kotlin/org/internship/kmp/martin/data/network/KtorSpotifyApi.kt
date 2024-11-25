@@ -3,35 +3,18 @@ package org.internship.kmp.martin.data.network
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.request.parameter
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.Flow
 import org.internship.kmp.martin.core.data.safeCall
 import org.internship.kmp.martin.core.domain.DataError
 import org.internship.kmp.martin.data.auth.AuthManager
-import org.internship.kmp.martin.data.database.spotifyuser.SpotifyUserDao
-import org.internship.kmp.martin.data.database.track.FavoriteTrackDao
-import org.internship.kmp.martin.data.domain.SpotifyUser
 import org.internship.kmp.martin.data.domain.Track
 import org.internship.kmp.martin.data.dto.SpotifyUserDto
 import org.internship.kmp.martin.data.dto.TrackDto
 import org.internship.kmp.martin.core.domain.Result
-
-//class KtorSpotifyApi(private val httpClient: HttpClient): SpotifyApi {
-//
-//    override suspend fun getFavouriteTracls(): String {
-//        return safeCall<GetFavouriteTracksresponseDto> {
-//                httpClient.get("https://api.spotify.com/v1/me/top/tracks")
-//                {
-//                    header("Authorization")
-//                    parameter("time_range", "short_term")
-//                }
-//            }
-//        }
-//
-//    }
-//}
+import org.internship.kmp.martin.data.dto.FavoriteTracksDto
+import org.internship.kmp.martin.data.dto.SearchResponseDto
 
 class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthManager): SpotifyApi {
     override fun setToken(accessToken: String) {
@@ -47,9 +30,15 @@ class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthM
         }
     }
 
-
-    override fun getFavoriteTracks(): List<TrackDto> {
-        TODO("Not yet implemented")
+    override suspend fun getFavoriteTracks(limit: Int, offset: Int): Result<FavoriteTracksDto, DataError.Remote> {
+        val accessToken = auth.getAccessToken()
+        return safeCall<FavoriteTracksDto> {
+            httpClient.get("https://api.spotify.com/v1/me/tracks") {
+                header(HttpHeaders.Authorization, "Bearer $accessToken")
+                parameter("limit", limit)
+                parameter("offset", offset)
+            }
+        }
     }
 
     override fun addFavoriteTrack(track: Track) {
@@ -58,6 +47,18 @@ class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthM
 
     override fun removeFavoriteTrack(track: Track) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun searchTracksInSpotify(query: String): Result<SearchResponseDto, DataError.Remote> {
+        val accessToken = auth.getAccessToken()
+        return safeCall<SearchResponseDto> {
+            httpClient.get("https://api.spotify.com/v1/search") {
+                header(HttpHeaders.Authorization, "Bearer $accessToken")
+                parameter("q", query)
+                parameter("type", "track")
+                parameter("limit", 50)
+            }
+        }
     }
 
 }

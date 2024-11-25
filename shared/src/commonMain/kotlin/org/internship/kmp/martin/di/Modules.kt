@@ -10,7 +10,9 @@ import org.internship.kmp.martin.data.database.RoomAppDatabase
 import org.internship.kmp.martin.data.network.KtorSpotifyApi
 import org.internship.kmp.martin.data.network.SpotifyApi
 import org.internship.kmp.martin.data.repository.SpotifyUserRepository
+import org.internship.kmp.martin.data.repository.TrackRepository
 import org.internship.kmp.martin.data.repository.impl.SpotifyUserRepositoryImpl
+import org.internship.kmp.martin.data.repository.impl.TrackRepositoryImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -24,6 +26,7 @@ val sharedModule = module {
 
 
     single<SpotifyUserRepository> { SpotifyUserRepositoryImpl(get(), get()) }
+    single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
     single {
         get<DatabaseFactory>().createFavTracksDatabase()
             .setDriver(BundledSQLiteDriver())
@@ -31,6 +34,17 @@ val sharedModule = module {
     }
     single {
         get<DatabaseFactory>().createSpotifyUserDatabase()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+
+    single {
+        get<DatabaseFactory>().createAlbumDatabase()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+    single {
+        get<DatabaseFactory>().createArtistDatabase()
             .setDriver(BundledSQLiteDriver())
             .build()
     }

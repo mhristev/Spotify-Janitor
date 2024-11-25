@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-//           applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_FAV_TRACK)
+//            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_FAV_TRACK)
 //            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_SPOTIFY_USER)
             LaunchView()
         }
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
     fun initiateSpotifyLogin() {
         val builder = AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI)
-        builder.setScopes(arrayOf("user-read-email", "user-read-private"))
+        builder.setScopes(arrayOf("user-read-email", "user-read-private", "user-library-read", "user-library-modify"))
         val request = builder.build()
         AuthorizationClient.openLoginInBrowser(this, request)
     }

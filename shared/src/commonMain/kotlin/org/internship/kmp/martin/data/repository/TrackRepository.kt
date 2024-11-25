@@ -1,11 +1,14 @@
 package org.internship.kmp.martin.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.internship.kmp.martin.core.domain.DataError
 import org.internship.kmp.martin.data.domain.Track
+import org.internship.kmp.martin.core.domain.Result
 
 interface TrackRepository {
-    fun getFavoriteTracks(): Flow<List<Track>>
+    suspend fun getFavoriteTracks(): Result<List<Track>, DataError>
     fun addFavoriteTrack(track: Track)
     fun removeFavoriteTrack(track: Track)
-    fun searchTracks(query: String) : Flow<List<String>>
+    suspend fun searchTracks(query: String) : Result<List<Track>, DataError>
+    suspend fun synchronizeTracks(): Result<Flow<List<Track>>, DataError>
 }

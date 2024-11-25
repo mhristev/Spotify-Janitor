@@ -33,4 +33,18 @@ actual class DatabaseFactory {
             name = dbSpUser
         )
     }
+
+    actual fun createAlbumDatabase(): RoomDatabase.Builder<RoomAppDatabase> {
+        val db = documentDirectory() + "/${RoomAppDatabase.DB_NAME_ALBUM}"
+        return Room.databaseBuilder<RoomAppDatabase>(
+            name = db
+        )
+    }
+
+    actual fun createArtistDatabase(): RoomDatabase.Builder<RoomAppDatabase> {
+        val db = documentDirectory() + "/${RoomAppDatabase.DB_NAME_ARTIST}"
+        return Room.databaseBuilder<RoomAppDatabase>(
+            name = db
+        )
+    }
 }
