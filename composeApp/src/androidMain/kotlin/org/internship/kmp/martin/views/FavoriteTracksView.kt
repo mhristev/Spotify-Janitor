@@ -10,63 +10,52 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.internship.kmp.martin.components.SearchTrackItem
+import org.internship.kmp.martin.presentation.fav_tracks_list.FavoriteTracksAction
 import org.internship.kmp.martin.presentation.fav_tracks_list.FavoriteTracksViewModel
 import org.koin.androidx.compose.koinViewModel
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavoriteTracksView() {
     val viewModel: FavoriteTracksViewModel = koinViewModel()
-    val tracks by viewModel.cashedTracks.collectAsState(emptyList())
-    var localTracks by remember { mutableStateOf(tracks) }
-    var recentlyDeletedTrack by remember { viewModel.lastRemovedTrack}
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(tracks) {
-        localTracks = tracks
-    }
 
     Column {
         Button(onClick = { viewModel.syncronizeTracks() }) {
             Text("Synchronize Tracks")
         }
-        recentlyDeletedTrack?.let { track ->
+        state.lastRemovedTrack?.let { track ->
             Button(onClick = {
-                localTracks = listOf(track) + localTracks
-                viewModel.undoRemoveTrack()
-                recentlyDeletedTrack = null
+                viewModel.onAction(FavoriteTracksAction.onUndoDeleteTrack)
             }) {
                 Text("Undo")
             }
         }
 
         LazyColumn {
-            items(localTracks, key = {it.id}) { track ->
+            items(state.tracks, key = { it.id }) { track ->
                 SwipeToDismiss(
                     state = rememberDismissState(
                         confirmStateChange = {
                             if (it == DismissValue.DismissedToEnd) {
-                                localTracks = localTracks.filterNot { it.id == track.id }
-                                viewModel.removeTrack(track)
+                                viewModel.onAction(FavoriteTracksAction.onTrackDelete(track))
                                 true
                             } else {
                                 false
                             }
                         }
                     ),
-                    background = {  },
+                    background = { },
                     dismissContent = {
                         SearchTrackItem(track)
                     }
                 )
             }
         }
-
     }
 }

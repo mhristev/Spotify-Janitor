@@ -8,6 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -16,48 +17,62 @@ import org.internship.kmp.martin.core.domain.Result
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.data.domain.Track
 import org.internship.kmp.martin.data.repository.TrackRepository
-import org.internship.kmp.martin.presentation.TrackListState
 
 
 class FavoriteTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
 
+//    @NativeCoroutinesState
+//    var cashedTracks: MutableStateFlow<List<Track>> = MutableStateFlow(emptyList())
+
+    private val _state = MutableStateFlow(FavoriteTracksState())
+
     @NativeCoroutinesState
-    var cashedTracks: MutableStateFlow<List<Track>> = MutableStateFlow(emptyList())
+    val state = _state
+        .onStart {
+            observeFavoriteTracks()
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            _state.value
+        )
 
-    var lastRemovedTrack = mutableStateOf<Track?>(null)
-    private var observeFavoriteJob: Job? = null
 
-//
-//    private val _state = MutableStateFlow(TrackListState())
-//
-//    val state = _state.asStateFlow()
-//        .onStart {
-//            if(cashedTracks.value.isEmpty()) {
-////                observeSearchQuery()
-//            }
-//            observeFavoriteTracks()
-//        }
-//        .stateIn(
-//            viewModelScope,
-//            SharingStarted.WhileSubscribed(5000L),
-//            _state.value
-//        )
 
-//
-//    fun onAction(action: FavTracksAction) {
-//        when (action) {
-//            is FavTracksAction.onTrackDelete -> removeTrack(action.)
-//            is FavTracksAction.onUndoDeleteTrack -> undoRemoveTrack()
-//            is FavTracksAction.SyncronizeTracks -> syncronizeTracks()
-//        }
-//    }
+    fun onAction(action: FavoriteTracksAction) {
+
+        when (action) {
+            is FavoriteTracksAction.onTrackDelete -> {
+
+                _state.update { currentState ->
+                    val updatedTracks = currentState.tracks.filter { it.id != action.track.id }
+                    currentState.copy(tracks = updatedTracks, lastRemovedTrack = action.track)
+                }
+                removeTrack(action.track)
+            }
+            is FavoriteTracksAction.onUndoDeleteTrack -> {
+                val track = _state.value.lastRemovedTrack ?: return
+
+                _state.update { currentState ->
+                    currentState.copy(tracks = listOf(track) + currentState.tracks, lastRemovedTrack = null)
+                }
+                undoRemoveTrack(track)
+            }
+            is FavoriteTracksAction.SyncronizeTracks -> syncronizeTracks()
+        }
+    }
 
     fun observeFavoriteTracks() {
         viewModelScope.launch {
             val result = trackRepository.getFavoriteTracks()
             if (result is Result.Success) {
-                cashedTracks.value = result.data
+                _state.update { it.copy(tracks = result.data) }
             }
+        }
+    }
+    private fun removeTrack(track: Track) {
+        viewModelScope.launch {
+            trackRepository.removeFavoriteTrack(track)
         }
     }
 
@@ -65,41 +80,24 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
         viewModelScope.launch { trackRepository.addFavoriteTrack(track) }
     }
 
+    private fun undoRemoveTrack(track: Track) {
+        viewModelScope.launch {
+            trackRepository.addFavoriteTrack(track)
+        }
+    }
+
     fun syncronizeTracks() {
         viewModelScope.launch {
             when (val result = trackRepository.synchronizeTracks()) {
                 is Result.Success -> {
-                    // Collect the Flow of tracks and update cashedTracks
                     result.data.collect { tracks ->
-                        cashedTracks.value = tracks.sortedByDescending { it.addedAt }
+                        _state.update { it.copy(tracks = tracks.sortedByDescending { it.addedAt }) }
                     }
                 }
                 is Result.Error -> {
                     // Handle the error appropriately
-                    // For example, update _state with an error state
-//                    _state.value = TrackListState(error = result.error)
                 }
             }
         }
     }
-
-    fun removeTrack(track: Track) {
-        viewModelScope.launch {
-            trackRepository.removeFavoriteTrack(track)
-                .onSuccess {
-                    cashedTracks.value = cashedTracks.value.filter { it.id != track.id }
-                }
-            lastRemovedTrack.value = track
-        }
-    }
-
-    fun undoRemoveTrack() {
-        lastRemovedTrack?.let { track ->
-            viewModelScope.launch {
-                trackRepository.addFavoriteTrack(track.value!!)
-                lastRemovedTrack.value = null
-            }
-        }
-    }
-
 }
