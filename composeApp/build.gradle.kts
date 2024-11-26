@@ -24,6 +24,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("com.spotify.android:auth:2.1.1")
             implementation(libs.koin.androidx.compose)
+            implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+            implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -72,6 +75,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.ui.android)
     debugImplementation(compose.uiTooling)
 }
 

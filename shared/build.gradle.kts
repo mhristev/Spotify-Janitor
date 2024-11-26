@@ -55,10 +55,12 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
 
             //Test gere
-            implementation(libs.coil.compose.core)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.mp)
-            implementation(libs.coil.network.ktor)
+//            implementation(libs.coil.compose.core)
+//            implementation(libs.coil.compose)
+//            implementation(libs.coil.mp)
+//            implementation(libs.coil.network.ktor)
+            implementation(libs.bundles.coil)
+
 
         }
         androidMain.dependencies {

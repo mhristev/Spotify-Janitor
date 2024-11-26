@@ -41,12 +41,22 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return Result.Success(domainTracks)
     }
 
-    override fun addFavoriteTrack(track: Track) {
-        TODO("Not yet implemented")
+    override suspend fun addFavoriteTrack(track: Track): Result<Unit, DataError> {
+        trackDao.upsert(track.toEntity())
+        spotifyApi.addFavoriteTrack(track)
+            .onError {
+                return Result.Error(it)
+            }
+        return Result.Success(Unit)
     }
 
-    override fun removeFavoriteTrack(track: Track) {
-        TODO("Not yet implemented")
+    override suspend fun removeFavoriteTrack(track: Track): Result<Unit, DataError> {
+        trackDao.removeFavTrack(track.id)
+        spotifyApi.removeFavoriteTrack(track)
+            .onError {
+                return Result.Error(it)
+            }
+        return Result.Success(Unit)
     }
 
     override suspend fun searchTracks(query: String): Result<List<Track>, DataError> {

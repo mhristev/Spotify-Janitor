@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.internship.kmp.martin.items.SearchTrackItem
+import org.internship.kmp.martin.components.SearchTrackItem
 import org.internship.kmp.martin.presentation.BrowseTracksViewModel
 import org.koin.androidx.compose.koinViewModel
 

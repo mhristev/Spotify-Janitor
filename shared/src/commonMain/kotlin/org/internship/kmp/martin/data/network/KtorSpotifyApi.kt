@@ -1,9 +1,11 @@
 package org.internship.kmp.martin.data.network
 
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.client.request.put
 import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 import org.internship.kmp.martin.core.data.safeCall
@@ -41,13 +43,25 @@ class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthM
         }
     }
 
-    override fun addFavoriteTrack(track: Track) {
-        TODO("Not yet implemented")
+override suspend fun addFavoriteTrack(track: Track): Result<Unit, DataError.Remote> {
+    val accessToken = auth.getAccessToken()
+    return safeCall<Unit> {
+        httpClient.put("https://api.spotify.com/v1/me/tracks") {
+            header(HttpHeaders.Authorization, "Bearer $accessToken")
+            parameter("ids", track.id)
+        }
     }
+}
 
-    override fun removeFavoriteTrack(track: Track) {
-        TODO("Not yet implemented")
+override suspend fun removeFavoriteTrack(track: Track): Result<Unit, DataError.Remote> {
+    val accessToken = auth.getAccessToken()
+    return safeCall<Unit> {
+        httpClient.delete("https://api.spotify.com/v1/me/tracks") {
+            header(HttpHeaders.Authorization, "Bearer $accessToken")
+            parameter("ids", track.id)
+        }
     }
+}
 
     override suspend fun searchTracksInSpotify(query: String): Result<SearchResponseDto, DataError.Remote> {
         val accessToken = auth.getAccessToken()
