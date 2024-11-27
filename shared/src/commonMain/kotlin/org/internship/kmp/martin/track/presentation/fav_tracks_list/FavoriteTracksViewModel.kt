@@ -1,0 +1,120 @@
+package org.internship.kmp.martin.track.presentation.fav_tracks_list
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.internship.kmp.martin.core.domain.Result
+import org.internship.kmp.martin.track.domain.Track
+import org.internship.kmp.martin.track.data.repository.TrackRepository
+
+
+class FavoriteTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
+    private val _state = MutableStateFlow(FavoriteTracksState())
+
+    @NativeCoroutinesState
+    val state = _state
+        .onStart {
+            loadFavoriteTracks()
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            _state.value
+        )
+//
+//    init {
+//        loadFavoriteTracks()
+//    }
+    private fun loadFavoriteTracks() {
+        viewModelScope.launch {
+            val result = trackRepository.getFavoriteTracks()
+            if (result is Result.Success) {
+                _state.update { it.copy(tracks = result.data.sortedByDescending { it.addedAt }) }
+            }
+        }
+    }
+    private fun loadNextFavoriteTracks() {
+        viewModelScope.launch {
+            val currentTracksCount = _state.value.tracks.size
+            if (currentTracksCount >= 1000) return@launch
+
+            val result = trackRepository.getNextFavoriteTracks(currentTracksCount)
+            if (result is Result.Success) {
+                _state.update { currentState ->
+                    currentState.copy(tracks = currentState.tracks + result.data)
+                }
+            }
+        }
+    }
+
+    fun onAction(action: FavoriteTracksAction) {
+
+        when (action) {
+            is FavoriteTracksAction.onTrackDelete -> {
+
+                _state.update { currentState ->
+                    val updatedTracks = currentState.tracks.filter { it.id != action.track.id }
+                    currentState.copy(tracks = updatedTracks, lastRemovedTrack = action.track)
+                }
+                removeTrack(action.track)
+            }
+            is FavoriteTracksAction.onUndoDeleteTrack -> {
+                val track = _state.value.lastRemovedTrack ?: return
+
+                _state.update { currentState ->
+                    currentState.copy(tracks = listOf(track) + currentState.tracks, lastRemovedTrack = null)
+                }
+                undoRemoveTrack(track)
+            }
+            is FavoriteTracksAction.SyncronizeTracks -> syncronizeTracks()
+            FavoriteTracksAction.GetNextFavoriteTracks -> loadNextFavoriteTracks()
+        }
+    }
+
+
+//    fun observeFavoriteTracks() {
+//        viewModelScope.launch {
+//            val result = trackRepository.getFavoriteTracks()
+//            if (result is Result.Success) {
+//                _state.update { it.copy(tracks = result.data) }
+//            }
+//        }
+//    }
+    private fun removeTrack(track: Track) {
+        viewModelScope.launch {
+            trackRepository.removeFavoriteTrack(track)
+        }
+    }
+
+    fun addTrackToFavorites(track: Track) {
+        viewModelScope.launch { trackRepository.addFavoriteTrack(track) }
+    }
+
+    private fun undoRemoveTrack(track: Track) {
+
+        viewModelScope.launch {
+            trackRepository.addFavoriteTrack(track)
+        }
+    }
+
+    fun syncronizeTracks() {
+        viewModelScope.launch {
+            when (val result = trackRepository.synchronizeTracks()) {
+                is Result.Success -> {
+                    result.data.collect { tracks ->
+                        _state.update { it.copy(tracks = tracks.sortedByDescending { it.addedAt }) }
+                    }
+                }
+                is Result.Error -> {
+                    // Handle the error appropriately
+                }
+            }
+        }
+    }
+}

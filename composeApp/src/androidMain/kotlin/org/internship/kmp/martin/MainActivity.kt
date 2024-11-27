@@ -3,9 +3,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
@@ -13,10 +10,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.CODE
-import org.internship.kmp.martin.data.database.RoomAppDatabase
-import org.internship.kmp.martin.di.initKoin
-import org.internship.kmp.martin.presentation.LaunchScreenViewModel
-import org.koin.androidx.compose.koinViewModel
+import org.internship.kmp.martin.core.presentation.LaunchScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 

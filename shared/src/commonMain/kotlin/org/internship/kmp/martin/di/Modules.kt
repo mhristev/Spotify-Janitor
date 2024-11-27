@@ -1,18 +1,18 @@
 package org.internship.kmp.martin.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import org.internship.kmp.martin.core.data.HttpClientFactory
-import org.internship.kmp.martin.data.auth.AuthManager
-import org.internship.kmp.martin.data.auth.KVaultAuthManager
-import org.internship.kmp.martin.data.auth.KVaultFactory
-import org.internship.kmp.martin.data.database.DatabaseFactory
-import org.internship.kmp.martin.data.database.RoomAppDatabase
-import org.internship.kmp.martin.data.network.KtorSpotifyApi
-import org.internship.kmp.martin.data.network.SpotifyApi
-import org.internship.kmp.martin.data.repository.SpotifyUserRepository
-import org.internship.kmp.martin.data.repository.TrackRepository
-import org.internship.kmp.martin.data.repository.impl.SpotifyUserRepositoryImpl
-import org.internship.kmp.martin.data.repository.impl.TrackRepositoryImpl
+import org.internship.kmp.martin.core.data.network.client.HttpClientFactory
+import org.internship.kmp.martin.core.data.auth.AuthManager
+import org.internship.kmp.martin.core.data.auth.KVaultAuthManager
+import org.internship.kmp.martin.core.data.auth.KVaultFactory
+import org.internship.kmp.martin.core.data.database.DatabaseFactory
+import org.internship.kmp.martin.core.data.database.RoomAppDatabase
+import org.internship.kmp.martin.core.data.network.KtorSpotifyApi
+import org.internship.kmp.martin.core.data.network.SpotifyApi
+import org.internship.kmp.martin.spotify_user.data.repository.SpotifyUserRepository
+import org.internship.kmp.martin.spotify_user.domain.SpotifyUserRepositoryImpl
+import org.internship.kmp.martin.track.data.repository.TrackRepository
+import org.internship.kmp.martin.track.domain.TrackRepositoryImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

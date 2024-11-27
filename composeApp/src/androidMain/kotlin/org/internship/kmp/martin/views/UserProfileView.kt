@@ -15,13 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import org.internship.kmp.martin.presentation.UserViewModel
+import org.internship.kmp.martin.spotify_user.presentation.UserViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserProfileView() {
     val viewModel: UserViewModel = koinViewModel()
-    val context = LocalContext.current
     val users by viewModel.getCurrentSpotifyUser().collectAsState(initial = emptyList())
 
     Column(

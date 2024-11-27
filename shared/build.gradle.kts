@@ -69,6 +69,7 @@ kotlin {
 //            implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
+            implementation("androidx.work:work-runtime-ktx:2.9.1")
         }
         iosMain.dependencies {
             // Ktor dependencies

@@ -28,8 +28,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
-import org.internship.kmp.martin.data.domain.Track
-import org.internship.kmp.martin.presentation.fav_tracks_list.FavoriteTracksViewModel
+import org.internship.kmp.martin.track.domain.Track
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
