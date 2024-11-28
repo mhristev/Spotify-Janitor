@@ -15,19 +15,11 @@ import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 
 @Composable
 fun LaunchView() {
-    Column {
-        SpotifyLoginButton()
-        // Other UI elements
-    }
-}
-
-
-@Composable
-fun SpotifyLoginButton() {
     val context = LocalContext.current as MainActivity
 
     Button(onClick = { context.initiateSpotifyLogin() }) {
         Text("Login with Spotify")
     }
 }
+
 

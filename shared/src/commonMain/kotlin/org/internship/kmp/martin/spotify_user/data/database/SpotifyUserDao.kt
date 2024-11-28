@@ -13,4 +13,7 @@ interface SpotifyUserDao {
     @Query("SELECT * FROM SpotifyUserEntity")
     fun getAllUsers(): Flow<List<SpotifyUserEntity>>
 
+    @Query("SELECT * FROM SpotifyUserEntity WHERE id = :userId")
+    suspend fun getUserById(userId: String): SpotifyUserEntity?
+
 }

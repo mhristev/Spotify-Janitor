@@ -1,7 +1,8 @@
 package org.internship.kmp.martin.core.data.auth
 
 interface AuthManager {
-    fun login(accessToken: String)
+    fun getUserId(): String?
     fun logout()
     fun getAccessToken(): String?
+    fun login(accessToken: String, userId: String)
 }

@@ -14,6 +14,7 @@ import org.internship.kmp.martin.spotify_user.data.repository.SpotifyUserReposit
 
 class SpotifyUserRepositoryImpl(private val userDao: SpotifyUserDao, private val apiClient: SpotifyApi):
     SpotifyUserRepository {
+
     override suspend fun login(accessToken: String): Result<SpotifyUser, DataError.Remote>{
         val result = apiClient.login(accessToken)
         result.onSuccess { currentUser ->
@@ -22,8 +23,9 @@ class SpotifyUserRepositoryImpl(private val userDao: SpotifyUserDao, private val
         return result.map { it.toDomain() }
         }
 
-    override fun getCurrentSpotifyUser(): Flow<List<SpotifyUserEntity>> {
-        return userDao.getAllUsers()
+    override suspend fun getCurrentSpotifyUser(): SpotifyUser? {
+        val currentUserId = apiClient.getCurrentUserId() ?: return null
+        return userDao.getUserById(currentUserId)?.toDomain()
     }
 
     override fun saveCurrentSpotifyUser(spotifyUser: SpotifyUser) {

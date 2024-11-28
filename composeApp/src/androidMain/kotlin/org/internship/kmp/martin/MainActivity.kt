@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -21,12 +23,22 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        WorkManager.initialize(
+            this,
+            Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.INFO)
+                .build()
+        )
         setContent {
 //            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_FAV_TRACK)
 //            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_SPOTIFY_USER)
             LaunchView()
         }
+    }
+    fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.INFO)
+            .build()
     }
 
     fun initiateSpotifyLogin() {

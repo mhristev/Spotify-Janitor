@@ -7,7 +7,9 @@ import org.internship.kmp.martin.core.data.database.DatabaseFactory
 import org.internship.kmp.martin.track.presentation.BrowseTracksViewModel
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
 import org.internship.kmp.martin.core.presentation.LaunchScreenViewModel
-import org.internship.kmp.martin.spotify_user.presentation.UserViewModel
+import org.internship.kmp.martin.spotify_user.presentation.UserProfileViewModel
+import org.internship.kmp.martin.track.data.repository.TrackRepository
+import org.internship.kmp.martin.track.domain.TrackRepositoryImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.android.ext.koin.androidApplication
@@ -18,8 +20,9 @@ actual val platformModule: Module
         single<HttpClientEngine> { OkHttp.create() }
         single { DatabaseFactory(androidApplication()) }
         single { KVaultFactory(androidApplication()) }
+        single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
 
-        factory { UserViewModel(get()) }
+        factory { UserProfileViewModel(get()) }
         factory { LaunchScreenViewModel(get()) }
         factory { FavoriteTracksViewModel(get()) }
         factory { BrowseTracksViewModel(get()) }

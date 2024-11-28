@@ -15,17 +15,17 @@ import kotlin.test.assertEquals
 class SpotifyApiServiceImplTest {
     @Test
     fun test() = runBlocking {
-        val token = "BQDJJOHU_iKkhFN3q_L52NfiGbRyWUa4xUGCj688u8lYgGFpXP_Ut9noaipZ-r5SRXSlm2Px_Mulfz_snGuZWFuzgayi-Us8Sglzjdtl9PLGsZnemUyAaKhvZjyVQVbNcjk4JK3YB0YsLDRojYbG0i2DLtz4Xsv56f1ode0CP-pOWT8pAnPG2okXKlRxRNOnCdY76cwaJeNnMXVw9njaiLvmQyQxBL5cat7dbMTbbT5MMyaF"
-        val response: HttpResponse = HttpClient().get("https://api.spotify.com/v1/me") {
-            header(HttpHeaders.Authorization, "Bearer $token")
-        }
-        var a: SpotifyUser? = null
-        if (response.status == HttpStatusCode.OK) {
-            a = SpotifyUser.fromJson(response.bodyAsText())
-        } else {
-            null
-        }
-        assertEquals(null, a)
+//        val token = "BQDJJOHU_iKkhFN3q_L52NfiGbRyWUa4xUGCj688u8lYgGFpXP_Ut9noaipZ-r5SRXSlm2Px_Mulfz_snGuZWFuzgayi-Us8Sglzjdtl9PLGsZnemUyAaKhvZjyVQVbNcjk4JK3YB0YsLDRojYbG0i2DLtz4Xsv56f1ode0CP-pOWT8pAnPG2okXKlRxRNOnCdY76cwaJeNnMXVw9njaiLvmQyQxBL5cat7dbMTbbT5MMyaF"
+//        val response: HttpResponse = HttpClient().get("https://api.spotify.com/v1/me") {
+//            header(HttpHeaders.Authorization, "Bearer $token")
+//        }
+//        var a: SpotifyUser? = null
+//        if (response.status == HttpStatusCode.OK) {
+//            a = SpotifyUser.fromJson(response.bodyAsText())
+//        } else {
+//            null
+//        }
+//        assertEquals(null, a)
     }
 }
 

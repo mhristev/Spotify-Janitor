@@ -27,3 +27,15 @@ fun SpotifyUserDto.toDomain(): SpotifyUser {
         imageUrl = this.images.first().url
     )
 }
+
+fun SpotifyUserEntity.toDomain(): SpotifyUser {
+    return SpotifyUser(
+        id = this.id,
+        displayName = this.displayName,
+        email = this.email,
+        country = this.country,
+        product = this.product,
+        followers = this.followers,
+        imageUrl = this.imageUrl
+    )
+}
