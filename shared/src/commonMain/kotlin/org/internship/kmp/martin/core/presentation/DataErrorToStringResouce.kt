@@ -17,6 +17,3 @@ fun DataError.toReadableText(): String {
 
     return stringRes.toString()
 }
-
-
-//error.toReadableText() in the viewmodel

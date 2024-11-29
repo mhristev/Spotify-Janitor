@@ -13,13 +13,13 @@ import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.CODE
 import org.internship.kmp.martin.core.presentation.LaunchScreenViewModel
+import org.internship.kmp.martin.views.LoginView
 import org.koin.androidx.compose.koinViewModel
 
 
 class MainActivity : ComponentActivity() {
     private val CLIENT_ID = "91be3576121a482e9ad00bb97888f3e8"
     private val REDIRECT_URI = "org.internship.kmp.martin://callback"
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 //            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_FAV_TRACK)
 //            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_SPOTIFY_USER)
-            LaunchView()
+            LoginView({ initiateSpotifyLogin() })
         }
     }
     fun getWorkManagerConfiguration(): Configuration {
@@ -55,7 +55,6 @@ class MainActivity : ComponentActivity() {
             val response = AuthorizationResponse.fromUri(uri)
             when (response.type) {
                 TOKEN -> {
-                    // Access token received
                     val accessToken = response.accessToken
                     val expires_int = response.expiresIn
                     setContent{

@@ -6,4 +6,12 @@ object AppConstants {
         const val MIN_TRACKS_TO_DISPLAY = 50
         const val TRACKS_PER_LOAD_MORE = 50
     }
+
+    object Colors {
+        const val PRIMARY_DARK_HEX ="#03001C"
+        const val PRIMARY_PURPLE_HEX = "#301E67"
+        const val SPOTIFY_GREEN_HEX = "#2DBC58"
+        const val SECONDARY_TEXT_GREY_HEX = "#949494"
+        const val PRIMARY_TEXT_WHiTE_HEX = "#FAF9F6"
+    }
 }

@@ -23,11 +23,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import coil3.compose.rememberAsyncImagePainter
+import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -62,7 +65,7 @@ fun SearchTrackItem(track: Track) {
             contentAlignment = Alignment.Center
         ) {
             when (val result = imageLoadResult) {
-                null -> CircularProgressIndicator()
+                null -> CircularProgressIndicator(color = Color(AppConstants.Colors.PRIMARY_PURPLE_HEX.toColorInt()))
                 else -> {
                     Image(
                         painter = if (result.isSuccess) painter else painterResource(id = android.R.drawable.ic_menu_report_image),
@@ -77,14 +80,14 @@ fun SearchTrackItem(track: Track) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = track.name, style = MaterialTheme.typography.h6)
-            Text(text = track.artists.joinToString(", ") { it.name }, style = MaterialTheme.typography.body2)
+            Text(text = track.name, style = MaterialTheme.typography.body1, color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt()))
+            Text(text = track.artists.joinToString(" · ") { it.name }, style = MaterialTheme.typography.body2, color = Color(AppConstants.Colors.SECONDARY_TEXT_GREY_HEX.toColorInt()))
         }
-        Button(
-            onClick = { viewModel.addTrackToFavorites(track) },
-            modifier = Modifier.size(36.dp)
-        ) {
-            Icon(Icons.Default.Favorite, contentDescription = "Add to Favorites")
-        }
+//        Button(
+//            onClick = { viewModel.addTrackToFavorites(track) },
+//            modifier = Modifier.size(36.dp)
+//        ) {
+//            Icon(Icons.Default.Favorite, contentDescription = "Add to Favorites")
+//        }
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
@@ -34,9 +35,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.rememberAsyncImagePainter
 import org.internship.kmp.martin.components.UserInfoRow
+import org.internship.kmp.martin.core.domain.AppConstants
+import org.internship.kmp.martin.spotify_user.presentation.UserProfileAction
 import org.internship.kmp.martin.spotify_user.presentation.UserProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,15 +49,14 @@ fun UserProfileView() {
     val viewModel: UserProfileViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Spotify Profile", color = Color.White) },
-                backgroundColor = Color.Black,
+                backgroundColor = Color(AppConstants.Colors.PRIMARY_PURPLE_HEX.toColorInt()),
                 actions = {
-                    IconButton(onClick = { viewModel.logout() }) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.White)
+                    IconButton(onClick = { viewModel.onAction(UserProfileAction.onLogout) }) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = Color.White)
                     }
                 }
             )
@@ -63,14 +66,14 @@ fun UserProfileView() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .background(Color(0xFF1F1F1F)) // Dark background color
+                    .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())) // Dark background color
             ) {
                 // Profile Header with Background
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(250.dp)
-                        .background(Color(0xFF50009C)) // Purple background
+                        .background(Color(AppConstants.Colors.PRIMARY_PURPLE_HEX.toColorInt())) // Purple background
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(state.user?.imageUrl),

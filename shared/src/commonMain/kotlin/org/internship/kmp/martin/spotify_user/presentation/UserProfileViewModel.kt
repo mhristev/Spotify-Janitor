@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.spotify_user.data.repository.SpotifyUserRepository
 import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksState
 
 class UserProfileViewModel(private val userRepository: SpotifyUserRepository): ViewModel() {
@@ -29,7 +30,15 @@ class UserProfileViewModel(private val userRepository: SpotifyUserRepository): V
         )
 
 
-    fun getCurrentSpotifyUser() {
+    fun onAction(action: UserProfileAction) {
+        when (action) {
+            is UserProfileAction.onGetCurrentUser -> getCurrentSpotifyUser()
+            is UserProfileAction.onLogout -> logout()
+        }
+    }
+
+
+    private fun getCurrentSpotifyUser() {
         viewModelScope.launch {
             val user = userRepository.getCurrentSpotifyUser()
             if (user != null) {
@@ -39,7 +48,7 @@ class UserProfileViewModel(private val userRepository: SpotifyUserRepository): V
             }
         }
     }
-    fun logout() {
+    private fun logout() {
         userRepository.logoutSpotifyUser()
     }
 

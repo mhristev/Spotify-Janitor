@@ -1,5 +1,6 @@
 package org.internship.kmp.martin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
+import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.views.FavoriteTracksView
 import org.internship.kmp.martin.views.SearchTracksView
 import org.internship.kmp.martin.views.UserProfileView
@@ -39,7 +43,13 @@ fun App() {
                 BottomNavigationItem(
                     icon = { Icon(tab.icon, contentDescription = tab.title) },
                     selected = selectedTab == index,
-                    onClick = { selectedTab = index }
+                    onClick = { selectedTab = index },
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color(AppConstants.Colors.SECONDARY_TEXT_GREY_HEX.toColorInt()),
+                    alwaysShowLabel = false,
+                    modifier = Modifier.background(
+                        Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
+                    )
                 )
             }
         }

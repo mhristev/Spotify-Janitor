@@ -1,12 +1,9 @@
 package org.internship.kmp.martin.track.domain
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
 import org.internship.kmp.martin.core.domain.DataError
 import org.internship.kmp.martin.track.data.database.FavoriteTrackDao
 import org.internship.kmp.martin.core.data.network.SpotifyApi
@@ -17,8 +14,6 @@ import org.internship.kmp.martin.core.domain.Result
 import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.data.dto.mapAddedAt
-import org.internship.kmp.martin.spotify_user.data.mappers.toDomain
-import org.internship.kmp.martin.spotify_user.data.mappers.toEntity
 import org.internship.kmp.martin.track.data.database.TrackEntity
 import org.internship.kmp.martin.track.data.mappers.toDomain
 import org.internship.kmp.martin.track.data.mappers.toEntity
