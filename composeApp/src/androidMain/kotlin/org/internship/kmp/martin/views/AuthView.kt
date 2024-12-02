@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import org.internship.kmp.martin.MainActivity
 import org.internship.kmp.martin.core.domain.AppConstants
 @Composable
-fun AuthView() {
+fun AuthView(navController: NavController) {
     val context = LocalContext.current as MainActivity
     Box(
         modifier = Modifier

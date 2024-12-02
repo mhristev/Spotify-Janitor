@@ -17,20 +17,21 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.internship.kmp.martin.core.domain.AppConstants
+import org.internship.kmp.martin.core.presentation.AuthViewModel
 import org.internship.kmp.martin.views.AuthView
 import org.internship.kmp.martin.views.FavoriteTracksView
 import org.internship.kmp.martin.views.SearchTracksView
 import org.internship.kmp.martin.views.UserProfileView
 
 @Composable
-fun App() {
+fun App(navController: NavController) {
     var selectedTab by remember { mutableStateOf(0) }
 
-    val navController = rememberNavController()
 
     val tabs = listOf(
         TabItem("Search", Icons.Default.Search, { SearchTracksView() }),

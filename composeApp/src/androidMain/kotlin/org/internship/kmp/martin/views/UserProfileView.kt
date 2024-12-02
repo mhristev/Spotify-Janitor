@@ -53,10 +53,13 @@ fun UserProfileView(navController: NavController) {
 
     val navigateToLogin by viewModel.navigateToLogin.collectAsState()
 
-    // Observe the navigateToLogin state and navigate when it's true
     LaunchedEffect(navigateToLogin) {
         if (navigateToLogin) {
-
+            navController.navigate("auth_screen") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+            }
         }
     }
 

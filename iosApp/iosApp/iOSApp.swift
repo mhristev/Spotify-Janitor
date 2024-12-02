@@ -5,7 +5,7 @@ import SpotifyiOS
 struct iOSApp: App {
     var body: some Scene {
         WindowGroup {
-            SpotifyLoginView()
+            ContentView()
         }
     }
 }
