@@ -7,9 +7,5 @@ import org.internship.kmp.martin.spotify_user.data.database.SpotifyUserEntity
 import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
 
 interface SpotifyUserRepository {
-    suspend fun login(accessToken: String): Result<SpotifyUser,DataError.Remote>
     suspend fun getCurrentSpotifyUser(): SpotifyUser?
-    fun saveCurrentSpotifyUser(spotifyUser: SpotifyUser)
-    fun logoutSpotifyUser()
-    suspend fun addSpotifyUser(spotifyUser: SpotifyUser)
 }

@@ -12,8 +12,9 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.CODE
-import org.internship.kmp.martin.core.presentation.LaunchScreenViewModel
-import org.internship.kmp.martin.views.LoginView
+import org.internship.kmp.martin.core.presentation.AuthViewModel
+import org.internship.kmp.martin.core.presentation.LoginViewModel
+import org.internship.kmp.martin.views.AuthView
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -30,9 +31,16 @@ class MainActivity : ComponentActivity() {
                 .build()
         )
         setContent {
-//            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_FAV_TRACK)
-//            applicationContext.deleteDatabase(RoomAppDatabase.DB_NAME_SPOTIFY_USER)
-            LoginView({ initiateSpotifyLogin() })
+            val viewModel: AuthViewModel = koinViewModel()
+            if (viewModel.isUserLoggedIn()) {
+                setContent {
+                    App()
+                }
+            } else {
+                setContent {
+                    AuthView()
+                }
+            }
         }
     }
     fun getWorkManagerConfiguration(): Configuration {
@@ -56,11 +64,11 @@ class MainActivity : ComponentActivity() {
             when (response.type) {
                 TOKEN -> {
                     val accessToken = response.accessToken
-                    val expires_int = response.expiresIn
+                    val expiresIn = response.expiresIn
                     setContent{
-                        val viewModel: LaunchScreenViewModel = koinViewModel()
+                        val viewModel: LoginViewModel = koinViewModel()
                         LaunchedEffect(Unit) {
-                            viewModel.login(accessToken)
+                            viewModel.login(accessToken, expiresIn)
                         }
                         App()
                     }
@@ -69,12 +77,6 @@ class MainActivity : ComponentActivity() {
                 }
                 ERROR -> {
                     // Handle error
-                }
-                CODE -> {
-                    // Authorization code received
-                    val code = response.code
-                    //exchangeCodeForToken(code)
-                    // Exchange code for access token if necessary
                 }
                 else -> {
                     // Handle other cases

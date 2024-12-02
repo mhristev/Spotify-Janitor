@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.androidx.ui.android)
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.core)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     debugImplementation(compose.uiTooling)
 }

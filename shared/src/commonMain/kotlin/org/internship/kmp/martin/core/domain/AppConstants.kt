@@ -14,4 +14,10 @@ object AppConstants {
         const val SECONDARY_TEXT_GREY_HEX = "#949494"
         const val PRIMARY_TEXT_WHiTE_HEX = "#FAF9F6"
     }
+
+    object VaultKeys {
+        const val AUTH_TOKEN = "auth_token"
+        const val EXPIRE_TIME = "expire_time"
+        const val USER_ID = "user_id"
+    }
 }

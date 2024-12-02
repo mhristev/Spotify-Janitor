@@ -17,29 +17,19 @@ import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.data.dto.FavoriteTracksDto
 import org.internship.kmp.martin.track.data.dto.SearchResponseDto
 
-class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthManager):
+class KtorSpotifyApi(private val httpClient: HttpClient, private val auth: AuthManager) :
     SpotifyApi {
-    override fun getCurrentUserId(): String? {
-        return auth.getUserId()
-    }
 
-    override fun setToken(accessToken: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun login(accessToken: String): Result<SpotifyUserDto, DataError.Remote>  {
+    override suspend fun getCurrentUser(): Result<SpotifyUserDto, DataError.Remote>  {
+        val accessToken = auth.getAccessToken()
         val response: Result<SpotifyUserDto, DataError.Remote> = safeCall<SpotifyUserDto> {
             httpClient.get("https://api.spotify.com/v1/me") {
                 header(HttpHeaders.Authorization, "Bearer $accessToken")
             }
         }
-
-        response.onSuccess { spotifyUserDto ->
-            auth.login(accessToken, spotifyUserDto.id)
-        }
-
         return response
     }
+
 
     override suspend fun getFavoriteTracks(limit: Int, offset: Int): Result<FavoriteTracksDto, DataError.Remote> {
         val accessToken = auth.getAccessToken()

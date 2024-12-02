@@ -4,9 +4,10 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import org.internship.kmp.martin.core.data.auth.KVaultFactory
 import org.internship.kmp.martin.core.data.database.DatabaseFactory
+import org.internship.kmp.martin.core.presentation.AuthViewModel
 import org.internship.kmp.martin.track.presentation.BrowseTracksViewModel
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
-import org.internship.kmp.martin.core.presentation.LaunchScreenViewModel
+import org.internship.kmp.martin.core.presentation.LoginViewModel
 import org.internship.kmp.martin.spotify_user.presentation.UserProfileViewModel
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 import org.internship.kmp.martin.track.domain.TrackRepositoryImpl
@@ -22,8 +23,9 @@ actual val platformModule: Module
         single { KVaultFactory(androidApplication()) }
         single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
 
-        factory { UserProfileViewModel(get()) }
-        factory { LaunchScreenViewModel(get()) }
+        factory { UserProfileViewModel(get(), get()) }
+        factory { LoginViewModel(get()) }
         factory { FavoriteTracksViewModel(get()) }
         factory { BrowseTracksViewModel(get()) }
+        factory { AuthViewModel(get()) }
     }

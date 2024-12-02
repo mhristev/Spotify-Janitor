@@ -25,6 +25,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import org.internship.kmp.martin.components.UserInfoRow
 import org.internship.kmp.martin.core.domain.AppConstants
@@ -45,9 +47,19 @@ import org.internship.kmp.martin.spotify_user.presentation.UserProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun UserProfileView() {
+fun UserProfileView(navController: NavController) {
     val viewModel: UserProfileViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val navigateToLogin by viewModel.navigateToLogin.collectAsState()
+
+    // Observe the navigateToLogin state and navigate when it's true
+    LaunchedEffect(navigateToLogin) {
+        if (navigateToLogin) {
+
+        }
+    }
+
 
     Scaffold(
         topBar = {

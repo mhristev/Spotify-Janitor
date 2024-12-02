@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +41,7 @@ fun SearchTracksView() {
     var searchQuery by remember { mutableStateOf("") }
 
     var lastQuery by remember { mutableStateOf("") }
-    val debouncePeriod = 500L // 1 second debounce period
+    val debouncePeriod = 500L
     val coroutineScope = rememberCoroutineScope()
 
     val darkBackgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
@@ -53,20 +51,20 @@ fun SearchTracksView() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(darkBackgroundColor) // Use dark background here
+            .background(darkBackgroundColor)
     ) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text("Search", color = whiteTextColor) },
-                    backgroundColor = darkBackgroundColor // Use purple for the top bar
+                    backgroundColor = darkBackgroundColor
                 )
             },
             content = { padding ->
                 Column(
                     modifier = Modifier
                         .padding(padding)
-                        .background(darkBackgroundColor) // Apply dark background here as well
+                        .background(darkBackgroundColor)
                 ) {
                     Row(
                         modifier = Modifier
@@ -92,7 +90,6 @@ fun SearchTracksView() {
                                 .background(whiteTextColor, shape = RoundedCornerShape(8.dp))
                         )
                     }
-
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {

@@ -9,14 +9,17 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.internship.kmp.martin.core.data.database.AuthRepository
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.spotify_user.data.repository.SpotifyUserRepository
 import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksState
 
-class UserProfileViewModel(private val userRepository: SpotifyUserRepository): ViewModel() {
+class UserProfileViewModel(private val userRepository: SpotifyUserRepository, private val authRepository: AuthRepository): ViewModel() {
     private val _state = MutableStateFlow(UserProfileState())
+    val navigateToLogin = MutableStateFlow(false)
+
 
     @NativeCoroutinesState
     val state = _state
@@ -49,7 +52,8 @@ class UserProfileViewModel(private val userRepository: SpotifyUserRepository): V
         }
     }
     private fun logout() {
-        userRepository.logoutSpotifyUser()
+        authRepository.logout()
+        navigateToLogin.value = true
     }
 
 }

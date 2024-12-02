@@ -5,6 +5,8 @@ import org.internship.kmp.martin.core.data.network.client.HttpClientFactory
 import org.internship.kmp.martin.core.data.auth.AuthManager
 import org.internship.kmp.martin.core.data.auth.KVaultAuthManager
 import org.internship.kmp.martin.core.data.auth.KVaultFactory
+import org.internship.kmp.martin.core.data.database.AuthRepository
+import org.internship.kmp.martin.core.data.database.AuthRepositoryImpl
 import org.internship.kmp.martin.core.data.database.DatabaseFactory
 import org.internship.kmp.martin.core.data.database.RoomAppDatabase
 import org.internship.kmp.martin.core.data.network.KtorSpotifyApi
@@ -27,6 +29,7 @@ val sharedModule = module {
 
     single<SpotifyUserRepository> { SpotifyUserRepositoryImpl(get(), get()) }
     single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single {
         get<DatabaseFactory>().createFavTracksDatabase()
             .setDriver(BundledSQLiteDriver())
