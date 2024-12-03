@@ -9,26 +9,24 @@ import SwiftUI
 import Shared
 
 struct TrackRow: View {
-    var trackName: String
-    var artist: String
-    var imageName: String
+    var track: Track
     
     var body: some View {
         HStack {
-            Image(imageName)
+            Image(track.album.imageUrl)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
                 .cornerRadius(8)
             
             VStack(alignment: .leading) {
-                Text(trackName)
+                Text(track.name)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .padding(.bottom, 2)
                 
-                Text(artist)
+                Text(track.artists.map { $0.name }.joined(separator: " · "))
                     .font(.system(size: 14))
                     .foregroundColor(.gray)
                     .lineLimit(1)

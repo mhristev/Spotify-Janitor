@@ -51,11 +51,11 @@ struct SpotifyLoginView: View {
     }
 }
 
-class PresentationContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }!
-    }
-}
+//class PresentationContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+//    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+//        return UIApplication.shared.connectedScenes
+//            .compactMap { $0 as? UIWindowScene }
+//            .flatMap { $0.windows }
+//            .first { $0.isKeyWindow }!
+//    }
+//}

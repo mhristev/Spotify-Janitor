@@ -1,5 +1,5 @@
 {
-  "originHash" : "1c78ec4c864394dd305bb035534c9f8aa226121d92b714af20bc936977fff195",
+  "originHash" : "baa12b6756ce7610cf3a5e1cb748a85b4fe771ee7634a24deb09c842a2f93963",
   "pins" : [
     {
       "identity" : "ios-sdk",
@@ -8,6 +8,33 @@
       "state" : {
         "branch" : "master",
         "revision" : "af71ec0bcf3baa7ec88c72119b7fdf65eb91fd67"
+      }
+    },
+    {
+      "identity" : "kmp-nativecoroutines",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rickclephas/KMP-NativeCoroutines.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e510d5247320ad92a0c4dc63b40b60abbf931599"
+      }
+    },
+    {
+      "identity" : "kmp-observableviewmodel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rickclephas/KMP-ObservableViewModel.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a7596d7d856ba1d0b92ca310ed8fa31e22b418fd"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift.git",
+      "state" : {
+        "revision" : "c7c7d2cf50a3211fe2843f76869c698e4e417930",
+        "version" : "6.8.0"
       }
     }
   ],

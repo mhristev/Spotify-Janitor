@@ -68,45 +68,6 @@ struct ContentView: View {
     }
 }
 
-struct FirstView: View {
-    var body: some View {
-        VStack {
-            Text("First View")
-            // Customize this view as needed
-        }
-    }
-}
-
-struct MiddleView: View {
-    var body: some View {
-        VStack {
-            Text("Favorite Tracks")
-                .font(.title)
-                .bold()
-            
-            List {
-                // Add your track items here
-                Text("Track 1")
-                Text("Track 2")
-                Text("Track 3")
-            }
-        }
-        .padding()
-        .background(Color.black) // Adjust background color
-        .cornerRadius(10)
-        .shadow(radius: 5)
-    }
-}
-
-struct ThirdView: View {
-    var body: some View {
-        VStack {
-            Text("Third View")
-            // Customize this view as needed
-        }
-    }
-}
-
 
 #Preview {
     ContentView()

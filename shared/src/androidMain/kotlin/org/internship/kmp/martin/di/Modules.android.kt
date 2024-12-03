@@ -21,7 +21,6 @@ actual val platformModule: Module
         single<HttpClientEngine> { OkHttp.create() }
         single { DatabaseFactory(androidApplication()) }
         single { KVaultFactory(androidApplication()) }
-        single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
 
         factory { UserProfileViewModel(get(), get()) }
         factory { LoginViewModel(get()) }

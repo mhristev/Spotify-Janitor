@@ -13,9 +13,79 @@
 		47035E6B2CFDEA0400ABD3F3 /* FavoriteTracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47035E6A2CFDE9FD00ABD3F3 /* FavoriteTracksView.swift */; };
 		47078FF62CFDF312001B85E1 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47078FF52CFDF30D001B85E1 /* UserProfileView.swift */; };
 		476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */; };
+		4770416E2CFFB7CF002EFFD6 /* MyTestInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */; };
+		4770416F2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt in Resources */ = {isa = PBXBuildFile; fileRef = 4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */; };
 		478A1DF62CE739CA0071B73D /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 478A1DF52CE739CA0071B73D /* SpotifyiOS */; };
 		478BF6422CFE056B00595EF4 /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6412CFE056500595EF4 /* TrackRow.swift */; };
 		478BF6452CFE082500595EF4 /* SearchTracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6442CFE081F00595EF4 /* SearchTracksView.swift */; };
+		479EDC9F2CFEFD7B00C67B76 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDC9E2CFEFD7300C67B76 /* AuthView.swift */; };
+		479EDCA12CFF0B9A00C67B76 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDCA02CFF0B9700C67B76 /* AppRootView.swift */; };
+		479EDCA32CFF14A900C67B76 /* KMPObservableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */; };
+		479EDCA62CFF14EE00C67B76 /* KMPObservableViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCA52CFF14EE00C67B76 /* KMPObservableViewModelCore */; };
+		479EDCA82CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCA72CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI */; };
+		479EDCAB2CFF150A00C67B76 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCAA2CFF150A00C67B76 /* KMPNativeCoroutinesAsync */; };
+		479EDCAD2CFF150A00C67B76 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCAC2CFF150A00C67B76 /* KMPNativeCoroutinesCombine */; };
+		479EDCAF2CFF150A00C67B76 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCAE2CFF150A00C67B76 /* KMPNativeCoroutinesCore */; };
+		479EDCB12CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 479EDCB02CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift */; };
+		479EDD1C2CFF204200C67B76 /* TrackDto.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD062CFF204200C67B76 /* TrackDto.kt */; };
+		479EDD1D2CFF204200C67B76 /* FavoriteTracksState.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD132CFF204200C67B76 /* FavoriteTracksState.kt */; };
+		479EDD1E2CFF204200C67B76 /* AlbumMappers.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCB82CFF204200C67B76 /* AlbumMappers.kt */; };
+		479EDD1F2CFF204200C67B76 /* ArtistDao.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCBF2CFF204200C67B76 /* ArtistDao.kt */; };
+		479EDD202CFF204200C67B76 /* ArtistDto.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCC22CFF204200C67B76 /* ArtistDto.kt */; };
+		479EDD212CFF204200C67B76 /* AuthManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCCB2CFF204200C67B76 /* AuthManager.kt */; };
+		479EDD222CFF204200C67B76 /* Artist.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCC72CFF204200C67B76 /* Artist.kt */; };
+		479EDD232CFF204200C67B76 /* FavoriteTracksAction.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD122CFF204200C67B76 /* FavoriteTracksAction.kt */; };
+		479EDD242CFF204200C67B76 /* Album.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCBB2CFF204200C67B76 /* Album.kt */; };
+		479EDD252CFF204200C67B76 /* SpotifyUserImageManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCEC2CFF204200C67B76 /* SpotifyUserImageManager.kt */; };
+		479EDD262CFF204200C67B76 /* initKoin.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE82CFF204200C67B76 /* initKoin.kt */; };
+		479EDD272CFF204200C67B76 /* ArtistMappers.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCC42CFF204200C67B76 /* ArtistMappers.kt */; };
+		479EDD282CFF204200C67B76 /* AppConstants.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCDC2CFF204200C67B76 /* AppConstants.kt */; };
+		479EDD292CFF204200C67B76 /* SpotifyUserEntity.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCF12CFF204200C67B76 /* SpotifyUserEntity.kt */; };
+		479EDD2A2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCFC2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt */; };
+		479EDD2B2CFF204200C67B76 /* DataErrorToStringResouce.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE32CFF204200C67B76 /* DataErrorToStringResouce.kt */; };
+		479EDD2C2CFF204200C67B76 /* SpotifyUserDao.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCF02CFF204200C67B76 /* SpotifyUserDao.kt */; };
+		479EDD2D2CFF204200C67B76 /* KVaultFactory.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCCD2CFF204200C67B76 /* KVaultFactory.kt */; };
+		479EDD2E2CFF204200C67B76 /* BrowseTracksViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD162CFF204200C67B76 /* BrowseTracksViewModel.kt */; };
+		479EDD2F2CFF204200C67B76 /* UserProfileState.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCFF2CFF204200C67B76 /* UserProfileState.kt */; };
+		479EDD302CFF204200C67B76 /* SpotifyUserMappers.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCF52CFF204200C67B76 /* SpotifyUserMappers.kt */; };
+		479EDD312CFF204200C67B76 /* Result.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE02CFF204200C67B76 /* Result.kt */; };
+		479EDD332CFF204200C67B76 /* TrackEntity.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD042CFF204200C67B76 /* TrackEntity.kt */; };
+		479EDD342CFF204200C67B76 /* TrackImageManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCED2CFF204200C67B76 /* TrackImageManager.kt */; };
+		479EDD352CFF204200C67B76 /* ArtistEntity.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCC02CFF204200C67B76 /* ArtistEntity.kt */; };
+		479EDD362CFF204200C67B76 /* LaunchScreenViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE42CFF204200C67B76 /* LaunchScreenViewModel.kt */; };
+		479EDD372CFF204200C67B76 /* DatabaseFactory.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD22CFF204200C67B76 /* DatabaseFactory.kt */; };
+		479EDD382CFF204200C67B76 /* TrackRepository.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD0B2CFF204200C67B76 /* TrackRepository.kt */; };
+		479EDD392CFF204200C67B76 /* TrackRepositoryImpl.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD102CFF204200C67B76 /* TrackRepositoryImpl.kt */; };
+		479EDD3A2CFF204200C67B76 /* Error.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCDE2CFF204200C67B76 /* Error.kt */; };
+		479EDD3B2CFF204200C67B76 /* KtorSpotifyApi.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD82CFF204200C67B76 /* KtorSpotifyApi.kt */; };
+		479EDD3C2CFF204200C67B76 /* Track.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD0F2CFF204200C67B76 /* Track.kt */; };
+		479EDD3D2CFF204200C67B76 /* Modules.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE92CFF204200C67B76 /* Modules.kt */; };
+		479EDD3E2CFF204200C67B76 /* FavoriteTracksViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD142CFF204200C67B76 /* FavoriteTracksViewModel.kt */; };
+		479EDD3F2CFF204200C67B76 /* NetworkConstants.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCDF2CFF204200C67B76 /* NetworkConstants.kt */; };
+		479EDD402CFF204200C67B76 /* AuthRepository.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD02CFF204200C67B76 /* AuthRepository.kt */; };
+		479EDD412CFF204200C67B76 /* AlbumEntity.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCB42CFF204200C67B76 /* AlbumEntity.kt */; };
+		479EDD422CFF204200C67B76 /* LoginViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE52CFF204200C67B76 /* LoginViewModel.kt */; };
+		479EDD432CFF204200C67B76 /* Res.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD1A2CFF204200C67B76 /* Res.kt */; };
+		479EDD442CFF204200C67B76 /* UserProfileViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD002CFF204200C67B76 /* UserProfileViewModel.kt */; };
+		479EDD452CFF204200C67B76 /* HttpClientExt.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD52CFF204200C67B76 /* HttpClientExt.kt */; };
+		479EDD462CFF204200C67B76 /* UserProfileAction.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCFE2CFF204200C67B76 /* UserProfileAction.kt */; };
+		479EDD472CFF204200C67B76 /* AuthRepositoryImpl.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD12CFF204200C67B76 /* AuthRepositoryImpl.kt */; };
+		479EDD482CFF204200C67B76 /* AppDatabaseConstructor.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCCF2CFF204200C67B76 /* AppDatabaseConstructor.kt */; };
+		479EDD492CFF204200C67B76 /* KVaultAuthManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCCC2CFF204200C67B76 /* KVaultAuthManager.kt */; };
+		479EDD4A2CFF204200C67B76 /* HttpClientFactory.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD62CFF204200C67B76 /* HttpClientFactory.kt */; };
+		479EDD4B2CFF204200C67B76 /* provideVault.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCEF2CFF204200C67B76 /* provideVault.kt */; };
+		479EDD4C2CFF204200C67B76 /* SpotifyUser.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCFB2CFF204200C67B76 /* SpotifyUser.kt */; };
+		479EDD4D2CFF204200C67B76 /* SpotifyUserRepository.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCF82CFF204200C67B76 /* SpotifyUserRepository.kt */; };
+		479EDD4E2CFF204200C67B76 /* RoomAppDatabase.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD32CFF204200C67B76 /* RoomAppDatabase.kt */; };
+		479EDD4F2CFF204200C67B76 /* FavoriteTrackDao.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD032CFF204200C67B76 /* FavoriteTrackDao.kt */; };
+		479EDD502CFF204200C67B76 /* SpotifyUserDto.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCF32CFF204200C67B76 /* SpotifyUserDto.kt */; };
+		479EDD512CFF204200C67B76 /* DataError.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCDD2CFF204200C67B76 /* DataError.kt */; };
+		479EDD522CFF204200C67B76 /* TrackMappers.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDD082CFF204200C67B76 /* TrackMappers.kt */; };
+		479EDD532CFF204200C67B76 /* SpotifyApi.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCD92CFF204200C67B76 /* SpotifyApi.kt */; };
+		479EDD542CFF204200C67B76 /* AlbumDao.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCB32CFF204200C67B76 /* AlbumDao.kt */; };
+		479EDD552CFF204200C67B76 /* AlbumDto.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCB62CFF204200C67B76 /* AlbumDto.kt */; };
+		479EDD562CFF204200C67B76 /* AuthViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE22CFF204200C67B76 /* AuthViewModel.kt */; };
+		479EDD572CFF204200C67B76 /* ImageManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCEB2CFF204200C67B76 /* ImageManager.kt */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,8 +97,72 @@
 		47078FF52CFDF30D001B85E1 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
 		476BE15A2CE74742008D833D /* iosApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iosApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTestInterface.kt; sourceTree = "<group>"; };
+		4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTestInterfaceImpl.kt; sourceTree = "<group>"; };
 		478BF6412CFE056500595EF4 /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
 		478BF6442CFE081F00595EF4 /* SearchTracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTracksView.swift; sourceTree = "<group>"; };
+		479EDC9E2CFEFD7300C67B76 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		479EDCA02CFF0B9700C67B76 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMPObservableViewModel.swift; sourceTree = "<group>"; };
+		479EDCB32CFF204200C67B76 /* AlbumDao.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AlbumDao.kt; sourceTree = "<group>"; };
+		479EDCB42CFF204200C67B76 /* AlbumEntity.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AlbumEntity.kt; sourceTree = "<group>"; };
+		479EDCB62CFF204200C67B76 /* AlbumDto.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AlbumDto.kt; sourceTree = "<group>"; };
+		479EDCB82CFF204200C67B76 /* AlbumMappers.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AlbumMappers.kt; sourceTree = "<group>"; };
+		479EDCBB2CFF204200C67B76 /* Album.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Album.kt; sourceTree = "<group>"; };
+		479EDCBF2CFF204200C67B76 /* ArtistDao.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ArtistDao.kt; sourceTree = "<group>"; };
+		479EDCC02CFF204200C67B76 /* ArtistEntity.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ArtistEntity.kt; sourceTree = "<group>"; };
+		479EDCC22CFF204200C67B76 /* ArtistDto.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ArtistDto.kt; sourceTree = "<group>"; };
+		479EDCC42CFF204200C67B76 /* ArtistMappers.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ArtistMappers.kt; sourceTree = "<group>"; };
+		479EDCC72CFF204200C67B76 /* Artist.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Artist.kt; sourceTree = "<group>"; };
+		479EDCCB2CFF204200C67B76 /* AuthManager.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AuthManager.kt; sourceTree = "<group>"; };
+		479EDCCC2CFF204200C67B76 /* KVaultAuthManager.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = KVaultAuthManager.kt; sourceTree = "<group>"; };
+		479EDCCD2CFF204200C67B76 /* KVaultFactory.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = KVaultFactory.kt; sourceTree = "<group>"; };
+		479EDCCF2CFF204200C67B76 /* AppDatabaseConstructor.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppDatabaseConstructor.kt; sourceTree = "<group>"; };
+		479EDCD02CFF204200C67B76 /* AuthRepository.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AuthRepository.kt; sourceTree = "<group>"; };
+		479EDCD12CFF204200C67B76 /* AuthRepositoryImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AuthRepositoryImpl.kt; sourceTree = "<group>"; };
+		479EDCD22CFF204200C67B76 /* DatabaseFactory.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DatabaseFactory.kt; sourceTree = "<group>"; };
+		479EDCD32CFF204200C67B76 /* RoomAppDatabase.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = RoomAppDatabase.kt; sourceTree = "<group>"; };
+		479EDCD52CFF204200C67B76 /* HttpClientExt.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = HttpClientExt.kt; sourceTree = "<group>"; };
+		479EDCD62CFF204200C67B76 /* HttpClientFactory.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = HttpClientFactory.kt; sourceTree = "<group>"; };
+		479EDCD82CFF204200C67B76 /* KtorSpotifyApi.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = KtorSpotifyApi.kt; sourceTree = "<group>"; };
+		479EDCD92CFF204200C67B76 /* SpotifyApi.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyApi.kt; sourceTree = "<group>"; };
+		479EDCDC2CFF204200C67B76 /* AppConstants.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppConstants.kt; sourceTree = "<group>"; };
+		479EDCDD2CFF204200C67B76 /* DataError.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DataError.kt; sourceTree = "<group>"; };
+		479EDCDE2CFF204200C67B76 /* Error.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Error.kt; sourceTree = "<group>"; };
+		479EDCDF2CFF204200C67B76 /* NetworkConstants.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NetworkConstants.kt; sourceTree = "<group>"; };
+		479EDCE02CFF204200C67B76 /* Result.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Result.kt; sourceTree = "<group>"; };
+		479EDCE22CFF204200C67B76 /* AuthViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AuthViewModel.kt; sourceTree = "<group>"; };
+		479EDCE32CFF204200C67B76 /* DataErrorToStringResouce.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DataErrorToStringResouce.kt; sourceTree = "<group>"; };
+		479EDCE42CFF204200C67B76 /* LaunchScreenViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LaunchScreenViewModel.kt; sourceTree = "<group>"; };
+		479EDCE52CFF204200C67B76 /* LoginViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LoginViewModel.kt; sourceTree = "<group>"; };
+		479EDCE82CFF204200C67B76 /* initKoin.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = initKoin.kt; sourceTree = "<group>"; };
+		479EDCE92CFF204200C67B76 /* Modules.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Modules.kt; sourceTree = "<group>"; };
+		479EDCEB2CFF204200C67B76 /* ImageManager.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ImageManager.kt; sourceTree = "<group>"; };
+		479EDCEC2CFF204200C67B76 /* SpotifyUserImageManager.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserImageManager.kt; sourceTree = "<group>"; };
+		479EDCED2CFF204200C67B76 /* TrackImageManager.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackImageManager.kt; sourceTree = "<group>"; };
+		479EDCEF2CFF204200C67B76 /* provideVault.kt */ = {isa = PBXFileReference; lastKnownFileType = text; name = provideVault.kt; path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/provideVault.kt; sourceTree = SOURCE_ROOT; };
+		479EDCF02CFF204200C67B76 /* SpotifyUserDao.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserDao.kt; sourceTree = "<group>"; };
+		479EDCF12CFF204200C67B76 /* SpotifyUserEntity.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserEntity.kt; sourceTree = "<group>"; };
+		479EDCF32CFF204200C67B76 /* SpotifyUserDto.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserDto.kt; sourceTree = "<group>"; };
+		479EDCF52CFF204200C67B76 /* SpotifyUserMappers.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserMappers.kt; sourceTree = "<group>"; };
+		479EDCF82CFF204200C67B76 /* SpotifyUserRepository.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserRepository.kt; sourceTree = "<group>"; };
+		479EDCFB2CFF204200C67B76 /* SpotifyUser.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUser.kt; sourceTree = "<group>"; };
+		479EDCFC2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpotifyUserRepositoryImpl.kt; sourceTree = "<group>"; };
+		479EDCFE2CFF204200C67B76 /* UserProfileAction.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = UserProfileAction.kt; sourceTree = "<group>"; };
+		479EDCFF2CFF204200C67B76 /* UserProfileState.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = UserProfileState.kt; sourceTree = "<group>"; };
+		479EDD002CFF204200C67B76 /* UserProfileViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = UserProfileViewModel.kt; sourceTree = "<group>"; };
+		479EDD032CFF204200C67B76 /* FavoriteTrackDao.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTrackDao.kt; sourceTree = "<group>"; };
+		479EDD042CFF204200C67B76 /* TrackEntity.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackEntity.kt; sourceTree = "<group>"; };
+		479EDD062CFF204200C67B76 /* TrackDto.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackDto.kt; sourceTree = "<group>"; };
+		479EDD082CFF204200C67B76 /* TrackMappers.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackMappers.kt; sourceTree = "<group>"; };
+		479EDD0B2CFF204200C67B76 /* TrackRepository.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackRepository.kt; sourceTree = "<group>"; };
+		479EDD0F2CFF204200C67B76 /* Track.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Track.kt; sourceTree = "<group>"; };
+		479EDD102CFF204200C67B76 /* TrackRepositoryImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TrackRepositoryImpl.kt; sourceTree = "<group>"; };
+		479EDD122CFF204200C67B76 /* FavoriteTracksAction.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksAction.kt; sourceTree = "<group>"; };
+		479EDD132CFF204200C67B76 /* FavoriteTracksState.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksState.kt; sourceTree = "<group>"; };
+		479EDD142CFF204200C67B76 /* FavoriteTracksViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksViewModel.kt; sourceTree = "<group>"; };
+		479EDD162CFF204200C67B76 /* BrowseTracksViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BrowseTracksViewModel.kt; sourceTree = "<group>"; };
+		479EDD1A2CFF204200C67B76 /* Res.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Res.kt; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* KMP-Spotify-Janitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KMP-Spotify-Janitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -40,6 +174,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				479EDCAB2CFF150A00C67B76 /* KMPNativeCoroutinesAsync in Frameworks */,
+				479EDCAD2CFF150A00C67B76 /* KMPNativeCoroutinesCombine in Frameworks */,
+				479EDCAF2CFF150A00C67B76 /* KMPNativeCoroutinesCore in Frameworks */,
+				479EDCB12CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				479EDCA82CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI in Frameworks */,
+				479EDCA62CFF14EE00C67B76 /* KMPObservableViewModelCore in Frameworks */,
 				478A1DF62CE739CA0071B73D /* SpotifyiOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,6 +205,8 @@
 		47035E672CFDE9C600ABD3F3 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				479EDCA02CFF0B9700C67B76 /* AppRootView.swift */,
+				479EDC9E2CFEFD7300C67B76 /* AuthView.swift */,
 				478BF6442CFE081F00595EF4 /* SearchTracksView.swift */,
 				47078FF52CFDF30D001B85E1 /* UserProfileView.swift */,
 				47035E6A2CFDE9FD00ABD3F3 /* FavoriteTracksView.swift */,
@@ -81,9 +223,446 @@
 			path = components;
 			sourceTree = "<group>";
 		};
+		479EDCB22CFF200C00C67B76 /* shared-code */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCBE2CFF204200C67B76 /* album */,
+				479EDCCA2CFF204200C67B76 /* artist */,
+				479EDCE72CFF204200C67B76 /* core */,
+				479EDCEA2CFF204200C67B76 /* di */,
+				479EDCEE2CFF204200C67B76 /* images */,
+				479EDCEF2CFF204200C67B76 /* provideVault.kt */,
+				479EDD022CFF204200C67B76 /* spotify_user */,
+				479EDD182CFF204200C67B76 /* track */,
+				479EDD1B2CFF204200C67B76 /* util */,
+			);
+			path = "shared-code";
+			sourceTree = "<group>";
+		};
+		479EDCB52CFF204200C67B76 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCB32CFF204200C67B76 /* AlbumDao.kt */,
+				479EDCB42CFF204200C67B76 /* AlbumEntity.kt */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		479EDCB72CFF204200C67B76 /* dto */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCB62CFF204200C67B76 /* AlbumDto.kt */,
+			);
+			path = dto;
+			sourceTree = "<group>";
+		};
+		479EDCB92CFF204200C67B76 /* mappers */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCB82CFF204200C67B76 /* AlbumMappers.kt */,
+			);
+			path = mappers;
+			sourceTree = "<group>";
+		};
+		479EDCBA2CFF204200C67B76 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCB52CFF204200C67B76 /* database */,
+				479EDCB72CFF204200C67B76 /* dto */,
+				479EDCB92CFF204200C67B76 /* mappers */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		479EDCBC2CFF204200C67B76 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCBB2CFF204200C67B76 /* Album.kt */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		479EDCBD2CFF204200C67B76 /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		479EDCBE2CFF204200C67B76 /* album */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCBA2CFF204200C67B76 /* data */,
+				479EDCBC2CFF204200C67B76 /* domain */,
+				479EDCBD2CFF204200C67B76 /* presentation */,
+			);
+			name = album;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/album;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDCC12CFF204200C67B76 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCBF2CFF204200C67B76 /* ArtistDao.kt */,
+				479EDCC02CFF204200C67B76 /* ArtistEntity.kt */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		479EDCC32CFF204200C67B76 /* dto */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCC22CFF204200C67B76 /* ArtistDto.kt */,
+			);
+			path = dto;
+			sourceTree = "<group>";
+		};
+		479EDCC52CFF204200C67B76 /* mappers */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCC42CFF204200C67B76 /* ArtistMappers.kt */,
+			);
+			path = mappers;
+			sourceTree = "<group>";
+		};
+		479EDCC62CFF204200C67B76 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCC12CFF204200C67B76 /* database */,
+				479EDCC32CFF204200C67B76 /* dto */,
+				479EDCC52CFF204200C67B76 /* mappers */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		479EDCC82CFF204200C67B76 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCC72CFF204200C67B76 /* Artist.kt */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		479EDCC92CFF204200C67B76 /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		479EDCCA2CFF204200C67B76 /* artist */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCC62CFF204200C67B76 /* data */,
+				479EDCC82CFF204200C67B76 /* domain */,
+				479EDCC92CFF204200C67B76 /* presentation */,
+			);
+			name = artist;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/artist;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDCCE2CFF204200C67B76 /* auth */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCCB2CFF204200C67B76 /* AuthManager.kt */,
+				479EDCCC2CFF204200C67B76 /* KVaultAuthManager.kt */,
+				479EDCCD2CFF204200C67B76 /* KVaultFactory.kt */,
+			);
+			path = auth;
+			sourceTree = "<group>";
+		};
+		479EDCD42CFF204200C67B76 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCCF2CFF204200C67B76 /* AppDatabaseConstructor.kt */,
+				479EDCD02CFF204200C67B76 /* AuthRepository.kt */,
+				479EDCD12CFF204200C67B76 /* AuthRepositoryImpl.kt */,
+				479EDCD22CFF204200C67B76 /* DatabaseFactory.kt */,
+				479EDCD32CFF204200C67B76 /* RoomAppDatabase.kt */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		479EDCD72CFF204200C67B76 /* client */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCD52CFF204200C67B76 /* HttpClientExt.kt */,
+				479EDCD62CFF204200C67B76 /* HttpClientFactory.kt */,
+			);
+			path = client;
+			sourceTree = "<group>";
+		};
+		479EDCDA2CFF204200C67B76 /* network */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCD72CFF204200C67B76 /* client */,
+				479EDCD82CFF204200C67B76 /* KtorSpotifyApi.kt */,
+				479EDCD92CFF204200C67B76 /* SpotifyApi.kt */,
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
+		479EDCDB2CFF204200C67B76 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCCE2CFF204200C67B76 /* auth */,
+				479EDCD42CFF204200C67B76 /* database */,
+				479EDCDA2CFF204200C67B76 /* network */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		479EDCE12CFF204200C67B76 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCDC2CFF204200C67B76 /* AppConstants.kt */,
+				479EDCDD2CFF204200C67B76 /* DataError.kt */,
+				479EDCDE2CFF204200C67B76 /* Error.kt */,
+				479EDCDF2CFF204200C67B76 /* NetworkConstants.kt */,
+				479EDCE02CFF204200C67B76 /* Result.kt */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		479EDCE62CFF204200C67B76 /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCE22CFF204200C67B76 /* AuthViewModel.kt */,
+				479EDCE32CFF204200C67B76 /* DataErrorToStringResouce.kt */,
+				479EDCE42CFF204200C67B76 /* LaunchScreenViewModel.kt */,
+				479EDCE52CFF204200C67B76 /* LoginViewModel.kt */,
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		479EDCE72CFF204200C67B76 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCDB2CFF204200C67B76 /* data */,
+				479EDCE12CFF204200C67B76 /* domain */,
+				479EDCE62CFF204200C67B76 /* presentation */,
+			);
+			name = core;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/core;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDCEA2CFF204200C67B76 /* di */ = {
+			isa = PBXGroup;
+			children = (
+				4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */,
+				4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */,
+				479EDCE82CFF204200C67B76 /* initKoin.kt */,
+				479EDCE92CFF204200C67B76 /* Modules.kt */,
+			);
+			name = di;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/di;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDCEE2CFF204200C67B76 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCEB2CFF204200C67B76 /* ImageManager.kt */,
+				479EDCEC2CFF204200C67B76 /* SpotifyUserImageManager.kt */,
+				479EDCED2CFF204200C67B76 /* TrackImageManager.kt */,
+			);
+			name = images;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/images;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDCF22CFF204200C67B76 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCF02CFF204200C67B76 /* SpotifyUserDao.kt */,
+				479EDCF12CFF204200C67B76 /* SpotifyUserEntity.kt */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		479EDCF42CFF204200C67B76 /* dto */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCF32CFF204200C67B76 /* SpotifyUserDto.kt */,
+			);
+			path = dto;
+			sourceTree = "<group>";
+		};
+		479EDCF62CFF204200C67B76 /* mappers */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCF52CFF204200C67B76 /* SpotifyUserMappers.kt */,
+			);
+			path = mappers;
+			sourceTree = "<group>";
+		};
+		479EDCF72CFF204200C67B76 /* network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
+		479EDCF92CFF204200C67B76 /* repository */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCF82CFF204200C67B76 /* SpotifyUserRepository.kt */,
+			);
+			path = repository;
+			sourceTree = "<group>";
+		};
+		479EDCFA2CFF204200C67B76 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCF22CFF204200C67B76 /* database */,
+				479EDCF42CFF204200C67B76 /* dto */,
+				479EDCF62CFF204200C67B76 /* mappers */,
+				479EDCF72CFF204200C67B76 /* network */,
+				479EDCF92CFF204200C67B76 /* repository */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		479EDCFD2CFF204200C67B76 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCFB2CFF204200C67B76 /* SpotifyUser.kt */,
+				479EDCFC2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		479EDD012CFF204200C67B76 /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCFE2CFF204200C67B76 /* UserProfileAction.kt */,
+				479EDCFF2CFF204200C67B76 /* UserProfileState.kt */,
+				479EDD002CFF204200C67B76 /* UserProfileViewModel.kt */,
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		479EDD022CFF204200C67B76 /* spotify_user */ = {
+			isa = PBXGroup;
+			children = (
+				479EDCFA2CFF204200C67B76 /* data */,
+				479EDCFD2CFF204200C67B76 /* domain */,
+				479EDD012CFF204200C67B76 /* presentation */,
+			);
+			name = spotify_user;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/spotify_user;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDD052CFF204200C67B76 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD032CFF204200C67B76 /* FavoriteTrackDao.kt */,
+				479EDD042CFF204200C67B76 /* TrackEntity.kt */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		479EDD072CFF204200C67B76 /* dto */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD062CFF204200C67B76 /* TrackDto.kt */,
+			);
+			path = dto;
+			sourceTree = "<group>";
+		};
+		479EDD092CFF204200C67B76 /* mappers */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD082CFF204200C67B76 /* TrackMappers.kt */,
+			);
+			path = mappers;
+			sourceTree = "<group>";
+		};
+		479EDD0A2CFF204200C67B76 /* network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
+		479EDD0C2CFF204200C67B76 /* repository */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD0B2CFF204200C67B76 /* TrackRepository.kt */,
+			);
+			path = repository;
+			sourceTree = "<group>";
+		};
+		479EDD0D2CFF204200C67B76 /* worker */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = worker;
+			sourceTree = "<group>";
+		};
+		479EDD0E2CFF204200C67B76 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD052CFF204200C67B76 /* database */,
+				479EDD072CFF204200C67B76 /* dto */,
+				479EDD092CFF204200C67B76 /* mappers */,
+				479EDD0A2CFF204200C67B76 /* network */,
+				479EDD0C2CFF204200C67B76 /* repository */,
+				479EDD0D2CFF204200C67B76 /* worker */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		479EDD112CFF204200C67B76 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD0F2CFF204200C67B76 /* Track.kt */,
+				479EDD102CFF204200C67B76 /* TrackRepositoryImpl.kt */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		479EDD152CFF204200C67B76 /* fav_tracks_list */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD122CFF204200C67B76 /* FavoriteTracksAction.kt */,
+				479EDD132CFF204200C67B76 /* FavoriteTracksState.kt */,
+				479EDD142CFF204200C67B76 /* FavoriteTracksViewModel.kt */,
+			);
+			path = fav_tracks_list;
+			sourceTree = "<group>";
+		};
+		479EDD172CFF204200C67B76 /* presentation */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD152CFF204200C67B76 /* fav_tracks_list */,
+				479EDD162CFF204200C67B76 /* BrowseTracksViewModel.kt */,
+			);
+			path = presentation;
+			sourceTree = "<group>";
+		};
+		479EDD182CFF204200C67B76 /* track */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD0E2CFF204200C67B76 /* data */,
+				479EDD112CFF204200C67B76 /* domain */,
+				479EDD172CFF204200C67B76 /* presentation */,
+			);
+			name = track;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/track;
+			sourceTree = SOURCE_ROOT;
+		};
+		479EDD1B2CFF204200C67B76 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				479EDD1A2CFF204200C67B76 /* Res.kt */,
+			);
+			name = util;
+			path = ../shared/src/commonMain/kotlin/org/internship/kmp/martin/util;
+			sourceTree = SOURCE_ROOT;
+		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
+				479EDCB22CFF200C00C67B76 /* shared-code */,
 				AB1DB47929225F7C00F7AF9C /* Configuration */,
 				7555FF7D242A565900829871 /* iosApp */,
 				7555FF7C242A565900829871 /* Products */,
@@ -103,6 +682,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */,
 				47035E692CFDE9DF00ABD3F3 /* components */,
 				47035E672CFDE9C600ABD3F3 /* views */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -141,6 +721,12 @@
 			name = iosApp;
 			packageProductDependencies = (
 				478A1DF52CE739CA0071B73D /* SpotifyiOS */,
+				479EDCA52CFF14EE00C67B76 /* KMPObservableViewModelCore */,
+				479EDCA72CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI */,
+				479EDCAA2CFF150A00C67B76 /* KMPNativeCoroutinesAsync */,
+				479EDCAC2CFF150A00C67B76 /* KMPNativeCoroutinesCombine */,
+				479EDCAE2CFF150A00C67B76 /* KMPNativeCoroutinesCore */,
+				479EDCB02CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* KMP-Spotify-Janitor.app */;
@@ -174,6 +760,8 @@
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
 				478A1DF42CE739CA0071B73D /* XCRemoteSwiftPackageReference "ios-sdk" */,
+				479EDCA42CFF14EE00C67B76 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */,
+				479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -190,6 +778,67 @@
 			buildActionMask = 2147483647;
 			files = (
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
+				479EDD1C2CFF204200C67B76 /* TrackDto.kt in Resources */,
+				479EDD1D2CFF204200C67B76 /* FavoriteTracksState.kt in Resources */,
+				479EDD1E2CFF204200C67B76 /* AlbumMappers.kt in Resources */,
+				479EDD1F2CFF204200C67B76 /* ArtistDao.kt in Resources */,
+				479EDD202CFF204200C67B76 /* ArtistDto.kt in Resources */,
+				479EDD212CFF204200C67B76 /* AuthManager.kt in Resources */,
+				479EDD222CFF204200C67B76 /* Artist.kt in Resources */,
+				479EDD232CFF204200C67B76 /* FavoriteTracksAction.kt in Resources */,
+				479EDD242CFF204200C67B76 /* Album.kt in Resources */,
+				479EDD252CFF204200C67B76 /* SpotifyUserImageManager.kt in Resources */,
+				479EDD262CFF204200C67B76 /* initKoin.kt in Resources */,
+				479EDD272CFF204200C67B76 /* ArtistMappers.kt in Resources */,
+				479EDD282CFF204200C67B76 /* AppConstants.kt in Resources */,
+				479EDD292CFF204200C67B76 /* SpotifyUserEntity.kt in Resources */,
+				479EDD2A2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt in Resources */,
+				479EDD2B2CFF204200C67B76 /* DataErrorToStringResouce.kt in Resources */,
+				479EDD2C2CFF204200C67B76 /* SpotifyUserDao.kt in Resources */,
+				479EDD2D2CFF204200C67B76 /* KVaultFactory.kt in Resources */,
+				479EDD2E2CFF204200C67B76 /* BrowseTracksViewModel.kt in Resources */,
+				479EDD2F2CFF204200C67B76 /* UserProfileState.kt in Resources */,
+				479EDD302CFF204200C67B76 /* SpotifyUserMappers.kt in Resources */,
+				479EDD312CFF204200C67B76 /* Result.kt in Resources */,
+				479EDD332CFF204200C67B76 /* TrackEntity.kt in Resources */,
+				479EDD342CFF204200C67B76 /* TrackImageManager.kt in Resources */,
+				479EDD352CFF204200C67B76 /* ArtistEntity.kt in Resources */,
+				479EDD362CFF204200C67B76 /* LaunchScreenViewModel.kt in Resources */,
+				479EDD372CFF204200C67B76 /* DatabaseFactory.kt in Resources */,
+				479EDD382CFF204200C67B76 /* TrackRepository.kt in Resources */,
+				479EDD392CFF204200C67B76 /* TrackRepositoryImpl.kt in Resources */,
+				4770416E2CFFB7CF002EFFD6 /* MyTestInterface.kt in Resources */,
+				4770416F2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt in Resources */,
+				479EDD3A2CFF204200C67B76 /* Error.kt in Resources */,
+				479EDD3B2CFF204200C67B76 /* KtorSpotifyApi.kt in Resources */,
+				479EDD3C2CFF204200C67B76 /* Track.kt in Resources */,
+				479EDD3D2CFF204200C67B76 /* Modules.kt in Resources */,
+				479EDD3E2CFF204200C67B76 /* FavoriteTracksViewModel.kt in Resources */,
+				479EDD3F2CFF204200C67B76 /* NetworkConstants.kt in Resources */,
+				479EDD402CFF204200C67B76 /* AuthRepository.kt in Resources */,
+				479EDD412CFF204200C67B76 /* AlbumEntity.kt in Resources */,
+				479EDD422CFF204200C67B76 /* LoginViewModel.kt in Resources */,
+				479EDD432CFF204200C67B76 /* Res.kt in Resources */,
+				479EDD442CFF204200C67B76 /* UserProfileViewModel.kt in Resources */,
+				479EDD452CFF204200C67B76 /* HttpClientExt.kt in Resources */,
+				479EDD462CFF204200C67B76 /* UserProfileAction.kt in Resources */,
+				479EDD472CFF204200C67B76 /* AuthRepositoryImpl.kt in Resources */,
+				479EDD482CFF204200C67B76 /* AppDatabaseConstructor.kt in Resources */,
+				479EDD492CFF204200C67B76 /* KVaultAuthManager.kt in Resources */,
+				479EDD4A2CFF204200C67B76 /* HttpClientFactory.kt in Resources */,
+				479EDD4B2CFF204200C67B76 /* provideVault.kt in Resources */,
+				479EDD4C2CFF204200C67B76 /* SpotifyUser.kt in Resources */,
+				479EDD4D2CFF204200C67B76 /* SpotifyUserRepository.kt in Resources */,
+				479EDD4E2CFF204200C67B76 /* RoomAppDatabase.kt in Resources */,
+				479EDD4F2CFF204200C67B76 /* FavoriteTrackDao.kt in Resources */,
+				479EDD502CFF204200C67B76 /* SpotifyUserDto.kt in Resources */,
+				479EDD512CFF204200C67B76 /* DataError.kt in Resources */,
+				479EDD522CFF204200C67B76 /* TrackMappers.kt in Resources */,
+				479EDD532CFF204200C67B76 /* SpotifyApi.kt in Resources */,
+				479EDD542CFF204200C67B76 /* AlbumDao.kt in Resources */,
+				479EDD552CFF204200C67B76 /* AlbumDto.kt in Resources */,
+				479EDD562CFF204200C67B76 /* AuthViewModel.kt in Resources */,
+				479EDD572CFF204200C67B76 /* ImageManager.kt in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,10 +873,13 @@
 			files = (
 				478BF6422CFE056B00595EF4 /* TrackRow.swift in Sources */,
 				478BF6452CFE082500595EF4 /* SearchTracksView.swift in Sources */,
+				479EDCA12CFF0B9A00C67B76 /* AppRootView.swift in Sources */,
 				47078FF62CFDF312001B85E1 /* UserProfileView.swift in Sources */,
+				479EDCA32CFF14A900C67B76 /* KMPObservableViewModel.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				47035E6B2CFDEA0400ABD3F3 /* FavoriteTracksView.swift in Sources */,
+				479EDC9F2CFEFD7B00C67B76 /* AuthView.swift in Sources */,
 				476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,7 +940,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -345,7 +997,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -370,7 +1022,7 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -401,7 +1053,7 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,6 +1100,22 @@
 				kind = branch;
 			};
 		};
+		479EDCA42CFF14EE00C67B76 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-ObservableViewModel.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -455,6 +1123,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 478A1DF42CE739CA0071B73D /* XCRemoteSwiftPackageReference "ios-sdk" */;
 			productName = SpotifyiOS;
+		};
+		479EDCA52CFF14EE00C67B76 /* KMPObservableViewModelCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA42CFF14EE00C67B76 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			productName = KMPObservableViewModelCore;
+		};
+		479EDCA72CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA42CFF14EE00C67B76 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			productName = KMPObservableViewModelSwiftUI;
+		};
+		479EDCAA2CFF150A00C67B76 /* KMPNativeCoroutinesAsync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesAsync;
+		};
+		479EDCAC2CFF150A00C67B76 /* KMPNativeCoroutinesCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCombine;
+		};
+		479EDCAE2CFF150A00C67B76 /* KMPNativeCoroutinesCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCore;
+		};
+		479EDCB02CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesRxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
