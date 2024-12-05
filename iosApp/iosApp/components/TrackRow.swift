@@ -10,6 +10,7 @@ import Shared
 
 struct TrackRow: View {
     var track: Track
+    var onAddToFavoritesClick: (Track) -> ResultKt
     
     var body: some View {
         HStack {

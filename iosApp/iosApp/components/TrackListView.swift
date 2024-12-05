@@ -8,15 +8,16 @@
 import SwiftUI
 import Shared
 
-struct TracksListView: View {
-    let tracks: [Track] // Assuming Track is the type for the track data
-    
-    var body: some View {
-        List(tracks, id: \.id) { track in
-            TrackRow(track: track)
-                .listRowSeparator(.hidden)
-                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-        }
-        .listStyle(.plain)
-    }
-}
+//struct TracksListView: View {
+//    let tracks: [Track]
+//    var onAddToFavoritesClick: ((Track) -> Void)?
+//    
+//    var body: some View {
+//        List(tracks, id: \.id) { track in
+//            TrackRow(track: track, onAddToFavoritesClick: onAddToFavoritesClick )
+//                .listRowSeparator(.hidden)
+//                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+//        }
+//        .listStyle(.plain)
+//    }
+//}

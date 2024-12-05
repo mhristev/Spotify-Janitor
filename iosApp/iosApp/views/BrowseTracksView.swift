@@ -21,7 +21,7 @@ struct BrowseTracksView: View {
     @State private var timer: Timer? = nil
     
     func performRequest(with query: String) {
-        viewModel.searchTracks(query: query)
+        viewModel.onAction(action: BrowseTracksActionOnSearch(query: query))
          }
     var body: some View {
         NavigationStack {
@@ -48,7 +48,16 @@ struct BrowseTracksView: View {
                             performRequest(with: newValue)
                         }
                     }
-                TracksListView(tracks: viewModel.state.tracks)
+                List(viewModel.state.tracks, id: \.id) { track in
+                    TrackRow(
+                        track: track,
+                        onAddToFavoritesClick:
+                            viewModel.onAction(action: BrowseTracksActionOnTrackAddToFavorites(track: track))
+                    )
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                }
+                .listStyle(.plain)
             }
             .navigationBarHidden(true)
             .navigationTitle("Search")

@@ -10,7 +10,6 @@ struct iOSApp: App {
     }
     
     var body: some Scene {
-        let myColor = AppConstants.Colors.shared.PRIMARY_PURPLE_HEX
         WindowGroup {
             ContentView()
         }

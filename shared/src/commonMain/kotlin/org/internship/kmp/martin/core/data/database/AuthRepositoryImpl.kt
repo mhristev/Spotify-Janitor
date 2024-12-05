@@ -18,14 +18,14 @@ import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
 
 class AuthRepositoryImpl(private val authManager: AuthManager, private val apiClient: SpotifyApi, private val userDao: SpotifyUserDao) : AuthRepository {
 
-    private val _isUserLoggedIn = MutableStateFlow(false)
+    private val _isUserLoggedIn = MutableStateFlow(isUserAuthenticated())
     override fun isUserLoggedIn(): StateFlow<Boolean> = _isUserLoggedIn
 
 
-//    override fun isUserLoggedIn(): StateFlow<Boolean> {
-//        val isLoggedIn = authManager.getAccessToken() != null
-//        return MutableStateFlow(isLoggedIn)
-//    }
+    private fun isUserAuthenticated(): Boolean {
+        val isLoggedIn = authManager.getAccessToken() != null
+        return isLoggedIn
+    }
 
     override suspend fun login(accessToken: String, expiresIn: Int): DataError? {
         authManager.setAccessToken(accessToken)

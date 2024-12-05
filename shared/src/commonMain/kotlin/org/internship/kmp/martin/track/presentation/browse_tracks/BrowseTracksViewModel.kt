@@ -6,14 +6,16 @@ import com.rickclephas.kmp.observableviewmodel.launch
 import com.rickclephas.kmp.observableviewmodel.stateIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import org.internship.kmp.martin.core.domain.DataError
 import org.internship.kmp.martin.core.domain.Result
+import org.internship.kmp.martin.core.domain.onError
+import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 
 class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
-    
+
     private val _state = MutableStateFlow(BrowseTracksState())
     @NativeCoroutinesState
     val state = _state
@@ -31,6 +33,7 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
         }
     }
 
+    @Throws(DataError::class)
     private fun searchTracks(query: String) {
         viewModelScope.launch {
             val results = trackRepository.searchTracks(query)
@@ -40,11 +43,20 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
                         tracks = results.data
                     )
                 }
+            } else {
+                results.onError {
+                    throw it
+                }
             }
         }
     }
-
+    @Throws(DataError::class)
     private fun addTrackToFavorites(track: Track) {
-        viewModelScope.launch { trackRepository.addFavoriteTrack(track) }
+        viewModelScope.launch {
+            val result = trackRepository.addFavoriteTrack(track)
+            result.onError {
+                throw it
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
     @NativeCoroutinesState
     val state = _state
         .onStart {
-            syncronizeTracks()
+            loadFavoriteTracks()
         }
         .stateIn(
             viewModelScope,
@@ -40,7 +40,9 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
                     )
                 }
             }
+            syncronizeTracks()
         }
+
     }
 
     private fun loadNextFavoriteTracks() {
