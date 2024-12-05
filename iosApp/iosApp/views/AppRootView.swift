@@ -12,32 +12,29 @@ struct AppRootView: View {
     init() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
-        tabBarAppearance.backgroundColor = .black  // Change tab bar background to red
+        tabBarAppearance.backgroundColor = UIColor(resource: .PRIMARY_DARK)
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     var body: some View {
         TabView {
-            // First View
-            SearchTracksView()
+            BrowseTracksView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
             
-            // Middle View (The one you provided)
             FavoriteTracksView()
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
             
-            // Third View
             UserProfileView()
                 .tabItem {
                     Label("Me", systemImage: "gearshape.fill")
                 }
         }
-        .accentColor(.blue)  // Change the color of the selected tab
+        .accentColor(Color(.PRIMARY_TEXT_WHITE))
         
     }
     

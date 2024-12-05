@@ -10,48 +10,29 @@ import Shared
 import KMPObservableViewModelSwiftUI
 
 struct FavoriteTracksView: View {
-
-    let inter: TrackRepository = KoinDependencies.shared.getTrackRepository()
+    
+    @StateViewModel
+    var viewModel = KoinDependencies.shared.favoriteTracksViewModel
+    
     var body: some View {
             VStack {
-                // Top Bar with title and refresh button
-                HStack {
-                    Text("Favorite Tracks")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.leading, 10)
-                    
-                    Spacer()
-
-                    Button(action: {
-                        // Refresh action logic goes here
-                        print("Refreshing...")
-                    }) {
-                        Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
-                            .padding(.trailing, 16)
-                    }
-                }
-                .padding(.top, 20)
-                .background(Color.black)
+                TopBarView(title: "Favorite Tracks", imageName: "arrow.clockwise", onAction: {
+                    viewModel.onAction(action: FavoriteTracksActionSyncronizeTracks())
+                })
                 
-                // Track list
-//                List(viewModel.state.tracks, id: \.id) { track in
-//                    TrackRow(track: track)
-//                        .listRowSeparator(.hidden)
-//                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-//                }
-//                .listStyle(.plain)
-        }
-        .background(Color.black)
-        .shadow(radius: 5)
-        }
+                List(viewModel.state.tracks, id: \.id) { track in
+                    TrackRow(track: track)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                }
+                .listStyle(.plain)
+        }.background(Color(.PRIMARY_DARK))
+            .shadow(radius: 5)
+    }
 }
 
 
-#Preview {
-    FavoriteTracksView()
-}
+//#Preview {
+//    FavoriteTracksView()
+//}
  

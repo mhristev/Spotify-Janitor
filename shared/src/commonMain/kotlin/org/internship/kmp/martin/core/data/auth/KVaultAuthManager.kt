@@ -1,6 +1,8 @@
 package org.internship.kmp.martin.core.data.auth
 
 import com.liftric.kvault.KVault
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.Clock
 import org.internship.kmp.martin.core.domain.AppConstants
 
@@ -19,10 +21,10 @@ class KVaultAuthManager(private val kvault: KVault): AuthManager {
         return currentTimeMillis + expiresIn
     }
 
-    override fun hasTokenExpired(): Boolean {
-        val expiresIn = getExpireTime() ?: return true
+    override fun hasTokenExpired(): StateFlow<Boolean> {
+        val expiresIn = getExpireTime() ?: return MutableStateFlow(true)
         val currentTimeSeconds = Clock.System.now().epochSeconds
-        return currentTimeSeconds > expiresIn
+        return MutableStateFlow(currentTimeSeconds > expiresIn)
     }
 
     private fun getExpireTime(): Long? {

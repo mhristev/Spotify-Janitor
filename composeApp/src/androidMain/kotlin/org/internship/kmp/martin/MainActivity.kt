@@ -3,19 +3,30 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.internship.kmp.martin.core.data.database.AuthRepository
+import org.internship.kmp.martin.core.presentation.AuthViewModel
 import org.internship.kmp.martin.core.presentation.LoginViewModel
+import org.koin.android.ext.android.get
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.compose.koinInject
 
 
 class MainActivity : ComponentActivity() {
     private val CLIENT_ID = "91be3576121a482e9ad00bb97888f3e8"
     private val REDIRECT_URI = "org.internship.kmp.martin://callback"
+
+    private var isAuthenticated = MutableStateFlow(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +51,20 @@ class MainActivity : ComponentActivity() {
                 TOKEN -> {
                     val accessToken = response.accessToken
                     val expiresIn = response.expiresIn
-                    setContent {
-                        val viewModel: LoginViewModel = koinViewModel()
-                        viewModel.login(accessToken, expiresIn)
-                        App(navController = rememberNavController())
+                    isAuthenticated.update { true }
+                    val authRepository: AuthRepository = get()
+                    lifecycleScope.launch {
+                        authRepository.login(accessToken, expiresIn)
                     }
+//                    val viewModel: AuthViewModel by viewModel()
+//
+//                    viewModel.login(accessToken, expiresIn)
                 }
                 ERROR -> {
-                    // Handle error
+                    // TODO()
                 }
                 else -> {
-                    // Handle other cases
+                    // TODO()
                 }
             }
         }

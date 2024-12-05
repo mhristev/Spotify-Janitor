@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DismissValue
@@ -32,11 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.internship.kmp.martin.components.SearchTrackItem
+import org.internship.kmp.martin.components.RemoveConfirmationDialog
+import org.internship.kmp.martin.components.TrackItem
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
@@ -49,17 +48,14 @@ fun FavoriteTracksView() {
     val viewModel: FavoriteTracksViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // Dialog state to show/hide the confirmation modal
     var showDialog by remember { mutableStateOf(false) }
     var trackToDelete by remember { mutableStateOf<Track?>(null) }
 
-    // Function to confirm deletion
     fun confirmDelete(track: Track) {
         trackToDelete = track
         showDialog = true
     }
 
-    // Function to handle delete confirmation
     fun onDeleteConfirmed() {
         trackToDelete?.let {
             viewModel.onAction(FavoriteTracksAction.onTrackDelete(it))
@@ -67,38 +63,22 @@ fun FavoriteTracksView() {
         showDialog = false
     }
 
-    // Function to handle cancel action
+
     fun onDeleteCancelled() {
         showDialog = false
     }
 
-//    val context = LocalContext.current
-
-//    fun deleteTrack(track: Track) {
-//        val trackJson = track.id
-//        val inputData = Data.Builder()
-//            .putString("track", trackJson)
-//            .build()
-//
-//        val deleteTrackWorkRequest = OneTimeWorkRequestBuilder<TrackDeletionWorker>()
-//            .setInputData(inputData)
-//            .setInitialDelay(5, java.util.concurrent.TimeUnit.SECONDS)
-//            .build()
-//
-//        WorkManager.getInstance(context).enqueue(deleteTrackWorkRequest)
-//    }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Favorite Tracks", color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())) },
                 backgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()),
                 actions = {
-                    // Sync Button on TopBar
                     IconButton(
-                        onClick = { viewModel.syncronizeTracks() },
+                        onClick = { viewModel.onAction(FavoriteTracksAction.SyncronizeTracks) },
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Refresh,  // Sync Icon
+                            imageVector = Icons.Filled.Refresh,
                             contentDescription = "Sync Tracks",
                             tint = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
                         )
@@ -128,9 +108,8 @@ fun FavoriteTracksView() {
                             state = rememberDismissState(
                                 confirmStateChange = {
                                     if (it == DismissValue.DismissedToEnd) {
-                                        // Show confirmation dialog when swiped to delete
                                         confirmDelete(track)
-                                        false // Don't delete immediately
+                                        false
                                     } else {
                                         false
                                     }
@@ -138,7 +117,7 @@ fun FavoriteTracksView() {
                             ),
                             background = { },
                             dismissContent = {
-                                SearchTrackItem(track)
+                                TrackItem(track, onAddToFavoritesClick = null)
                             }
                         )
                     }
@@ -160,7 +139,7 @@ fun FavoriteTracksView() {
                 }
                 if (showDialog) {
                     trackToDelete?.let {
-                        DeleteConfirmationDialog(
+                        RemoveConfirmationDialog(
                             track = it,
                             onConfirm = { onDeleteConfirmed() },
                             onDismiss = { onDeleteCancelled() }
@@ -172,34 +151,4 @@ fun FavoriteTracksView() {
     )
 }
 
-@Composable
-fun DeleteConfirmationDialog(
-    track: Track?,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    if (track != null) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text("Confirm Deletion", color = Color.White) },
-            text = { Text("Are you sure you want to delete this track?", color = Color.White) },
-            confirmButton = {
-                Button(
-                    onClick = onConfirm,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
-                ) {
-                    Text("Delete", color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt()))
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
-                ) {
-                    Text("Cancel", color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt()))
-                }
-            },
-            backgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
-        )
-    }
-}
+

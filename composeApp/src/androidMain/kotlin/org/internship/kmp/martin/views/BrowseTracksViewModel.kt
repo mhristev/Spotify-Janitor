@@ -28,20 +28,21 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.internship.kmp.martin.components.SearchTrackItem
+import org.internship.kmp.martin.components.TrackItem
 import org.internship.kmp.martin.core.domain.AppConstants
-import org.internship.kmp.martin.track.presentation.BrowseTracksViewModel
+import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksAction
+import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchTracksView() {
+fun BrowseTracksView() {
     val viewModel: BrowseTracksViewModel = koinViewModel()
-    val tracks by viewModel.cashedTracks.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
-
     var lastQuery by remember { mutableStateOf("") }
     val debouncePeriod = 500L
+
     val coroutineScope = rememberCoroutineScope()
 
     val darkBackgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
@@ -80,7 +81,7 @@ fun SearchTracksView() {
                                     delay(debouncePeriod)
                                     if (searchQuery == newQuery && searchQuery != lastQuery) {
                                         lastQuery = searchQuery
-                                        viewModel.searchTracks(searchQuery)
+                                        viewModel.onAction(BrowseTracksAction.onSearch(searchQuery))
                                     }
                                 }
                             },
@@ -93,8 +94,10 @@ fun SearchTracksView() {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(tracks) { track ->
-                            SearchTrackItem(track)
+                        items(state.tracks) { track ->
+                            TrackItem(track, onAddToFavoritesClick = {
+                                viewModel.onAction(BrowseTracksAction.onTrackAddToFavorites(it))
+                            })
                         }
                     }
                 }

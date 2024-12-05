@@ -7,6 +7,8 @@
 //
 import SwiftUI
 import SpotifyiOS
+import KMPObservableViewModelSwiftUI
+import Shared
 
 import AuthenticationServices
 
@@ -14,53 +16,57 @@ struct AuthView: View {
     @State private var isLoggedIn = false
     @State private var authSession: ASWebAuthenticationSession?
     @State private var accessToken: String?
-
+    
+    
+    @StateViewModel
+    var viewModel = KoinDependencies.shared.authViewModel
+    
     private let clientID = "91be3576121a482e9ad00bb97888f3e8"
     private let redirectURI = URL(string: "org.internship.kmp.martin://callback")!
-
+    
     
     var body: some View {
-            ZStack {
-                Color.black
-                    .edgesIgnoringSafeArea(.all)
+        ZStack {
+            Color(.PRIMARY_DARK)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                AsyncImage(url: URL(string: "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png")) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                } placeholder: {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .frame(width: 120, height: 120)
+                }
                 
-                VStack {
-                    AsyncImage(url: URL(string: "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png")) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 120, height: 120)
-                    } placeholder: {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .frame(width: 120, height: 120)
-                    }
+                Spacer().frame(height: 16)
+                
+                Text("Spotify Janitor")
+                    .font(.headline)
+                    .foregroundColor(Color.white)
+                    .padding(.bottom, 24)
+                
+                Spacer().frame(height: 24)
+                
+                Button(action: {
+                    initiateSpotifyLogin()
+                }) {
+                    Text("Login with Spotify").foregroundColor(Color.white)
                     
-                    Spacer().frame(height: 16)
-                    
-                    Text("Spotify Janitor")
-                        .font(.headline)
-                        .foregroundColor(Color.white)
-                        .padding(.bottom, 24)
-                    
-                    Spacer().frame(height: 24)
-                    
-                    Button(action: {
-                        initiateSpotifyLogin()
-                    }) {
-                        Text("Login with Spotify").foregroundColor(Color.white)
-                        
-                    }
-        
-                    
-                    
-                    
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.horizontal, 20)
-            }.fullScreenCover(isPresented: $isLoggedIn) {
-                AppRootView()
-                }
+                }.background(Color(.SPOTIFY_GREEN))
+                
+                
+                
+                
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.horizontal, 20)
+        }.fullScreenCover(isPresented: $isLoggedIn) {
+            AppRootView()
+        }
         
     }
     
@@ -70,25 +76,31 @@ struct AuthView: View {
         let presentationContextProvider = PresentationContextProvider()
         authSession = ASWebAuthenticationSession(url: authURL, callbackURLScheme: redirectURI.scheme) { callbackURL, error in
             if let callbackURL = callbackURL, error == nil {
-                if let token = extractAccessToken(from: callbackURL) {
-                    accessToken = token
-                    isLoggedIn = true
+                let (token, expiresIn) = extractAccessToken(from: callbackURL)
+                if let token = token {
+                    if let intValue = Int32(expiresIn ?? "") {
+                        viewModel.onAction(action: AuthActionOnLogin(accessToken: token, expiresIn: intValue))
+                        isLoggedIn = true
+                    }
+                   
                 }
             }
         }
         authSession?.presentationContextProvider = presentationContextProvider
         authSession?.start()
     }
-
-    private func extractAccessToken(from url: URL) -> String? {
-        guard let fragment = url.fragment else { return nil }
+    
+    private func extractAccessToken(from url: URL) -> (String?, String?) {
+        guard let fragment = url.fragment else { return (nil, nil) }
         let params = fragment.split(separator: "&").reduce(into: [String: String]()) { result, param in
             let parts = param.split(separator: "=")
             if parts.count == 2 {
                 result[String(parts[0])] = String(parts[1])
             }
         }
-        return params["access_token"]
+        var expiresIn = params["expires_in"]
+        var accessToken = params["access_token"]
+        return (accessToken, expiresIn)
     }
 }
 

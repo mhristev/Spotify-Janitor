@@ -36,8 +36,7 @@ import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTrac
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchTrackItem(track: Track) {
-    val viewModel: FavoriteTracksViewModel = koinViewModel()
+fun TrackItem(track: Track, onAddToFavoritesClick: ((track:Track) -> Unit)? = null) {
     var imageLoadResult by remember { mutableStateOf<Result<Painter>?>(null) }
     val painter = rememberAsyncImagePainter(
         model = track.album.imageUrl,
@@ -80,14 +79,21 @@ fun SearchTrackItem(track: Track) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = track.name, style = MaterialTheme.typography.body1, color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt()))
-            Text(text = track.artists.joinToString(" · ") { it.name }, style = MaterialTheme.typography.body2, color = Color(AppConstants.Colors.SECONDARY_TEXT_GREY_HEX.toColorInt()))
+            Text(text = track.name, style = MaterialTheme.typography.body1, color = Color(
+                AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
+            )
+            Text(text = track.artists.joinToString(" · ") { it.name }, style = MaterialTheme.typography.body2, color = Color(
+                AppConstants.Colors.SECONDARY_TEXT_GREY_HEX.toColorInt())
+            )
         }
-//        Button(
-//            onClick = { viewModel.addTrackToFavorites(track) },
-//            modifier = Modifier.size(36.dp)
-//        ) {
-//            Icon(Icons.Default.Favorite, contentDescription = "Add to Favorites")
-//        }
+        if (onAddToFavoritesClick != null) {
+            Button(
+                onClick = { onAddToFavoritesClick(track) },
+                modifier = Modifier.size(36.dp)
+            ) {
+                Icon(Icons.Default.Favorite, contentDescription = "Add to Favorites")
+            }
+        }
+
     }
 }

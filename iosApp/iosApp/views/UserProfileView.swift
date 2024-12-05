@@ -7,23 +7,26 @@
 //
 import SwiftUI
 import Shared
+import KMPObservableViewModelSwiftUI
 
 struct UserProfileView: View {
+    
+    @StateViewModel
+    var viewModel = KoinDependencies.shared.userProfileViewModel
+    
     var body: some View {
         VStack {
-            // Top Bar with title and logout button
             VStack {
                 HStack {
                     Text("Spotify Profile")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
                         .padding(.leading, 16)
                     
-                    Spacer() // Pushes the logout button to the right
+                    Spacer()
                     
                     Button(action: {
-                        // Logout action goes here
                         print("Logging out...")
                     }) {
                         Text("Logout")
@@ -33,17 +36,35 @@ struct UserProfileView: View {
                     }
                 }
                 
-                // Profile Header
                 VStack {
-                    Image("profile_picture") // Ensure this image is included in your assets
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 120, height: 120)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                        .shadow(radius: 10)
+
+                    AsyncImage(url: URL(string: viewModel.state.user?.imageUrl ?? "")) { phase in
+                        switch phase {
+                        case .empty:
+                            // This is the loading state
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .frame(width: 128, height: 128)
+                        case .success(let image):
+                            // Successfully loaded image
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 188, height: 188)                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color(.PRIMARY_TEXT_WHITE), lineWidth: 1))
+                                .shadow(radius: 10)
+                        case .failure:
+                            // This is the error state
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.red)
+                                .frame(width: 60, height: 60)
+                        @unknown default:
+                            // Handle unknown future states
+                            EmptyView()
+                        }
+                    }
                     
-                    Text("Martin Hristev")
+                    Text(viewModel.state.user?.displayName ?? "")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -54,21 +75,21 @@ struct UserProfileView: View {
                 .frame(maxWidth: .infinity)
      
                 .padding(.top, 30)
-            }.background(Color.purple)
+            }.background(Color(.PRIMARY_PURPLE))
             
             
             VStack {
-                ProfileRow(title: "EMAIL", value: "mhristev03@gmail.com")
-                ProfileRow(title: "COUNTRY", value: "BG")
-                ProfileRow(title: "FOLLOWERS", value: "27")
-                ProfileRow(title: "PRODUCT", value: "premium")
+                ProfileRow(title: "EMAIL", value: viewModel.state.user?.email ?? "")
+                ProfileRow(title: "COUNTRY", value: viewModel.state.user?.country ?? "")
+                ProfileRow(title: "FOLLOWERS", value: String(viewModel.state.user?.followers ?? 0))
+                ProfileRow(title: "PRODUCT", value: viewModel.state.user?.product ?? "")
             }
             .padding(.top, 20)
             
             Spacer()
 
         }
-        .background(Color.black)
+        .background(Color(.PRIMARY_DARK))
     }
 }
 
@@ -80,21 +101,21 @@ struct ProfileRow: View {
         HStack {
             Text(title)
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
                 .padding(.leading, 20)
             
             Spacer()
             
             Text(value)
                 .font(.body)
-                .foregroundColor(.white)
+                .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
                 .padding(.trailing, 20)
         }
         .padding(.vertical, 10)
         .overlay(
             Rectangle()
                 .frame(height: 1)  // Set the height of the border
-                .foregroundColor(.white)  // Color of the bottom border
+                .foregroundColor(Color(.PRIMARY_TEXT_WHITE))  // Color of the bottom border
                 .padding(.top, 10), // Adjust padding to position the border at the bottom
             alignment: .bottom
         )

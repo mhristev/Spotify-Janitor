@@ -13,11 +13,30 @@ struct TrackRow: View {
     
     var body: some View {
         HStack {
-            Image(track.album.imageUrl)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
-                .cornerRadius(8)
+            AsyncImage(url: URL(string: track.album.imageUrl)) { phase in
+                switch phase {
+                case .empty:
+                    // This is the loading state
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .frame(width: 60, height: 60)
+                case .success(let image):
+                    // Successfully loaded image
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                        .cornerRadius(8)
+                case .failure:
+                    // This is the error state
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                        .frame(width: 60, height: 60)
+                @unknown default:
+                    // Handle unknown future states
+                    EmptyView()
+                }
+            }
             
             VStack(alignment: .leading) {
                 Text(track.name)
@@ -36,7 +55,7 @@ struct TrackRow: View {
             Spacer()
         }
         .padding(.vertical, 10)
-        .background(Color.black)
+        .background(Color(.PRIMARY_DARK))
         
        
     }

@@ -33,37 +33,20 @@ import Shared
 //}
 
 import SwiftUI
+import KMPObservableViewModelSwiftUI
 
 struct ContentView: View {
-    init() {
-            let tabBarAppearance = UITabBarAppearance()
-            tabBarAppearance.configureWithDefaultBackground()
-            tabBarAppearance.backgroundColor = .black  // Change tab bar background to red
-            UITabBar.appearance().standardAppearance = tabBarAppearance
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
+    
+//    @StateViewModel
+//    var viewModel = KoinDependencies.shared.authViewModel
+    var isAuthenticated = false
+    
     var body: some View {
-        TabView {
-            // First View
-            SearchTracksView()
-                .tabItem {
-                    Label("First", systemImage: "house.fill")
-                }
-            
-            // Middle View (The one you provided)
-            FavoriteTracksView()
-                .tabItem {
-                    Label("Middle", systemImage: "heart.fill")
-                }
-            
-            // Third View
-            UserProfileView()
-                .tabItem {
-                    Label("Third", systemImage: "gearshape.fill")
-                }
+        if isAuthenticated {
+            AppRootView()
+        } else {
+            AuthView()
         }
-        .accentColor(.blue)  // Change the color of the selected tab
-        .background(Color.red)
         
     }
 }

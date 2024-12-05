@@ -1,7 +1,5 @@
 package org.internship.kmp.martin.track.presentation.fav_tracks_list
 
-
-import androidx.lifecycle.viewModelScope
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -10,9 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.core.domain.Result
 import org.internship.kmp.martin.track.domain.Track
@@ -27,7 +23,7 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
     @NativeCoroutinesState
     val state = _state
         .onStart {
-            loadFavoriteTracks()
+            syncronizeTracks()
         }
         .stateIn(
             viewModelScope,
@@ -46,6 +42,7 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
             }
         }
     }
+
     private fun loadNextFavoriteTracks() {
         viewModelScope.launch {
             val currentTracksCount = _state.value.tracks.size
@@ -85,33 +82,19 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
         }
     }
 
-
-//    fun observeFavoriteTracks() {
-//        viewModelScope.launch {
-//            val result = trackRepository.getFavoriteTracks()
-//            if (result is Result.Success) {
-//                _state.update { it.copy(tracks = result.data) }
-//            }
-//        }
-//    }
     private fun removeTrack(track: Track) {
         viewModelScope.launch {
             trackRepository.removeFavoriteTrack(track)
         }
     }
 
-    fun addTrackToFavorites(track: Track) {
-        viewModelScope.launch { trackRepository.addFavoriteTrack(track) }
-    }
-
     private fun undoRemoveTrack(track: Track) {
-
         viewModelScope.launch {
             trackRepository.addFavoriteTrack(track)
         }
     }
 
-    fun syncronizeTracks() {
+    private fun syncronizeTracks() {
         val currentTracksCount = _state.value.tracks.size
         viewModelScope.launch {
             when (val result = trackRepository.synchronizeTracks()) {

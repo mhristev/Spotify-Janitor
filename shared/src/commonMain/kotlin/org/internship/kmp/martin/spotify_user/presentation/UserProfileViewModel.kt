@@ -1,10 +1,13 @@
 package org.internship.kmp.martin.spotify_user.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.observableviewmodel.ViewModel
+import com.rickclephas.kmp.observableviewmodel.launch
+import com.rickclephas.kmp.observableviewmodel.stateIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -20,6 +23,7 @@ class UserProfileViewModel(private val userRepository: SpotifyUserRepository, pr
     private val _state = MutableStateFlow(UserProfileState())
     val navigateToLogin = MutableStateFlow(false)
 
+    val isUserLoggedIn: StateFlow<Boolean> = authRepository.isUserLoggedIn()
 
     @NativeCoroutinesState
     val state = _state

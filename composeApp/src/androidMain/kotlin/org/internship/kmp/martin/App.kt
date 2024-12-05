@@ -18,14 +18,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import org.internship.kmp.martin.core.domain.AppConstants
-import org.internship.kmp.martin.core.presentation.AuthViewModel
-import org.internship.kmp.martin.views.AuthView
 import org.internship.kmp.martin.views.FavoriteTracksView
-import org.internship.kmp.martin.views.SearchTracksView
+import org.internship.kmp.martin.views.BrowseTracksView
 import org.internship.kmp.martin.views.UserProfileView
 
 @Composable
@@ -34,7 +29,7 @@ fun App(navController: NavController) {
 
 
     val tabs = listOf(
-        TabItem("Search", Icons.Default.Search, { SearchTracksView() }),
+        TabItem("Search", Icons.Default.Search, { BrowseTracksView() }),
         TabItem("Favorites", Icons.Default.Favorite, { FavoriteTracksView() }),
         TabItem("Profile", Icons.Default.Person, { UserProfileView(navController) })
     )
