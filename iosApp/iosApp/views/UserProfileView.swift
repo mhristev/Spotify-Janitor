@@ -7,91 +7,104 @@
 //
 import SwiftUI
 import Shared
-import KMPObservableViewModelSwiftUI
+    import KMPObservableViewModelSwiftUI
 
-struct UserProfileView: View {
-    
-    @StateViewModel
-    var viewModel = KoinDependencies.shared.userProfileViewModel
-    
-    var body: some View {
-        VStack {
+    struct UserProfileView: View {
+        
+        @StateViewModel
+        var viewModel = KoinDependencies.shared.getUserProfileViewModel()
+        
+        @State var redirect = false
+        
+        func logout() {
+            viewModel.onAction(action: UserProfileActionOnLogout())
+            self.redirect = viewModel.navigateToLogin
+        }
+        
+        var body: some View {
+           
             VStack {
-                HStack {
-                    Text("Spotify Profile")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
-                        .padding(.leading, 16)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        print("Logging out...")
-                    }) {
-                        Text("Logout")
-                            .font(.body)
-                            .foregroundColor(.white)
-                            .padding(.trailing, 16)
-                    }
-                }
-                
                 VStack {
-
-                    AsyncImage(url: URL(string: viewModel.state.user?.imageUrl ?? "")) { phase in
-                        switch phase {
-                        case .empty:
-                            // This is the loading state
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .frame(width: 128, height: 128)
-                        case .success(let image):
-                            // Successfully loaded image
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 188, height: 188)                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color(.PRIMARY_TEXT_WHITE), lineWidth: 1))
-                                .shadow(radius: 10)
-                        case .failure:
-                            // This is the error state
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.red)
-                                .frame(width: 60, height: 60)
-                        @unknown default:
-                            // Handle unknown future states
-                            EmptyView()
+                    HStack {
+                        Text("Spotify Profile")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
+                            .padding(.leading, 16)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            print("Logging out...")
+                            logout()
+                        }) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .font(.system(size: 20))
+                                .foregroundColor(.white)
+                                .padding(.trailing, 16)
                         }
                     }
                     
-                    Text(viewModel.state.user?.displayName ?? "")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.top, 8)
-                        .padding(.bottom, 10)
+                    VStack {
+                        
+                        AsyncImage(url: URL(string: viewModel.state.user?.imageUrl ?? "")) { phase in
+                            switch phase {
+                            case .empty:
+                                // This is the loading state
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: 128, height: 128)
+                            case .success(let image):
+                                // Successfully loaded image
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 188, height: 188)                                .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color(.PRIMARY_TEXT_WHITE), lineWidth: 1))
+                                    .shadow(radius: 10)
+                            case .failure:
+                                
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.red)
+                                    .frame(width: 60, height: 60)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        
+                        Text(viewModel.state.user?.displayName ?? "")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top, 8)
+                            .padding(.bottom, 10)
+                        
+                    }
+                    .frame(maxWidth: .infinity)
                     
+                    .padding(.top, 30)
+                }.background(Color(.PRIMARY_PURPLE))
+                
+                
+                VStack {
+                    ProfileRow(title: "EMAIL", value: viewModel.state.user?.email ?? "")
+                    ProfileRow(title: "COUNTRY", value: viewModel.state.user?.country ?? "")
+                    ProfileRow(title: "FOLLOWERS", value: String(viewModel.state.user?.followers ?? 0))
+                    ProfileRow(title: "PRODUCT", value: viewModel.state.user?.product ?? "")
                 }
-                .frame(maxWidth: .infinity)
-     
-                .padding(.top, 30)
-            }.background(Color(.PRIMARY_PURPLE))
+                .padding(.top, 20)
+                
+                Spacer()
+                .navigationDestination(isPresented: $redirect) {
+                    ContentView()
+                        .navigationBarBackButtonHidden(true)
+                }
             
-            
-            VStack {
-                ProfileRow(title: "EMAIL", value: viewModel.state.user?.email ?? "")
-                ProfileRow(title: "COUNTRY", value: viewModel.state.user?.country ?? "")
-                ProfileRow(title: "FOLLOWERS", value: String(viewModel.state.user?.followers ?? 0))
-                ProfileRow(title: "PRODUCT", value: viewModel.state.user?.product ?? "")
             }
-            .padding(.top, 20)
+            .background(Color(.PRIMARY_DARK))
             
-            Spacer()
-
         }
-        .background(Color(.PRIMARY_DARK))
     }
-}
 
 struct ProfileRow: View {
     var title: String

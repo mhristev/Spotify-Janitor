@@ -15,15 +15,14 @@ import kotlinx.coroutines.launch
 import org.internship.kmp.martin.core.data.database.AuthRepository
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.spotify_user.data.repository.SpotifyUserRepository
-import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
-import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
-import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksState
 
 class UserProfileViewModel(private val userRepository: SpotifyUserRepository, private val authRepository: AuthRepository): ViewModel() {
     private val _state = MutableStateFlow(UserProfileState())
+
+    @NativeCoroutinesState
     val navigateToLogin = MutableStateFlow(false)
 
-    val isUserLoggedIn: StateFlow<Boolean> = authRepository.isUserLoggedIn()
+//    val isUserLoggedIn: StateFlow<Boolean> = authRepository.isUserLoggedIn()
 
     @NativeCoroutinesState
     val state = _state

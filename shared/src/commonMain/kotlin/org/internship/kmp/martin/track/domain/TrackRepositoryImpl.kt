@@ -21,6 +21,10 @@ import org.internship.kmp.martin.track.data.mappers.toEntity
 class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val spotifyApi: SpotifyApi):
     TrackRepository {
 
+    override suspend fun isSongInFavorites(track: Track): Boolean {
+        return trackDao.getFavoriteTracks().firstOrNull()?.any { it.id == track.id } ?: false
+    }
+
     override suspend fun getFavoriteTracks(): Result<List<Track>, DataError> {
         val limitTracksPerCall = NetworkConstants.Limits.TRACKS_PER_CALL
         val minTracksDisplayed = AppConstants.Limits.MIN_TRACKS_TO_DISPLAY
@@ -28,13 +32,13 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         val tracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
 
         return if (tracks.isEmpty() || tracks.size < minTracksDisplayed) {
-            fetchAndStoreFavoriteTracks(limitTracksPerCall, minTracksDisplayed)
+            fetchAndStoreFavoriteTracks(limitTracksPerCall)
         } else {
             Result.Success(tracks.map { it.toDomain() })
         }
     }
 
-    private suspend fun fetchAndStoreFavoriteTracks(limitTracksPerCall: Int, minTracksDisplayed: Int): Result<List<Track>, DataError> {
+    private suspend fun fetchAndStoreFavoriteTracks(limitTracksPerCall: Int): Result<List<Track>, DataError> {
         val result = spotifyApi.getFavoriteTracks(limitTracksPerCall, 0)
         result.onSuccess { favTracksDto ->
             favTracksDto.mapAddedAt()

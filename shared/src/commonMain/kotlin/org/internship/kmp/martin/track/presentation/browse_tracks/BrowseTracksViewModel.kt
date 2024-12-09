@@ -1,5 +1,6 @@
 package org.internship.kmp.martin.track.presentation.browse_tracks
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -30,33 +31,33 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
         when(action) {
             is BrowseTracksAction.onTrackAddToFavorites -> addTrackToFavorites(action.track)
             is BrowseTracksAction.onSearch -> searchTracks(action.query)
+//            is BrowseTracksAction.onCheckIfTrackIsFavorite -> checkIfTrackIsFavorite(action.track)
         }
     }
 
-    @Throws(DataError::class)
+    @NativeCoroutines
+    suspend fun checkIfTrackIsFavorite(track: Track): Boolean {
+        return trackRepository.isSongInFavorites(track)
+    }
+
     private fun searchTracks(query: String) {
         viewModelScope.launch {
             val results = trackRepository.searchTracks(query)
-            if (results is Result.Success) {
-                _state.update {
-                    it.copy(
-                        tracks = results.data
-                    )
+            results
+                .onSuccess { tracks ->
+                    _state.update {
+                        it.copy(
+                            tracks = tracks
+                        )
+                    }
                 }
-            } else {
-                results.onError {
-                    throw it
-                }
-            }
         }
     }
-    @Throws(DataError::class)
+
     private fun addTrackToFavorites(track: Track) {
         viewModelScope.launch {
             val result = trackRepository.addFavoriteTrack(track)
-            result.onError {
-                throw it
-            }
+
         }
     }
 }

@@ -10,7 +10,8 @@ import Shared
 
 struct TrackRow: View {
     var track: Track
-    var onAddToFavoritesClick: (Track) -> ResultKt
+    var onAddToFavoritesClick: ((Track) -> Void)?
+//    var checkIfTrackAlreadyInFavorite: (Track) -> Bool
     
     var body: some View {
         HStack {
@@ -54,6 +55,19 @@ struct TrackRow: View {
             .padding(.leading, 10)
             
             Spacer()
+            
+//            if !checkIfTrackAlreadyInFavorite(track) {
+                if let onAddToFavorites = onAddToFavoritesClick {
+                    Button(action: {
+                        onAddToFavorites(track)
+                    }) {
+                        Image(systemName: "plus.circle")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                            .padding(.trailing, 16)
+                    }
+                }
+//            }
         }
         .padding(.vertical, 10)
         .background(Color(.PRIMARY_DARK))

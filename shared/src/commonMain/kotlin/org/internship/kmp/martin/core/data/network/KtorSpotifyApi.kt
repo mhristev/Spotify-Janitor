@@ -64,6 +64,7 @@ override suspend fun removeFavoriteTrack(track: Track): Result<Unit, DataError.R
 
     override suspend fun searchTracksInSpotify(query: String): Result<SearchResponseDto, DataError.Remote> {
         val accessToken = auth.getAccessToken()
+//        return Result.Error(DataError.Remote.UNKNOWN)
         return safeCall<SearchResponseDto> {
             httpClient.get("https://api.spotify.com/v1/search") {
                 header(HttpHeaders.Authorization, "Bearer $accessToken")

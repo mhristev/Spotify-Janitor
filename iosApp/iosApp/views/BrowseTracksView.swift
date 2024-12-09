@@ -15,29 +15,35 @@ import Combine
 
 struct BrowseTracksView: View {
     @StateViewModel
-    var viewModel = KoinDependencies.shared.browseTracksViewModel
+    var viewModel = KoinDependencies.shared.getBrowseTracksViewModel()
     
     @State private var searchQuery: String = ""
     @State private var timer: Timer? = nil
+    @State private var showMessage: Bool = false
+    @State private var messageText: String = ""
     
     func performRequest(with query: String) {
         viewModel.onAction(action: BrowseTracksActionOnSearch(query: query))
-         }
-    var body: some View {
-        NavigationStack {
-            VStack {
-                HStack {
-                    Text("Browse")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.leading, 10)
-                    
-                    Spacer()
+    }
+    
+    private func handleAddToFavoritesSuccess(trackName: String) {
+            withAnimation {
+                messageText = "\(trackName) added to favorites!"
+                showMessage = true
+            }
+            
+            // Hide the message after 3 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation {
+                    showMessage = false
                 }
-          
-                .background(Color(.PRIMARY_DARK))
-                .padding(.top, 0)
+            }
+        }
+    
+    var body: some View {
+  
+            VStack {
+                TopBarView(title: "Browse", imageName: nil, onAction: nil)
                 // Search Bar
                 TextField("Search", text: $searchQuery)
                     .padding()
@@ -49,25 +55,37 @@ struct BrowseTracksView: View {
                         }
                     }
                 List(viewModel.state.tracks, id: \.id) { track in
-                    TrackRow(
-                        track: track,
-                        onAddToFavoritesClick:
-                            viewModel.onAction(action: BrowseTracksActionOnTrackAddToFavorites(track: track))
-                    )
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    TrackRow(track: track,
+                             onAddToFavoritesClick: { _ in
+                        viewModel.onAction(action: BrowseTracksActionOnTrackAddToFavorites(track: track))
+                        handleAddToFavoritesSuccess(trackName: track.name)
+                    })
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .listStyle(.plain)
+                if showMessage {
+                               
+                                
+                                    Text(messageText)
+                                        .padding()
+                                        .background(Color.green.opacity(0.8))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                        .transition(.opacity)
+                                
+                            }
             }
             .navigationBarHidden(true)
             .navigationTitle("Search")
             .background(Color(.PRIMARY_DARK))
             .shadow(radius: 5)
-        }.onAppear(perform: {
-            performRequest(with: "")
-        })
+        
+  
+        
     }
 }
+    
 
 
 #Preview {

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.core.domain.Result
+import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 
@@ -43,6 +44,34 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
             syncronizeTracks()
         }
 
+    }
+
+    fun removeTrackFromCashedList(track: Track) {
+        _state.update { currentState ->
+            val index = currentState.tracks.indexOfFirst { it.id == track.id }
+            currentState.copy(
+                tracks = currentState.tracks.filter { it.id != track.id },
+                lastRemovedTrack = track,
+                lastRemovedTrackIndex = index
+            )
+        }
+    }
+
+    fun restoreLastRemovedTrackToCashedList() {
+        val track = _state.value.lastRemovedTrack ?: return
+        val index = _state.value.lastRemovedTrackIndex ?: return
+        _state.update {
+            val updatedTracks = it.tracks.toMutableList()
+            updatedTracks.add(index, track)
+            it.copy(tracks = updatedTracks, lastRemovedTrack = null, lastRemovedTrackIndex = null)
+        }
+    }
+
+    fun removeTrackById(id: String) {
+        viewModelScope.launch {
+            val track = _state.value.tracks.find { it.id == id } ?: _state.value.lastRemovedTrack ?: return@launch
+            trackRepository.removeFavoriteTrack(track)
+        }
     }
 
     private fun loadNextFavoriteTracks() {

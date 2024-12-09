@@ -24,7 +24,7 @@ actual val platformModule: Module
 
         factory { UserProfileViewModel(get(), get()) }
         factory { LoginViewModel(get()) }
-        factory { FavoriteTracksViewModel(get()) }
+        single { FavoriteTracksViewModel(get()) }
         factory { BrowseTracksViewModel(get()) }
         single { AuthViewModel(get()) }
     }

@@ -1,5 +1,8 @@
 package org.internship.kmp.martin.views
 
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,9 +34,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import org.internship.kmp.martin.TrackDeletionWorker
 import org.internship.kmp.martin.components.RemoveConfirmationDialog
 import org.internship.kmp.martin.components.TrackItem
 import org.internship.kmp.martin.core.domain.AppConstants
@@ -41,31 +49,81 @@ import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
+
+//state.lastRemovedTrack?.let { track ->
+//    if (viewModel.showUndoButton) {
+//        Button(onClick = {
+//            viewModel.onAction(FavoriteTracksAction.onUndoDeleteTrack)
+//            removeTrackIdFromUserDefaults()
+//            viewModel.showUndoButton = false
+//        }) {
+//            Text("Undo")
+//        }
+//    }
+//}
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavoriteTracksView() {
+    val context = LocalContext.current
     val viewModel: FavoriteTracksViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    var showUndoButton by mutableStateOf(false)
+    var workRequestId by mutableStateOf(UUID.randomUUID())
+
 
     var showDialog by remember { mutableStateOf(false) }
     var trackToDelete by remember { mutableStateOf<Track?>(null) }
+
+    fun cancelScheduledTrackDeletion() {
+        WorkManager.getInstance(context).cancelWorkById(workRequestId)
+    }
 
     fun confirmDelete(track: Track) {
         trackToDelete = track
         showDialog = true
     }
+    fun scheduleTrackDeletion(trackId: String) {
+        val inputData = Data.Builder()
+            .putString("trackId", trackId)
+            .build()
+
+        val request = OneTimeWorkRequestBuilder<TrackDeletionWorker>()
+            .setInitialDelay(3, TimeUnit.SECONDS)
+            .setInputData(inputData)
+            .build()
+
+        workRequestId = request.id
+
+        WorkManager.getInstance(context).enqueue(request)
+    }
+
+    fun showUndoButton() {
+        showUndoButton = true
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (showUndoButton) {
+                showUndoButton = false
+            }
+        }, 3000)
+    }
 
     fun onDeleteConfirmed() {
         trackToDelete?.let {
-            viewModel.onAction(FavoriteTracksAction.onTrackDelete(it))
+            viewModel.removeTrackFromCashedList(it)
+            scheduleTrackDeletion(it.id)
         }
         showDialog = false
+        showUndoButton()
     }
-
 
     fun onDeleteCancelled() {
         showDialog = false
+        showUndoButton = false
+        viewModel.restoreLastRemovedTrackToCashedList()
+        cancelScheduledTrackDeletion()
     }
 
     Scaffold(
@@ -94,9 +152,9 @@ fun FavoriteTracksView() {
                     .padding(padding)
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
-                state.lastRemovedTrack?.let { track ->
+                if (showUndoButton) {
                     Button(onClick = {
-                        viewModel.onAction(FavoriteTracksAction.onUndoDeleteTrack)
+                        onDeleteCancelled()
                     }) {
                         Text("Undo")
                     }

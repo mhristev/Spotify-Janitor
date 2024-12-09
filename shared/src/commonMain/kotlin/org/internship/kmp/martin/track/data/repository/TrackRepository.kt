@@ -6,6 +6,7 @@ import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.core.domain.Result
 
 interface TrackRepository {
+    suspend fun isSongInFavorites(track: Track): Boolean
     suspend fun getFavoriteTracks(): Result<List<Track>, DataError>
     suspend fun addFavoriteTrack(track: Track): Result<Unit, DataError>
     suspend fun removeFavoriteTrack(track: Track): Result<Unit, DataError>

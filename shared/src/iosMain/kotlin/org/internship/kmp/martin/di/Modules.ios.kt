@@ -18,7 +18,7 @@ actual val platformModule: Module
         single { DatabaseFactory() }
         single { KVaultFactory() }
         single { FavoriteTracksViewModel(get()) }
-        single { AuthViewModel(get()) }
-        single {UserProfileViewModel(get(), get())}
-        single {BrowseTracksViewModel(get())}
+        factory { AuthViewModel(get()) }
+        factory {UserProfileViewModel(get(), get())}
+        factory { BrowseTracksViewModel(get()) }
     }

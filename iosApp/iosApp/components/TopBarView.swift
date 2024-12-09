@@ -10,8 +10,8 @@ import SwiftUI
 struct TopBarView: View {
     
     var title: String
-    var imageName: String
-    var onAction: () -> Void
+    var imageName: String?
+    var onAction: (() -> Void)?
     
     var body: some View {
         HStack {
@@ -22,14 +22,15 @@ struct TopBarView: View {
                 .padding(.leading, 10)
             
             Spacer()
-            
-            Button(action: {
-                onAction()
-            }) {
-                Image(systemName: imageName)
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                    .padding(.trailing, 16)
+            if let imageName = imageName, let onAction = onAction {
+                Button(action: {
+                    onAction()
+                }) {
+                    Image(systemName: imageName)
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 16)
+                }
             }
         }
         .padding(.top, 20)

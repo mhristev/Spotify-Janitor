@@ -9,6 +9,8 @@ import org.internship.kmp.martin.track.data.repository.TrackRepository
 import org.internship.kmp.martin.track.domain.Track
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,26 +18,20 @@ class TrackDeletionWorker(
     context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params), KoinComponent {
-    private val trackRepository: TrackRepository by inject()
+    val viewModel: FavoriteTracksViewModel = getKoin().get<FavoriteTracksViewModel>()
 
     override suspend fun doWork(): Result {
-        val trackJson = inputData.getString("track")
-        if (trackJson.isNullOrEmpty()) {
+        val trackId = inputData.getString("trackId")
+        if (trackId.isNullOrEmpty()) {
             return Result.failure()
         }
-
-        val track = parseTrackJson(trackJson)
         return try {
             withContext(Dispatchers.IO) {
-                trackRepository.removeFavoriteTrack(track)
+                viewModel.removeTrackById(trackId)
             }
             Result.success()
         } catch (e: Exception) {
             Result.failure()
         }
-    }
-
-    private fun parseTrackJson(json: String): Track {
-        return Json.decodeFromString(json)
     }
 }

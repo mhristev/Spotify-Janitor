@@ -1,5 +1,6 @@
 package org.internship.kmp.martin.koinDependencies
 
+import org.internship.kmp.martin.core.data.database.AuthRepository
 import org.internship.kmp.martin.core.presentation.AuthViewModel
 import org.internship.kmp.martin.core.presentation.LoginViewModel
 import org.internship.kmp.martin.di.MyTestInterface
@@ -16,7 +17,13 @@ object KoinDependencies : KoinComponent {
 //        fun myTestInterface(): MyTestInterface = get()
 //        fun getFavoriteTracksViewModel(): FavoriteTracksViewModel = get()
         val favoriteTracksViewModel: FavoriteTracksViewModel by inject()
+        fun getFavoriteTracksViewModel() = getKoin().get<FavoriteTracksViewModel>()
         val authViewModel: AuthViewModel by inject()
+        fun getAuthViewModel() = getKoin().get<AuthViewModel>()
         val userProfileViewModel: UserProfileViewModel by inject()
+        fun getUserProfileViewModel() = getKoin().get<UserProfileViewModel>()
         val browseTracksViewModel: BrowseTracksViewModel by inject()
+        fun getBrowseTracksViewModel() = getKoin().get<BrowseTracksViewModel>()
+        val authRepository: AuthRepository by inject()
+        fun getAuthRepository() = getKoin().get<AuthRepository>()
 }
