@@ -7,7 +7,8 @@ import KMPNativeCoroutinesRxSwift
 
 struct ContentView: View {
     @State private var isUserAuthenticated: Bool = false
-    var authViewModel = KoinDependencies.shared.authViewModel
+
+    var authViewModel = KoinDependencies.shared.getAuthViewModel()
     
     var body: some View {
         Group {

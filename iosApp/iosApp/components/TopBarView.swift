@@ -18,7 +18,7 @@ struct TopBarView: View {
             Text(title)
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
+                .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
                 .padding(.leading, 10)
             
             Spacer()
@@ -28,7 +28,7 @@ struct TopBarView: View {
                 }) {
                     Image(systemName: imageName)
                         .font(.system(size: 20))
-                        .foregroundColor(.white)
+                        .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
                         .padding(.trailing, 16)
                 }
             }

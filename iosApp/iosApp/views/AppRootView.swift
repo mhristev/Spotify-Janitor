@@ -24,7 +24,7 @@
                 TabView(selection: $selectedTab) {
                     BrowseTracksView()
                         .tabItem {
-                            Label("Search", systemImage: "magnifyingglass")
+                            Label("Browse", systemImage: "magnifyingglass")
                         }.tag(0)
                     
                     FavoriteTracksView()

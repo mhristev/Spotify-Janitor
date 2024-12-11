@@ -50,7 +50,7 @@ struct AuthView: View {
                     
                     Text("Spotify Janitor")
                         .font(.headline)
-                        .foregroundColor(Color.white)
+                        .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
                         .padding(.bottom, 24)
                     
                     Spacer().frame(height: 24)
@@ -59,7 +59,7 @@ struct AuthView: View {
                         initiateSpotifyLogin()
                     }) {
                         Text("Login with Spotify")
-                            .foregroundColor(Color(.PRIMARY_TEXT_WHITE))
+                            .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
                             .font(.headline)
                             .padding()
                         

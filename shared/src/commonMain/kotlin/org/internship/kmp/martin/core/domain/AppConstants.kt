@@ -7,8 +7,6 @@ object AppConstants {
         const val TRACKS_PER_LOAD_MORE = 50
     }
 
-    const val TEST_ACCESSSS ="#03001C"
-
     object Colors {
         const val PRIMARY_DARK_HEX ="#03001C"
         const val PRIMARY_PURPLE_HEX = "#301E67"

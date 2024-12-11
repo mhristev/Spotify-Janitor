@@ -60,12 +60,34 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return if (localTracks.size > currentTrackOffset) {
             getLocalFavoriteTracks(localTracks, currentTrackOffset)
         } else {
-            getRemoteFavoriteTracks(currentTrackOffset)
+            fetchAndStoreAdditionalTracks(currentTrackOffset)
+            // After fetching more tracks, return the newly added tracks
+            val updatedLocalTracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
+            getLocalFavoriteTracks(updatedLocalTracks, currentTrackOffset)
         }
     }
 
+
     override suspend fun removeFavoriteTrackById(trackId: String) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchAndStoreAdditionalTracks(currentLocalCount: Int) {
+        val limitTracksPerCall = NetworkConstants.Limits.TRACKS_PER_CALL
+
+        val result = spotifyApi.getFavoriteTracks(limitTracksPerCall, currentLocalCount)
+        result.onSuccess { favTracksDto ->
+            favTracksDto.mapAddedAt()
+            favTracksDto.items.forEach { trackDto ->
+                trackDao.upsert(trackDto.track.toDomain().toEntity())
+            }
+        }.onError {
+            // Log error or handle as needed
+        }
+    }
+
+    override suspend fun getLocalFavoriteTracksCount(): Int {
+        return trackDao.getFavoriteTracksHandle().size
     }
 
     private fun getLocalFavoriteTracks(localTracks: List<TrackEntity>, currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
@@ -82,9 +104,7 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
             favTracksDto.items.forEach { trackDto ->
                 trackDao.upsert(trackDto.track.toDomain().toEntity())
             }
-            val tracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
-            val domainTracks = tracks.drop(currentTrackOffset).take(limitTracksPerCall).map { it.toDomain() }
-            return Result.Success(flowOf(domainTracks))
+            getNextFavoriteTracks(currentTrackOffset)
         }.onError {
             return Result.Error(it)
         }

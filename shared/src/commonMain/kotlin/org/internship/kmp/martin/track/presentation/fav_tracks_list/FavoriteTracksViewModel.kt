@@ -25,6 +25,12 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
     val state = _state
         .onStart {
             loadFavoriteTracks()
+            syncronizeTracks()
+//            val bufferSize = AppConstants.Limits.TRACKS_PER_LOAD_MORE
+//            val localTracksCount = trackRepository.getLocalFavoriteTracksCount()
+//            if (localTracksCount - _state.value.tracks.size <= bufferSize) {
+//                trackRepository.fetchAndStoreAdditionalTracks(localTracksCount)
+//            }
         }
         .stateIn(
             viewModelScope,
@@ -41,12 +47,11 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
                     )
                 }
             }
-            syncronizeTracks()
         }
 
     }
 
-    fun removeTrackFromCashedList(track: Track) {
+    private fun removeTrackFromCashedList(track: Track) {
         _state.update { currentState ->
             val index = currentState.tracks.indexOfFirst { it.id == track.id }
             currentState.copy(
@@ -57,7 +62,7 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
         }
     }
 
-    fun restoreLastRemovedTrackToCashedList() {
+    private fun restoreLastRemovedTrackToCashedList() {
         val track = _state.value.lastRemovedTrack ?: return
         val index = _state.value.lastRemovedTrackIndex ?: return
         _state.update {
@@ -67,63 +72,97 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
         }
     }
 
-    fun removeTrackById(id: String) {
+    private fun removeTrackById(id: String) {
         viewModelScope.launch {
             val track = _state.value.tracks.find { it.id == id } ?: _state.value.lastRemovedTrack ?: return@launch
             trackRepository.removeFavoriteTrack(track)
         }
     }
 
+//    private fun loadNextFavoriteTracks() {
+//        viewModelScope.launch {
+//            val currentTracksCount = _state.value.tracks.size
+//            if (currentTracksCount >= 1000) return@launch
+//
+//            val result = trackRepository.getNextFavoriteTracks(currentTracksCount)
+//            if (result is Result.Success) {
+//                _state.update { currentState ->
+//                    val resData = result.data.firstOrNull() ?: emptyList()
+//                    currentState.copy(tracks = currentState.tracks + resData)
+//                }
+//            } else if (result is Result.Error) {
+//                _state.update { currentState ->
+//
+//                    currentState.copy(errorString = result.error.toString())
+//                }
+//            }
+//        }
+//    }
     private fun loadNextFavoriteTracks() {
+
         viewModelScope.launch {
             val currentTracksCount = _state.value.tracks.size
             if (currentTracksCount >= 1000) return@launch
 
             val result = trackRepository.getNextFavoriteTracks(currentTracksCount)
+
             if (result is Result.Success) {
+                val tracks = result.data.firstOrNull() ?: emptyList()
                 _state.update { currentState ->
-                    val resData = result.data.firstOrNull() ?: emptyList()
-                    currentState.copy(tracks = currentState.tracks + resData)
+                    currentState.copy(tracks = currentState.tracks + tracks)
+                }
+
+//                val bufferSize = AppConstants.Limits.TRACKS_PER_LOAD_MORE
+//                val localTracksCount = trackRepository.getLocalFavoriteTracksCount()
+//                if (localTracksCount - currentTracksCount <= bufferSize) {
+//                    trackRepository.fetchAndStoreAdditionalTracks(localTracksCount)
+//                }
+            } else if (result is Result.Error) {
+                _state.update { currentState ->
+
+                    currentState.copy(errorString = result.error.toString())
                 }
             }
+
         }
     }
+
 
     fun onAction(action: FavoriteTracksAction) {
 
         when (action) {
-            is FavoriteTracksAction.onTrackDelete -> {
-
-                _state.update { currentState ->
-                    val updatedTracks = currentState.tracks.filter { it.id != action.track.id }
-                    currentState.copy(tracks = updatedTracks, lastRemovedTrack = action.track)
-                }
-                removeTrack(action.track)
-            }
-            is FavoriteTracksAction.onUndoDeleteTrack -> {
-                val track = _state.value.lastRemovedTrack ?: return
-
-                _state.update { currentState ->
-                    currentState.copy(tracks = listOf(track) + currentState.tracks, lastRemovedTrack = null)
-                }
-                undoRemoveTrack(track)
-            }
+//            is FavoriteTracksAction.onTrackDelete -> removeTrack(action.track)
+//            is FavoriteTracksAction.onUndoDeleteTrack -> {
+//                val track = _state.value.lastRemovedTrack ?: return
+//
+//                _state.update { currentState ->
+//                    currentState.copy(tracks = listOf(track) + currentState.tracks, lastRemovedTrack = null)
+//                }
+//                undoRemoveTrack(track)
+//            }
             is FavoriteTracksAction.SyncronizeTracks -> syncronizeTracks()
-            FavoriteTracksAction.GetNextFavoriteTracks -> loadNextFavoriteTracks()
+            is  FavoriteTracksAction.GetNextFavoriteTracks -> loadNextFavoriteTracks()
+            is FavoriteTracksAction.onRemoveTrackById -> removeTrackById(action.trackId)
+            is FavoriteTracksAction.onRemoveTrackFromCashedList -> removeTrackFromCashedList(action.track)
+            is FavoriteTracksAction.onRestoreLastRemovedTrackToCashedList -> restoreLastRemovedTrackToCashedList()
         }
     }
 
-    private fun removeTrack(track: Track) {
-        viewModelScope.launch {
-            trackRepository.removeFavoriteTrack(track)
-        }
-    }
+//    private fun removeTrack(track: Track) {
+//        viewModelScope.launch {
+//            _state.update { currentState ->
+//                val updatedTracks = currentState.tracks.filter { it.id != track.id }
+//                currentState.copy(tracks = updatedTracks)
+//            }
+//            trackRepository.removeFavoriteTrack(track)
+//        }
+//    }
 
-    private fun undoRemoveTrack(track: Track) {
-        viewModelScope.launch {
-            trackRepository.addFavoriteTrack(track)
-        }
-    }
+//    private fun undoRemoveTrack(track: Track) {
+//        viewModelScope.launch {
+//            trackRepository.addFavoriteTrack(track)
+//        }
+//    }
 
     private fun syncronizeTracks() {
         val currentTracksCount = _state.value.tracks.size
@@ -135,7 +174,6 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
                     }
                 }
                 is Result.Error -> {
-                    // Handle the error appropriately
                 }
             }
         }

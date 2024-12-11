@@ -34,7 +34,7 @@ fun UserInfoRow(label: String, value: String, icon: ImageVector, isPassword: Boo
             imageVector = icon,
             contentDescription = "$label icon",
             modifier = Modifier.size(24.dp),
-            tint = Color(0xFFBDBDBD) // Light gray color for icons
+            tint = Color(0xFFBDBDBD)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {

@@ -1,31 +1,26 @@
 package org.internship.kmp.martin.core.data.database
 
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 import org.internship.kmp.martin.core.data.auth.AuthManager
 import org.internship.kmp.martin.core.data.network.SpotifyApi
 import org.internship.kmp.martin.core.domain.DataError
-import org.internship.kmp.martin.core.domain.Result
-import org.internship.kmp.martin.core.domain.map
 import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.spotify_user.data.database.SpotifyUserDao
 import org.internship.kmp.martin.spotify_user.data.mappers.toDomain
 import org.internship.kmp.martin.spotify_user.data.mappers.toEntity
-import org.internship.kmp.martin.spotify_user.domain.SpotifyUser
 
 class AuthRepositoryImpl(private val authManager: AuthManager, private val apiClient: SpotifyApi, private val userDao: SpotifyUserDao) : AuthRepository {
 //    @NativeCoroutinesState
-    val isUserLoggedIn2 = MutableStateFlow(isUserAuthenticated())
+    val _isUserLoggedIn = MutableStateFlow(isUserAuthenticated())
 
 
-    override val isUserLoggedInMine: StateFlow<Boolean> = isUserLoggedIn2
-
-    override fun isUserLoggedIn(): StateFlow<Boolean> = isUserLoggedIn2
+    override fun isUserLoggedIn(): StateFlow<Boolean> = _isUserLoggedIn
+    @NativeCoroutines
+    val bla =  isUserLoggedIn()
 
     override fun isUserAuthenticated(): Boolean {
         val isLoggedIn = authManager.getAccessToken() != null && !authManager.hasTokenExpired().value
@@ -38,7 +33,7 @@ class AuthRepositoryImpl(private val authManager: AuthManager, private val apiCl
         request.onSuccess { currentUser ->
             authManager.login(accessToken, currentUser.id, expiresIn)
             userDao.upsert(currentUser.toDomain().toEntity())
-            isUserLoggedIn2.value = true
+            _isUserLoggedIn.value = true
         }
         request.onError { error ->
             return error
@@ -48,7 +43,7 @@ class AuthRepositoryImpl(private val authManager: AuthManager, private val apiCl
 
     override fun logout() {
         authManager.logoutClear()
-        isUserLoggedIn2.value = false
+        _isUserLoggedIn.value = false
     }
 
 }

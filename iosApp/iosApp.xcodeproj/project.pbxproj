@@ -14,7 +14,6 @@
 		47078FF62CFDF312001B85E1 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47078FF52CFDF30D001B85E1 /* UserProfileView.swift */; };
 		475A2FBD2D009E40004C8AB7 /* BrowseTracksViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 475A2FBB2D009E40004C8AB7 /* BrowseTracksViewModel.kt */; };
 		475A2FBE2D009E40004C8AB7 /* BrowseTracksState.kt in Resources */ = {isa = PBXBuildFile; fileRef = 475A2FBA2D009E40004C8AB7 /* BrowseTracksState.kt */; };
-		475A2FC02D009F07004C8AB7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475A2FBF2D009EFE004C8AB7 /* TrackListView.swift */; };
 		475A2FC22D00A77C004C8AB7 /* TopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475A2FC12D00A772004C8AB7 /* TopBarView.swift */; };
 		476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */; };
 		4770416E2CFFB7CF002EFFD6 /* MyTestInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */; };
@@ -89,6 +88,8 @@
 		479EDD552CFF204200C67B76 /* AlbumDto.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCB62CFF204200C67B76 /* AlbumDto.kt */; };
 		479EDD562CFF204200C67B76 /* AuthViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE22CFF204200C67B76 /* AuthViewModel.kt */; };
 		479EDD572CFF204200C67B76 /* ImageManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCEB2CFF204200C67B76 /* ImageManager.kt */; };
+		47A97BD02D07A939000BDCCC /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 47A97BCF2D07A939000BDCCC /* SDWebImageSwiftUI */; };
+		47DC66722D08448400B94A61 /* ProfileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DC66712D08447B00B94A61 /* ProfileRow.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,7 +101,6 @@
 		47078FF52CFDF30D001B85E1 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		475A2FBA2D009E40004C8AB7 /* BrowseTracksState.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BrowseTracksState.kt; sourceTree = "<group>"; };
 		475A2FBB2D009E40004C8AB7 /* BrowseTracksViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BrowseTracksViewModel.kt; sourceTree = "<group>"; };
-		475A2FBF2D009EFE004C8AB7 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
 		475A2FC12D00A772004C8AB7 /* TopBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarView.swift; sourceTree = "<group>"; };
 		476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
 		476BE15A2CE74742008D833D /* iosApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iosApp-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -169,6 +169,7 @@
 		479EDD132CFF204200C67B76 /* FavoriteTracksState.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksState.kt; sourceTree = "<group>"; };
 		479EDD142CFF204200C67B76 /* FavoriteTracksViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksViewModel.kt; sourceTree = "<group>"; };
 		479EDD1A2CFF204200C67B76 /* Res.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Res.kt; sourceTree = "<group>"; };
+		47DC66712D08447B00B94A61 /* ProfileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRow.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* KMP-Spotify-Janitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KMP-Spotify-Janitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -184,6 +185,7 @@
 				479EDCAD2CFF150A00C67B76 /* KMPNativeCoroutinesCombine in Frameworks */,
 				479EDCAF2CFF150A00C67B76 /* KMPNativeCoroutinesCore in Frameworks */,
 				479EDCB12CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				47A97BD02D07A939000BDCCC /* SDWebImageSwiftUI in Frameworks */,
 				479EDCA82CFF14EE00C67B76 /* KMPObservableViewModelSwiftUI in Frameworks */,
 				479EDCA62CFF14EE00C67B76 /* KMPObservableViewModelCore in Frameworks */,
 				478A1DF62CE739CA0071B73D /* SpotifyiOS in Frameworks */,
@@ -224,8 +226,8 @@
 		47035E692CFDE9DF00ABD3F3 /* components */ = {
 			isa = PBXGroup;
 			children = (
+				47DC66712D08447B00B94A61 /* ProfileRow.swift */,
 				475A2FC12D00A772004C8AB7 /* TopBarView.swift */,
-				475A2FBF2D009EFE004C8AB7 /* TrackListView.swift */,
 				478BF6412CFE056500595EF4 /* TrackRow.swift */,
 			);
 			path = components;
@@ -744,6 +746,7 @@
 				479EDCAC2CFF150A00C67B76 /* KMPNativeCoroutinesCombine */,
 				479EDCAE2CFF150A00C67B76 /* KMPNativeCoroutinesCore */,
 				479EDCB02CFF150A00C67B76 /* KMPNativeCoroutinesRxSwift */,
+				47A97BCF2D07A939000BDCCC /* SDWebImageSwiftUI */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* KMP-Spotify-Janitor.app */;
@@ -779,6 +782,7 @@
 				478A1DF42CE739CA0071B73D /* XCRemoteSwiftPackageReference "ios-sdk" */,
 				479EDCA42CFF14EE00C67B76 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */,
 				479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+				47A97BCE2D07A939000BDCCC /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -894,10 +898,10 @@
 				479EDCA12CFF0B9A00C67B76 /* AppRootView.swift in Sources */,
 				47078FF62CFDF312001B85E1 /* UserProfileView.swift in Sources */,
 				479EDCA32CFF14A900C67B76 /* KMPObservableViewModel.swift in Sources */,
+				47DC66722D08448400B94A61 /* ProfileRow.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				475A2FC22D00A77C004C8AB7 /* TopBarView.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
-				475A2FC02D009F07004C8AB7 /* TrackListView.swift in Sources */,
 				47035E6B2CFDEA0400ABD3F3 /* FavoriteTracksView.swift in Sources */,
 				479EDC9F2CFEFD7B00C67B76 /* AuthView.swift in Sources */,
 				476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */,
@@ -1136,6 +1140,14 @@
 				kind = branch;
 			};
 		};
+		47A97BCE2D07A939000BDCCC /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1173,6 +1185,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 479EDCA92CFF150A00C67B76 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesRxSwift;
+		};
+		47A97BCF2D07A939000BDCCC /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47A97BCE2D07A939000BDCCC /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

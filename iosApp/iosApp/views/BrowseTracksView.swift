@@ -44,16 +44,27 @@ struct BrowseTracksView: View {
   
             VStack {
                 TopBarView(title: "Browse", imageName: nil, onAction: nil)
-                // Search Bar
-                TextField("Search", text: $searchQuery)
-                    .padding()
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onChange(of: searchQuery) { newValue in
-                        timer?.invalidate()
-                        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                            performRequest(with: newValue)
-                        }
-                    }
+                TextField("What do you want to listen to?", text: $searchQuery)
+                           .padding(7)
+                           .padding(.leading, 30) // Space for the icon
+                           .background(Color(.systemGray6))
+                           .cornerRadius(8)
+                           .overlay(
+                               HStack {
+                                   Image(systemName: "magnifyingglass")
+                                       .foregroundColor(.gray)
+                                       .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                       .padding(.leading, 8)
+                                   Spacer()
+                               }
+                           )
+                           .padding(.horizontal, 10)
+                           .onChange(of: searchQuery) { oldvalue, newValue in
+                               timer?.invalidate()
+                               timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                                   performRequest(with: newValue)
+                               }
+                           }
                 List(viewModel.state.tracks, id: \.id) { track in
                     TrackRow(track: track,
                              onAddToFavoritesClick: { _ in
@@ -65,16 +76,13 @@ struct BrowseTracksView: View {
                 }
                 .listStyle(.plain)
                 if showMessage {
-                               
-                                
-                                    Text(messageText)
-                                        .padding()
-                                        .background(Color.green.opacity(0.8))
-                                        .foregroundColor(.white)
-                                        .cornerRadius(8)
-                                        .transition(.opacity)
-                                
-                            }
+                    Text(messageText)
+                        .padding()
+                        .background(Color.green.opacity(0.8))
+                        .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
+                        .cornerRadius(8)
+                        .transition(.opacity)
+                }
             }
             .navigationBarHidden(true)
             .navigationTitle("Search")

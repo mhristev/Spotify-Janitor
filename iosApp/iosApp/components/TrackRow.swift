@@ -7,67 +7,82 @@
 //
 import SwiftUI
 import Shared
+import SDWebImageSwiftUI
 
 struct TrackRow: View {
     var track: Track
     var onAddToFavoritesClick: ((Track) -> Void)?
 //    var checkIfTrackAlreadyInFavorite: (Track) -> Bool
-    
+    // https://github.com/SDWebImage/SDWebImageSwiftUI
     var body: some View {
         HStack {
-            AsyncImage(url: URL(string: track.album.imageUrl)) { phase in
-                switch phase {
-                case .empty:
-                    // This is the loading state
+            WebImage(url: URL(string: track.album.imageUrl)) { image in
+                    image.resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .cornerRadius(8)
+                } placeholder: {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .frame(width: 60, height: 60)
-                case .success(let image):
-                    // Successfully loaded image
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 60, height: 60)
-                        .cornerRadius(8)
-                case .failure:
-                    // This is the error state
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.red)
-                        .frame(width: 60, height: 60)
-                @unknown default:
-                    // Handle unknown future states
-                    EmptyView()
                 }
-            }
+                .resizable()
+                .transition(.fade(duration: 0.5))
+                .scaledToFit()
+                .frame(width: 60, height: 60, alignment: .center)
+                
+            
+//            AsyncImage(url: URL(string: track.album.imageUrl)) { phase in
+//                switch phase {
+//                case .empty:
+//                    ProgressView()
+//                        .progressViewStyle(CircularProgressViewStyle())
+//                        .frame(width: 60, height: 60)
+//                case .success(let image):
+//               
+//                    image
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 60, height: 60)
+//                        .cornerRadius(8)
+//                case .failure:
+//                    // This is the error state
+//                    Image(systemName: "exclamationmark.triangle.fill")
+//                        .foregroundColor(.red)
+//                        .frame(width: 60, height: 60)
+//                @unknown default:
+//                    // Handle unknown future states
+//                    EmptyView()
+//                }
+//            }
             
             VStack(alignment: .leading) {
                 Text(track.name)
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
                     .lineLimit(1)
                     .padding(.bottom, 2)
                 
                 Text(track.artists.map { $0.name }.joined(separator: " · "))
                     .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(Color(.SECONDARY_TEXT_GREY))
                     .lineLimit(1)
             }
             .padding(.leading, 10)
             
             Spacer()
             
-//            if !checkIfTrackAlreadyInFavorite(track) {
-                if let onAddToFavorites = onAddToFavoritesClick {
-                    Button(action: {
-                        onAddToFavorites(track)
-                    }) {
-                        Image(systemName: "plus.circle")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
-                            .padding(.trailing, 16)
-                    }
+            if let onAddToFavorites = onAddToFavoritesClick {
+                Button(action: {
+                    onAddToFavorites(track)
+                }) {
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
+                        .padding(.trailing, 16)
                 }
-//            }
+            }
+
         }
         .padding(.vertical, 10)
         .background(Color(.PRIMARY_DARK))

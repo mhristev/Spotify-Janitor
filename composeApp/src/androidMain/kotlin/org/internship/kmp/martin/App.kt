@@ -1,5 +1,6 @@
 package org.internship.kmp.martin
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -19,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
 import org.internship.kmp.martin.core.domain.AppConstants
-import org.internship.kmp.martin.views.FavoriteTracksView
 import org.internship.kmp.martin.views.BrowseTracksView
+import org.internship.kmp.martin.views.FavoriteTracksView
 import org.internship.kmp.martin.views.UserProfileView
 
 @Composable

@@ -20,16 +20,20 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberDismissState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import kotlinx.coroutines.launch
 import org.internship.kmp.martin.TrackDeletionWorker
 import org.internship.kmp.martin.components.RemoveConfirmationDialog
 import org.internship.kmp.martin.components.TrackItem
@@ -53,17 +58,6 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 
-//state.lastRemovedTrack?.let { track ->
-//    if (viewModel.showUndoButton) {
-//        Button(onClick = {
-//            viewModel.onAction(FavoriteTracksAction.onUndoDeleteTrack)
-//            removeTrackIdFromUserDefaults()
-//            viewModel.showUndoButton = false
-//        }) {
-//            Text("Undo")
-//        }
-//    }
-//}
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -73,6 +67,8 @@ fun FavoriteTracksView() {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var showUndoButton by mutableStateOf(false)
     var workRequestId by mutableStateOf(UUID.randomUUID())
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
 
     var showDialog by remember { mutableStateOf(false) }
@@ -112,7 +108,7 @@ fun FavoriteTracksView() {
 
     fun onDeleteConfirmed() {
         trackToDelete?.let {
-            viewModel.removeTrackFromCashedList(it)
+            viewModel.onAction(FavoriteTracksAction.onRemoveTrackFromCashedList(it))
             scheduleTrackDeletion(it.id)
         }
         showDialog = false
@@ -122,7 +118,7 @@ fun FavoriteTracksView() {
     fun onDeleteCancelled() {
         showDialog = false
         showUndoButton = false
-        viewModel.restoreLastRemovedTrackToCashedList()
+        viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackToCashedList)
         cancelScheduledTrackDeletion()
     }
 
@@ -153,6 +149,16 @@ fun FavoriteTracksView() {
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
                 if (showUndoButton) {
+//                    coroutineScope.launch {
+//                        val result = scaffoldState.snackbarHostState.showSnackbar(
+//                            message = "Track removed",
+//                            actionLabel = "Undo",
+//                            duration = SnackbarDuration.Short
+//                        )
+//                        if (result == SnackbarResult.ActionPerformed) {
+//                            trackToDelete?.let { viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackToCashedList) }
+//                        }
+//                    }
                     Button(onClick = {
                         onDeleteCancelled()
                     }) {
@@ -167,6 +173,7 @@ fun FavoriteTracksView() {
                                 confirmStateChange = {
                                     if (it == DismissValue.DismissedToEnd) {
                                         confirmDelete(track)
+
                                         false
                                     } else {
                                         false
@@ -196,6 +203,7 @@ fun FavoriteTracksView() {
                     }
                 }
                 if (showDialog) {
+
                     trackToDelete?.let {
                         RemoveConfirmationDialog(
                             track = it,

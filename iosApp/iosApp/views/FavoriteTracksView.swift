@@ -33,18 +33,28 @@ struct FavoriteTracksView: View {
                             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                     .onDelete(perform: prepareForDelete)
+                    // Load More Button
+                    Button(action: {
+                        viewModel.onAction(action: FavoriteTracksActionGetNextFavoriteTracks())
+                    }) {
+                        Text("Load More")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
                 }
                 .listStyle(.plain)
                 if isUndoVisible {
-                                Button("Undo") {
-                                    restoreDeletedTrack()
-                                }
-                                .padding()
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                                .transition(.opacity)
-                            }
+                    Button("Undo") {
+                        restoreDeletedTrack()
+                    }
+                    .padding()
+                    .background(Color.green)
+                    .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
+                    .cornerRadius(8)
+                    .transition(.opacity)
+                }
         }.background(Color(.PRIMARY_DARK))
             .shadow(radius: 5)
             .alert("Confirm Deletion", isPresented: $isShowingConfirmation) {
@@ -71,7 +81,7 @@ struct FavoriteTracksView: View {
             
             UserDefaults.standard.set(trackToDelete.id, forKey: "backgroundDeleteTrackID")
             
-            viewModel.removeTrackFromCashedList(track: trackToDelete)
+        viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackFromCashedList(track: trackToDelete))
             
             withAnimation {
                 isUndoVisible = true
@@ -103,7 +113,7 @@ struct FavoriteTracksView: View {
         }
         
         private func restoreDeletedTrack() {
-            viewModel.restoreLastRemovedTrackToCashedList()
+            viewModel.onAction(action: FavoriteTracksActionOnRestoreLastRemovedTrackToCashedList())
             
             isUndoVisible = false
             

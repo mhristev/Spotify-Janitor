@@ -14,4 +14,6 @@ interface TrackRepository {
     suspend fun synchronizeTracks(): Result<Flow<List<Track>>, DataError>
     suspend fun getNextFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError>
     suspend fun removeFavoriteTrackById(trackId: String)
+    suspend fun fetchAndStoreAdditionalTracks(currentLocalCount: Int)
+    suspend fun getLocalFavoriteTracksCount(): Int
 }
