@@ -8,7 +8,7 @@ sealed interface FavoriteTracksAction {
     data object SyncronizeTracks : FavoriteTracksAction
     data object GetNextFavoriteTracks : FavoriteTracksAction
     data class onRemoveTrackById(val trackId: String): FavoriteTracksAction
-    data class onRemoveTrackFromCashedList(val track: Track): FavoriteTracksAction
-    data object onRestoreLastRemovedTrackToCashedList: FavoriteTracksAction
+    data class onRemoveTrackLocally(val track: Track): FavoriteTracksAction
+    data object onRestoreLastRemovedTrackLocally: FavoriteTracksAction
 
 }

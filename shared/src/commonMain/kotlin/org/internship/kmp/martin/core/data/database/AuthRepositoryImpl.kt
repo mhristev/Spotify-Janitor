@@ -2,6 +2,7 @@ package org.internship.kmp.martin.core.data.database
 
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.internship.kmp.martin.core.data.auth.AuthManager
@@ -17,10 +18,10 @@ class AuthRepositoryImpl(private val authManager: AuthManager, private val apiCl
 //    @NativeCoroutinesState
     val _isUserLoggedIn = MutableStateFlow(isUserAuthenticated())
 
+    @NativeCoroutinesState
+    override var isUserAuthTest: StateFlow<Boolean> = _isUserLoggedIn
 
     override fun isUserLoggedIn(): StateFlow<Boolean> = _isUserLoggedIn
-    @NativeCoroutines
-    val bla =  isUserLoggedIn()
 
     override fun isUserAuthenticated(): Boolean {
         val isLoggedIn = authManager.getAccessToken() != null && !authManager.hasTokenExpired().value

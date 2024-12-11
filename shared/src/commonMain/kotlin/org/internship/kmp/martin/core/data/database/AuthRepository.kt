@@ -7,7 +7,8 @@ import org.internship.kmp.martin.core.domain.DataError
 
 
 interface AuthRepository {
-    @NativeCoroutines
+    @NativeCoroutinesState
+    var isUserAuthTest: StateFlow<Boolean>
     fun isUserLoggedIn(): StateFlow<Boolean>
     suspend fun login(accessToken: String, expiresIn: Int): DataError?
     fun logout()

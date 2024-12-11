@@ -25,46 +25,50 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return trackDao.getFavoriteTracks().firstOrNull()?.any { it.id == track.id } ?: false
     }
 
-    override suspend fun getFavoriteTracks(): Result<List<Track>, DataError> {
+    override suspend fun getFavoriteTracks(): Result<Flow<List<Track>>, DataError> {
         val limitTracksPerCall = NetworkConstants.Limits.TRACKS_PER_CALL
         val minTracksDisplayed = AppConstants.Limits.MIN_TRACKS_TO_DISPLAY
 
-        val tracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
+        val trackCount = trackDao.getFavoriteTracksHandle().size
+            val tracksFlow = trackDao.getFavoriteTracks()
+                .map { it.map { trackEntity -> trackEntity.toDomain() } }
 
-        return if (tracks.isEmpty() || tracks.size < minTracksDisplayed) {
+        return if (trackCount < minTracksDisplayed) {
             fetchAndStoreFavoriteTracks(limitTracksPerCall)
         } else {
-            Result.Success(tracks.map { it.toDomain() })
+            Result.Success(tracksFlow)
         }
     }
 
-    private suspend fun fetchAndStoreFavoriteTracks(limitTracksPerCall: Int): Result<List<Track>, DataError> {
+
+    private suspend fun fetchAndStoreFavoriteTracks(limitTracksPerCall: Int): Result<Flow<List<Track>>, DataError> {
         val result = spotifyApi.getFavoriteTracks(limitTracksPerCall, 0)
         result.onSuccess { favTracksDto ->
             favTracksDto.mapAddedAt()
             favTracksDto.items.forEach { trackDto ->
                 trackDao.upsert(trackDto.track.toDomain().toEntity())
             }
-            val tracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
-            val domainTracks = tracks.map { it.toDomain() }
-            return Result.Success(domainTracks)
+            val tracksFlow = trackDao.getFavoriteTracks()
+                .map { it.map { trackEntity -> trackEntity.toDomain() } }
+            return Result.Success(tracksFlow)
         }.onError {
             return Result.Error(it)
         }
         return Result.Error(DataError.Local.UNKNOWN)
     }
 
-    override suspend fun getNextFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
-        val localTracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
+    override suspend fun getNextFavoriteTracks(currentTrackOffset: Int) {
+        val localTracks = trackDao.getFavoriteTracksHandle()
 
-        return if (localTracks.size > currentTrackOffset) {
+        if (localTracks.size > currentTrackOffset) {
             getLocalFavoriteTracks(localTracks, currentTrackOffset)
         } else {
             fetchAndStoreAdditionalTracks(currentTrackOffset)
-            // After fetching more tracks, return the newly added tracks
-            val updatedLocalTracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
-            getLocalFavoriteTracks(updatedLocalTracks, currentTrackOffset)
         }
+    }
+
+    override suspend fun restoreTrackToDao(track: Track) {
+        trackDao.upsert(track.toEntity())
     }
 
 
@@ -82,7 +86,6 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
                 trackDao.upsert(trackDto.track.toDomain().toEntity())
             }
         }.onError {
-            // Log error or handle as needed
         }
     }
 
@@ -90,10 +93,10 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return trackDao.getFavoriteTracksHandle().size
     }
 
-    private fun getLocalFavoriteTracks(localTracks: List<TrackEntity>, currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
-        val tracksPerLoadMore = AppConstants.Limits.TRACKS_PER_LOAD_MORE
-        val domainTracks = localTracks.drop(currentTrackOffset).take(tracksPerLoadMore).map { it.toDomain() }
-        return Result.Success(flowOf(domainTracks))
+    private fun getLocalFavoriteTracks(localTracks: List<TrackEntity>, currentTrackOffset: Int) {
+//        val tracksPerLoadMore = AppConstants.Limits.TRACKS_PER_LOAD_MORE
+//        val domainTracks = localTracks.drop(currentTrackOffset).take(tracksPerLoadMore).map { it.toDomain() }
+//        return domainTracks)
     }
 
     private suspend fun getRemoteFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
@@ -120,7 +123,11 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return Result.Success(Unit)
     }
 
-    override suspend fun removeFavoriteTrack(track: Track): Result<Unit, DataError> {
+    override suspend fun removeFavoriteTrackLocally(track: Track) {
+        trackDao.removeFavTrack(track.id)
+    }
+
+    override suspend fun removeFavoriteTrackGlobally(track: Track): Result<Unit, DataError> {
         trackDao.removeFavTrack(track.id)
         spotifyApi.removeFavoriteTrack(track)
             .onError {

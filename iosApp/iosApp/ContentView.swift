@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var isUserAuthenticated: Bool = false
 
     var authViewModel = KoinDependencies.shared.getAuthViewModel()
+    var authRepository = KoinDependencies.shared.getAuthRepository()
     
     var body: some View {
         Group {
@@ -24,6 +25,13 @@ struct ContentView: View {
     }
     
     private func observeUserAuthentication() {
+        let publisher: AnyPublisher<Bool, Never> = createPublisher(for: authRepository.isUserAuthTest)
+
+                cancellable = publisher
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] value in
+                        self?.isUserAuthTest = value
+                    }
         createObservable(for: authViewModel.isUserLoggedInFlow)
             .subscribe(onNext: { isLoggedIn in
                 self.isUserAuthenticated = isLoggedIn as! Bool

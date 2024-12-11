@@ -20,8 +20,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -65,12 +63,13 @@ fun FavoriteTracksView() {
     val context = LocalContext.current
     val viewModel: FavoriteTracksViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var showUndoButton by mutableStateOf(false)
-    var workRequestId by mutableStateOf(UUID.randomUUID())
+
+    var workRequestId by remember {mutableStateOf(UUID.randomUUID())}
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    val trackList by state.tracks.collectAsStateWithLifecycle(emptyList())
 
-
+    var showUndoButton by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var trackToDelete by remember { mutableStateOf<Track?>(null) }
 
@@ -97,7 +96,7 @@ fun FavoriteTracksView() {
         WorkManager.getInstance(context).enqueue(request)
     }
 
-    fun showUndoButton() {
+    fun showUndoButton2() {
         showUndoButton = true
         Handler(Looper.getMainLooper()).postDelayed({
             if (showUndoButton) {
@@ -106,20 +105,24 @@ fun FavoriteTracksView() {
         }, 3000)
     }
 
-    fun onDeleteConfirmed() {
+     fun onDeleteConfirmed() {
         trackToDelete?.let {
-            viewModel.onAction(FavoriteTracksAction.onRemoveTrackFromCashedList(it))
+            viewModel.onAction(FavoriteTracksAction.onRemoveTrackLocally(it))
             scheduleTrackDeletion(it.id)
         }
         showDialog = false
-        showUndoButton()
+        showUndoButton2()
     }
 
-    fun onDeleteCancelled() {
+     fun onDeleteDialogCancelled() {
         showDialog = false
+    }
+
+    fun onDeleteUndoCancelled() {
         showUndoButton = false
-        viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackToCashedList)
         cancelScheduledTrackDeletion()
+        viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackLocally)
+
     }
 
     Scaffold(
@@ -129,7 +132,7 @@ fun FavoriteTracksView() {
                 backgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()),
                 actions = {
                     IconButton(
-                        onClick = { viewModel.onAction(FavoriteTracksAction.SyncronizeTracks) },
+                        onClick = {  coroutineScope.launch {  viewModel.onAction(FavoriteTracksAction.SyncronizeTracks)} },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Refresh,
@@ -148,32 +151,22 @@ fun FavoriteTracksView() {
                     .padding(padding)
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
+
                 if (showUndoButton) {
-//                    coroutineScope.launch {
-//                        val result = scaffoldState.snackbarHostState.showSnackbar(
-//                            message = "Track removed",
-//                            actionLabel = "Undo",
-//                            duration = SnackbarDuration.Short
-//                        )
-//                        if (result == SnackbarResult.ActionPerformed) {
-//                            trackToDelete?.let { viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackToCashedList) }
-//                        }
-//                    }
                     Button(onClick = {
-                        onDeleteCancelled()
+                        onDeleteUndoCancelled()
                     }) {
                         Text("Undo")
                     }
                 }
 
                 LazyColumn() {
-                    items(state.tracks, key = { it.id }) { track ->
+                    items(trackList, key = { it.id }) { track ->
                         SwipeToDismiss(
                             state = rememberDismissState(
                                 confirmStateChange = {
                                     if (it == DismissValue.DismissedToEnd) {
                                         confirmDelete(track)
-
                                         false
                                     } else {
                                         false
@@ -192,7 +185,8 @@ fun FavoriteTracksView() {
                             contentAlignment = Alignment.Center
                         ) {
                             Button(
-                                onClick = { viewModel.onAction(FavoriteTracksAction.GetNextFavoriteTracks) },
+                                onClick = { coroutineScope.launch {
+                                    viewModel.onAction(FavoriteTracksAction.GetNextFavoriteTracks) } },
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                                 border = BorderStroke(1.dp, Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())),
                                 shape = RoundedCornerShape(50)
@@ -207,8 +201,12 @@ fun FavoriteTracksView() {
                     trackToDelete?.let {
                         RemoveConfirmationDialog(
                             track = it,
-                            onConfirm = { onDeleteConfirmed() },
-                            onDismiss = { onDeleteCancelled() }
+                            onConfirm = {
+                                    onDeleteConfirmed()
+                                        },
+                            onDismiss = {
+                                onDeleteDialogCancelled()
+                            }
                         )
                     }
                 }
