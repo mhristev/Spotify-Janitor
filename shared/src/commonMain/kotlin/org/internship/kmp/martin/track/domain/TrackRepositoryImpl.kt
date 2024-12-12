@@ -1,6 +1,7 @@
 package org.internship.kmp.martin.track.domain
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -30,7 +31,7 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         val minTracksDisplayed = AppConstants.Limits.MIN_TRACKS_TO_DISPLAY
 
         val trackCount = trackDao.getFavoriteTracksHandle().size
-            val tracksFlow = trackDao.getFavoriteTracks()
+            val tracksFlow = trackDao.getFavoriteTracksPaged(50, 0)
                 .map { it.map { trackEntity -> trackEntity.toDomain() } }
 
         return if (trackCount < minTracksDisplayed) {
@@ -57,13 +58,14 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return Result.Error(DataError.Local.UNKNOWN)
     }
 
-    override suspend fun getNextFavoriteTracks(currentTrackOffset: Int) {
+    override suspend fun getNextFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
         val localTracks = trackDao.getFavoriteTracksHandle()
 
         if (localTracks.size > currentTrackOffset) {
-            getLocalFavoriteTracks(localTracks, currentTrackOffset)
+            return Result.Success(trackDao.getFavoriteTracksPaged(50, currentTrackOffset).map { it.map { trackEntity -> trackEntity.toDomain() } })
         } else {
             fetchAndStoreAdditionalTracks(currentTrackOffset)
+            return Result.Success(trackDao.getFavoriteTracksPaged(currentTrackOffset+50, 0).map { it.map { trackEntity -> trackEntity.toDomain() } })
         }
     }
 
@@ -91,6 +93,11 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
 
     override suspend fun getLocalFavoriteTracksCount(): Int {
         return trackDao.getFavoriteTracksHandle().size
+    }
+
+    override fun getFavoriteTracksPaged(limit: Int, offset: Int): Flow<List<Track>> {
+        return trackDao.getFavoriteTracksPaged(limit, offset)
+            .map { it.map { trackEntity -> trackEntity.toDomain() } }
     }
 
     private fun getLocalFavoriteTracks(localTracks: List<TrackEntity>, currentTrackOffset: Int) {
@@ -148,18 +155,38 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
     }
 
     override suspend fun synchronizeTracks(): Result<Flow<List<Track>>, DataError> {
-        val localTracks = trackDao.getFavoriteTracks().firstOrNull() ?: emptyList()
-        val allApiTracks = fetchApiTracks(localTracks.size)
+        TODO("Not yet implemented")
+    }
 
-        if (allApiTracks is Result.Error) {
-            return allApiTracks
-        }
 
-        val apiTracks = (allApiTracks as Result.Success).data
+    override suspend fun syncTracksReturnOffset(offset: Int) {
+        val localTracks = trackDao.getFavoriteTracksHandle().map { it.toDomain() }
+        //val allApiTracks = fetchApiTracks(localTracks.size)
+        val apiTracks = getTracksFromApi(localTracks.size)
+
         synchronizeLocalTracksWithApi(localTracks, apiTracks)
 
-        val domainTracks = trackDao.getFavoriteTracks().map { it.map { trackEntity -> trackEntity.toDomain() } }
-        return Result.Success(domainTracks)
+//        val domainTracks = trackDao.getFavoriteTracks().map { it.map { trackEntity -> trackEntity.toDomain() } }
+//        return Result.Success(domainTracks)
+    }
+
+    private suspend fun getTracksFromApi(count: Int): List<Track> {
+        val maxTracks: Int = AppConstants.Limits.MAX_TRACKS_CACHED
+        val limitTracksPerCall: Int = NetworkConstants.Limits.TRACKS_PER_CALL
+        var counter: Int = 0
+        val result = mutableListOf<Track>()
+
+        while (counter < count) {
+            spotifyApi.getFavoriteTracks(limitTracksPerCall, counter)
+                .onSuccess { favTracksDto ->
+                    favTracksDto.mapAddedAt()
+                    val apiTracks = favTracksDto.items.map { it.track.toDomain() }
+                    result.addAll(apiTracks)
+                }
+            counter += limitTracksPerCall
+        }
+        return result
+
     }
 
     private suspend fun fetchApiTracks(localTracksSize: Int): Result<List<Track>, DataError> {
@@ -182,8 +209,7 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return Result.Success(allApiTracks)
     }
 
-    private suspend fun synchronizeLocalTracksWithApi(localTracks: List<TrackEntity>, apiTracks: List<Track>) {
-        // Remove local tracks that are not in the API
+    private suspend fun synchronizeLocalTracksWithApi(localTracks: List<Track>, apiTracks: List<Track>) {
         localTracks.filterNot { localTrack -> apiTracks.any { it.id == localTrack.id } }.forEach { track ->
             trackDao.removeFavTrack(track.id)
         }
@@ -202,7 +228,5 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
                 trackDao.upsert(track.toEntity())
             }
         }
-        print(apiTracks)
-        println(localTracks)
     }
 }

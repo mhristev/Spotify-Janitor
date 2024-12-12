@@ -21,4 +21,8 @@ interface FavoriteTrackDao {
 
     @Upsert
     suspend fun insertAll(tracks: List<TrackEntity>)
+
+    @Query("SELECT * FROM TrackEntity ORDER BY addedAt DESC LIMIT :limit OFFSET :offset")
+    fun getFavoriteTracksPaged(limit: Int, offset: Int): Flow<List<TrackEntity>>
+
 }

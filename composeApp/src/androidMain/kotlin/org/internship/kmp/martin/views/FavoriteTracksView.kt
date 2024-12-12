@@ -10,16 +10,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -66,6 +72,7 @@ fun FavoriteTracksView() {
 
     var workRequestId by remember {mutableStateOf(UUID.randomUUID())}
     val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val trackList by state.tracks.collectAsStateWithLifecycle(emptyList())
 
@@ -87,13 +94,27 @@ fun FavoriteTracksView() {
             .build()
 
         val request = OneTimeWorkRequestBuilder<TrackDeletionWorker>()
-            .setInitialDelay(3, TimeUnit.SECONDS)
+            .setInitialDelay(4, TimeUnit.SECONDS)
             .setInputData(inputData)
             .build()
 
         workRequestId = request.id
 
         WorkManager.getInstance(context).enqueue(request)
+    }
+
+    fun showUndoSnackbar(track: Track) {
+        coroutineScope.launch {
+            val result = snackbarHostState.showSnackbar(
+                message = "Track deleted",
+                actionLabel = "Undo",
+                duration = SnackbarDuration.Short
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                cancelScheduledTrackDeletion()
+                viewModel.onAction(FavoriteTracksAction.onRestoreLastRemovedTrackLocally)
+            }
+        }
     }
 
     fun showUndoButton2() {
@@ -109,6 +130,7 @@ fun FavoriteTracksView() {
         trackToDelete?.let {
             viewModel.onAction(FavoriteTracksAction.onRemoveTrackLocally(it))
             scheduleTrackDeletion(it.id)
+            showUndoSnackbar(it)
         }
         showDialog = false
         showUndoButton2()
@@ -131,19 +153,29 @@ fun FavoriteTracksView() {
                 title = { Text("Favorite Tracks", color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())) },
                 backgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()),
                 actions = {
-                    IconButton(
-                        onClick = {  coroutineScope.launch {  viewModel.onAction(FavoriteTracksAction.SyncronizeTracks)} },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Refresh,
-                            contentDescription = "Sync Tracks",
-                            tint = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            color = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt()),
+                            modifier = Modifier.size(30.dp).padding(5.dp)
                         )
+                    } else {
+                        IconButton(
+                            onClick = {
+                                viewModel.onAction(FavoriteTracksAction.SyncronizeTracks)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Refresh,
+                                contentDescription = "Sync Tracks",
+                                tint = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
+                            )
+                        }
                     }
                 },
                 elevation = 4.dp
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         content = { padding ->
             Column(
                 modifier = Modifier
@@ -151,15 +183,6 @@ fun FavoriteTracksView() {
                     .padding(padding)
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
-
-                if (showUndoButton) {
-                    Button(onClick = {
-                        onDeleteUndoCancelled()
-                    }) {
-                        Text("Undo")
-                    }
-                }
-
                 LazyColumn() {
                     items(trackList, key = { it.id }) { track ->
                         SwipeToDismiss(
@@ -197,7 +220,6 @@ fun FavoriteTracksView() {
                     }
                 }
                 if (showDialog) {
-
                     trackToDelete?.let {
                         RemoveConfirmationDialog(
                             track = it,

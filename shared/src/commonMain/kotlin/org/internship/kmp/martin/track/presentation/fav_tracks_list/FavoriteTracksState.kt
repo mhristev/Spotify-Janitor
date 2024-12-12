@@ -6,7 +6,11 @@ import org.internship.kmp.martin.track.domain.Track
 
 data class FavoriteTracksState(
     val tracks: Flow<List<Track>> = flowOf(emptyList()),
-    val lastRemovedTrack: Track? = null,
+    val trackToDelete: Track? = null,
     val errorString: String? = null,
+
+    val isLoading: Boolean = false,
+    val isShowingDeleteConfirmation: Boolean = false,
+    val isShowingUndoButton: Boolean = false
 )
 

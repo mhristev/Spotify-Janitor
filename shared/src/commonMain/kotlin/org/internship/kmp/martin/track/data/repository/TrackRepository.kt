@@ -13,9 +13,11 @@ interface TrackRepository {
     suspend fun removeFavoriteTrackGlobally(track: Track): Result<Unit, DataError>
     suspend fun searchTracks(query: String) : Result<List<Track>, DataError>
     suspend fun synchronizeTracks(): Result<Flow<List<Track>>, DataError>
-    suspend fun getNextFavoriteTracks(currentTrackOffset: Int)
+    suspend fun getNextFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError>
     suspend fun restoreTrackToDao(track: Track)
     suspend fun removeFavoriteTrackById(trackId: String)
     suspend fun fetchAndStoreAdditionalTracks(currentLocalCount: Int)
     suspend fun getLocalFavoriteTracksCount(): Int
+    fun getFavoriteTracksPaged(limit: Int, offset: Int): Flow<List<Track>>
+    suspend fun syncTracksReturnOffset(offset: Int)
 }
