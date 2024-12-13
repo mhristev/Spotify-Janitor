@@ -7,6 +7,11 @@ object AppConstants {
         const val TRACKS_PER_LOAD_MORE = 50
     }
 
+    object SpotifyApi {
+        const val MAX_TRACKS_PER_CALL = 50
+        const val BASE_URL = "https://api.spotify.com/v1"
+    }
+
     object Colors {
         const val PRIMARY_DARK_HEX ="#03001C"
         const val PRIMARY_PURPLE_HEX = "#301E67"

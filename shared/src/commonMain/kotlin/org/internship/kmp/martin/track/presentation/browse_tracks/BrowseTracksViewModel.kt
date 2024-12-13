@@ -1,6 +1,6 @@
 package org.internship.kmp.martin.track.presentation.browse_tracks
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
+import androidx.compose.runtime.mutableStateOf
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -8,16 +8,14 @@ import com.rickclephas.kmp.observableviewmodel.stateIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.update
-import org.internship.kmp.martin.core.domain.DataError
-import org.internship.kmp.martin.core.domain.Result
 import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 
 class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
-
     private val _state = MutableStateFlow(BrowseTracksState())
+
     @NativeCoroutinesState
     val state = _state
         .stateIn(
@@ -26,38 +24,61 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
             _state.value
         )
 
-
     fun onAction(action: BrowseTracksAction) {
         when(action) {
             is BrowseTracksAction.onTrackAddToFavorites -> addTrackToFavorites(action.track)
             is BrowseTracksAction.onSearch -> searchTracks(action.query)
-//            is BrowseTracksAction.onCheckIfTrackIsFavorite -> checkIfTrackIsFavorite(action.track)
+            is BrowseTracksAction.OnErrorMessageShown -> setErrorString(null)
+            BrowseTracksAction.OnSaveSuccessShown -> setIsSavingToFavoritesSuccessful(false)
         }
-    }
-
-    @NativeCoroutines
-    suspend fun checkIfTrackIsFavorite(track: Track): Boolean {
-        return trackRepository.isSongInFavorites(track)
     }
 
     private fun searchTracks(query: String) {
         viewModelScope.launch {
-            val results = trackRepository.searchTracks(query)
-            results
+            setIsLoadingTracks(true)
+            trackRepository.searchTracks(query)
                 .onSuccess { tracks ->
-                    _state.update {
-                        it.copy(
-                            tracks = tracks
-                        )
-                    }
+                    setTracks(tracks)
                 }
+                .onError {
+                    setErrorString(it.toString())
+                }
+            setIsLoadingTracks(false)
         }
     }
 
     private fun addTrackToFavorites(track: Track) {
         viewModelScope.launch {
-            val result = trackRepository.addFavoriteTrack(track)
-
+            trackRepository.addTrackToFavorites(track)
+                .onError {
+                    setErrorString(it.toString())
+                }
+            setIsSavingToFavoritesSuccessful(true)
         }
     }
+
+    private fun setTracks(resultTracks: List<Track>) {
+        _state.update {
+            it.copy(tracks = resultTracks)
+        }
+    }
+
+    private fun setIsLoadingTracks(isLoading: Boolean) {
+        _state.update {
+            it.copy(isLoadingTracks = isLoading)
+        }
+    }
+
+    private fun setIsSavingToFavoritesSuccessful(isSavingSuccessful: Boolean) {
+        _state.update {
+            it.copy(isSavingToFavoritesSuccess = isSavingSuccessful)
+        }
+    }
+
+    private fun setErrorString(errorStr: String?) {
+        _state.update {
+            it.copy(errorString = errorStr)
+        }
+    }
+
 }

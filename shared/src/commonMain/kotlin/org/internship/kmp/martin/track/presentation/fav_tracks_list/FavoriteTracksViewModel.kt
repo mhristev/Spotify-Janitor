@@ -4,11 +4,13 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.rickclephas.kmp.observableviewmodel.stateIn
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
@@ -23,97 +25,122 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
             loadNextFavoriteTracks()
             syncAllTracks()
         }
-        .stateIn(
+        .stateIn (
             viewModelScope,
-            SharingStarted.WhileSubscribed(10000L),
+            SharingStarted.WhileSubscribed(5000L),
             _state.value
         )
 
-//    private fun loadFavoriteTracks() {
-//        viewModelScope.launch {
-//            trackRepository.getFavoriteTracks()
-//                .onSuccess { tracksFlow ->
-//                    tracksFlow.collect { tracks ->
-//                        _state.update {
-//                            it.copy(tracks = flowOf(tracks.sortedByDescending { track ->track.addedAt }))
-//                        }
-//
-//                    }
-//
-//                }
-//        }
-//    }
-
     fun onAction(action: FavoriteTracksAction) {
         when (action) {
-            is FavoriteTracksAction.SyncronizeTracks -> syncAllTracks()
-            is  FavoriteTracksAction.GetNextFavoriteTracks -> loadNextFavoriteTracks()
-            is FavoriteTracksAction.onRemoveTrackById -> removeTrackGlobally(action.trackId)
-            is FavoriteTracksAction.onRemoveTrackLocally -> removeTrackLocally(action.track)
-            is FavoriteTracksAction.onRestoreLastRemovedTrackLocally -> restoreLastRemovedTrackLocally()
+            is FavoriteTracksAction.OnSyncTracks -> syncAllTracks()
+            is  FavoriteTracksAction.OnGetNextFavoriteTracks -> loadNextFavoriteTracks()
+            is FavoriteTracksAction.OnRemoveTrackByIdGlobally -> removeTrackGlobally(action.trackId)
+            is FavoriteTracksAction.OnRemoveTrackLocally -> removeTrackLocally(action.track)
+            is FavoriteTracksAction.OnRestoreLastRemovedTrackLocally -> restoreLastRemovedTrackLocally()
+            is FavoriteTracksAction.OnHideUndoOption -> setShowingUndoButton(false)
+            is FavoriteTracksAction.OnHideDeletionDialog -> setShowingDeleteConfirmation(false)
+            is FavoriteTracksAction.OnShowDeletionDialog -> setShowingDeleteConfirmation(true)
+            is FavoriteTracksAction.OnErrorMessageShown -> setErrorMessage(null)
         }
     }
-
 
     private fun loadNextFavoriteTracks() {
         viewModelScope.launch {
-            val tracksCount = _state.value.tracks.firstOrNull()?.size ?: 0
+            setLoadingGetTracks(true)
+            val tracksCount = _state.value.cashedTracksFlow.firstOrNull()?.size ?: 0
             trackRepository.getNextFavoriteTracks(tracksCount)
                 .onSuccess { tracksFlow ->
-                    _state.update { it.copy(tracks = tracksFlow)}
+                    setCashedTracksFlow(tracksFlow)
                 }
+                .onError {
+                    setErrorMessage(it.toString())
+                }
+            setLoadingGetTracks(false)
         }
     }
 
-
     private fun removeTrackLocally(track: Track) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    trackToDelete = track
-                )
-            }
+            setTrackToDelete(track)
             trackRepository.removeFavoriteTrackLocally(track)
+            setShowingUndoButton(true)
         }
     }
 
     private fun restoreLastRemovedTrackLocally() {
         val track = _state.value.trackToDelete ?: return
         viewModelScope.launch {
-            _state.update {
-                trackRepository.restoreTrackToDao(track)
-                it.copy(trackToDelete = null)
-            }
+            trackRepository.restoreTrackLocally(track)
+            setTrackToDelete(null)
+            setShowingUndoButton(false)
         }
     }
 
     private fun removeTrackGlobally(id: String) {
         viewModelScope.launch {
-            val track = _state.value.tracks.firstOrNull()?.find { it.id == id } ?: _state.value.trackToDelete ?: return@launch
+            val track = _state.value.trackToDelete?.takeIf { it.id == id } ?: return@launch
             trackRepository.removeFavoriteTrackGlobally(track)
-            _state.update {
-                it.copy(trackToDelete = null)
-            }
+                .onSuccess {
+                    setTrackToDelete(null)
+                }
+                .onError {
+                    setErrorMessage(it.toString())
+                }
         }
     }
 
-
-
-    private fun setLoadingState(isLoading: Boolean) {
-        _state.update {
-            it.copy(isLoading = isLoading)
+    private fun syncAllTracks() {
+        viewModelScope.launch {
+            setLoadingSync(true)
+            trackRepository.syncAllTracks()
+                .onError {
+                    setErrorMessage(it.toString())
+                }
+            setLoadingSync(false)
         }
     }
+
     private fun setTrackToDelete(track: Track?) {
         _state.update {
             it.copy(trackToDelete = track)
         }
     }
-    private fun syncAllTracks() {
-        viewModelScope.launch {
-            setLoadingState(true)
-            trackRepository.syncTracksReturnOffset(0)
-            setLoadingState(false)
+
+    private fun setCashedTracksFlow(tracksFlow: Flow<List<Track>>) {
+        _state.update {
+            it.copy(cashedTracksFlow = tracksFlow)
         }
     }
+
+    private fun setLoadingSync(isLoading: Boolean) {
+        _state.update {
+            it.copy(isLoadingSync = isLoading)
+        }
+    }
+
+    private fun setLoadingGetTracks(isLoading: Boolean) {
+        _state.update {
+            it.copy(isLoadingGetTracks = isLoading)
+        }
+    }
+
+    private fun setShowingDeleteConfirmation(isShowing: Boolean) {
+        _state.update {
+            it.copy(isShowingDeleteConfirmation = isShowing)
+        }
+    }
+
+    private fun setShowingUndoButton(isShowing: Boolean) {
+        _state.update {
+            it.copy(isShowingUndoButton = isShowing)
+        }
+    }
+
+    private fun setErrorMessage(errorStr: String?) {
+        _state.update {
+            it.copy(errorString = errorStr)
+        }
+    }
+
 }

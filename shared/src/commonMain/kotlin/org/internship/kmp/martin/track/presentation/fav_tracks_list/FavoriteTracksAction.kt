@@ -3,12 +3,13 @@ package org.internship.kmp.martin.track.presentation.fav_tracks_list
 import org.internship.kmp.martin.track.domain.Track
 
 sealed interface FavoriteTracksAction {
-//    data class onTrackDelete(val track: Track): FavoriteTracksAction
-//    data object onUndoDeleteTrack: FavoriteTracksAction
-    data object SyncronizeTracks : FavoriteTracksAction
-    data object GetNextFavoriteTracks : FavoriteTracksAction
-    data class onRemoveTrackById(val trackId: String): FavoriteTracksAction
-    data class onRemoveTrackLocally(val track: Track): FavoriteTracksAction
-    data object onRestoreLastRemovedTrackLocally: FavoriteTracksAction
-
+    data object OnSyncTracks : FavoriteTracksAction
+    data object OnGetNextFavoriteTracks : FavoriteTracksAction
+    data class OnRemoveTrackByIdGlobally(val trackId: String): FavoriteTracksAction
+    data class OnRemoveTrackLocally(val track: Track): FavoriteTracksAction
+    data object OnRestoreLastRemovedTrackLocally: FavoriteTracksAction
+    data object OnHideUndoOption: FavoriteTracksAction
+    data object OnShowDeletionDialog: FavoriteTracksAction
+    data object OnHideDeletionDialog: FavoriteTracksAction
+    data object OnErrorMessageShown: FavoriteTracksAction
 }

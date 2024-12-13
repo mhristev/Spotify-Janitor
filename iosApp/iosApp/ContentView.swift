@@ -25,19 +25,20 @@ struct ContentView: View {
     }
     
     private func observeUserAuthentication() {
-        let publisher: AnyPublisher<Bool, Never> = createPublisher(for: authRepository.isUserAuthTest)
 
-                cancellable = publisher
-                    .receive(on: DispatchQueue.main)
-                    .sink { [weak self] value in
-                        self?.isUserAuthTest = value
-                    }
         createObservable(for: authViewModel.isUserLoggedInFlow)
             .subscribe(onNext: { isLoggedIn in
                 self.isUserAuthenticated = isLoggedIn as! Bool
             }, onError: { error in
                 print("Received error: \(error)")
             })
+        
+        createPublisher(for: authViewModel.isUserLoggedInFlow)
+            .sink { completion in
+            } receiveValue: { newValue in
+                self.isUserAuthenticated = newValue as! Bool
+            }
+
     }
 }
 #Preview {

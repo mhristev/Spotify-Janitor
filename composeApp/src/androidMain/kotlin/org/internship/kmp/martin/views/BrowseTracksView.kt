@@ -15,8 +15,10 @@ import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.launch
 import org.internship.kmp.martin.components.TrackItem
 import org.internship.kmp.martin.core.domain.AppConstants
+import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksAction
 import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksViewModel
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,6 +28,7 @@ fun BrowseTracksView() {
 
     var searchQuery by remember { mutableStateOf("") }
     var lastQuery by remember { mutableStateOf("") }
+
     val debouncePeriod = 500L
 
     val coroutineScope = rememberCoroutineScope()
@@ -33,6 +36,43 @@ fun BrowseTracksView() {
 
     val darkBackgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
     val whiteTextColor = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
+
+    fun performSearch(newQuery: String) {
+        coroutineScope.launch {
+            kotlinx.coroutines.delay(debouncePeriod)
+            if (searchQuery == newQuery && searchQuery != lastQuery) {
+                lastQuery = searchQuery
+                viewModel.onAction(BrowseTracksAction.onSearch(searchQuery))
+            }
+        }
+    }
+
+    fun showErrorMessage() {
+        coroutineScope.launch {
+            state.errorString?.let {
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Short
+                )
+            }
+            viewModel.onAction(BrowseTracksAction.OnErrorMessageShown)
+        }
+    }
+
+    fun performAddToFavorites(track: Track) {
+        viewModel.onAction(BrowseTracksAction.onTrackAddToFavorites(track))
+    }
+
+
+    fun showBla() {
+        coroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = "added to favorites!",
+                duration = SnackbarDuration.Short
+            )
+        }
+        viewModel.onAction(BrowseTracksAction.OnSaveSuccessShown)
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -58,13 +98,7 @@ fun BrowseTracksView() {
                         value = searchQuery,
                         onValueChange = { newQuery ->
                             searchQuery = newQuery
-                            coroutineScope.launch {
-                                kotlinx.coroutines.delay(debouncePeriod)
-                                if (searchQuery == newQuery && searchQuery != lastQuery) {
-                                    lastQuery = searchQuery
-                                    viewModel.onAction(BrowseTracksAction.onSearch(searchQuery))
-                                }
-                            }
+                            performSearch(newQuery)
                         },
                         label = { Text("What do you want to listen to?", color = Color.Gray) },
                         modifier = Modifier
@@ -72,20 +106,32 @@ fun BrowseTracksView() {
                             .background(whiteTextColor, shape = RoundedCornerShape(8.dp))
                     )
                 }
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(state.tracks) { track ->
-                        TrackItem(track, onAddToFavoritesClick = {
-                            viewModel.onAction(BrowseTracksAction.onTrackAddToFavorites(it))
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "${track.name} added to favorites!",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        })
+                if (state.isLoadingTracks) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(darkBackgroundColor),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = whiteTextColor)
                     }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(state.tracks) { track ->
+                            TrackItem(track, onAddToFavoritesClick = {
+                                performAddToFavorites(track)
+
+                            })
+                        }
+                    }
+                }
+                if (state.isSavingToFavoritesSuccess) {
+                    showBla()
+                }
+                if (state.errorString != null) {
+                    showErrorMessage()
                 }
             }
         }

@@ -1,7 +1,6 @@
 package org.internship.kmp.martin.core.data.database
 
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +14,7 @@ import org.internship.kmp.martin.spotify_user.data.mappers.toDomain
 import org.internship.kmp.martin.spotify_user.data.mappers.toEntity
 
 class AuthRepositoryImpl(private val authManager: AuthManager, private val apiClient: SpotifyApi, private val userDao: SpotifyUserDao) : AuthRepository {
+//    @NativeCoroutinesState
 //    @NativeCoroutinesState
     val _isUserLoggedIn = MutableStateFlow(isUserAuthenticated())
 
@@ -30,9 +30,10 @@ class AuthRepositoryImpl(private val authManager: AuthManager, private val apiCl
 
     override suspend fun login(accessToken: String, expiresIn: Int): DataError? {
         authManager.setAccessToken(accessToken)
+        authManager.setExpiresIn(expiresIn)
         val request = apiClient.getCurrentUser()
         request.onSuccess { currentUser ->
-            authManager.login(accessToken, currentUser.id, expiresIn)
+            authManager.setUserId(currentUser.id)
             userDao.upsert(currentUser.toDomain().toEntity())
             _isUserLoggedIn.value = true
         }
@@ -46,5 +47,6 @@ class AuthRepositoryImpl(private val authManager: AuthManager, private val apiCl
         authManager.logoutClear()
         _isUserLoggedIn.value = false
     }
+
 
 }

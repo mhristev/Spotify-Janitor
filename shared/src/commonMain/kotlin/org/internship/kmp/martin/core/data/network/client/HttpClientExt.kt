@@ -9,6 +9,7 @@ import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
+import okio.IOException
 import kotlin.coroutines.coroutineContext
 
 suspend inline fun <reified T> safeCall(
@@ -18,7 +19,7 @@ suspend inline fun <reified T> safeCall(
         execute()
     } catch(e: SocketTimeoutException) {
         return Result.Error(DataError.Remote.REQUEST_TIMEOUT)
-    } catch(e: UnresolvedAddressException) {
+    } catch (e: IOException) { // only way fot now to handle No internet connection; Throws UnknownHostException which is java class -> https://youtrack.jetbrains.com/issue/KTOR-2630/Client-Handle-network-exceptions-in-the-commonMain-module
         return Result.Error(DataError.Remote.NO_INTERNET)
     } catch (e: Exception) {
         coroutineContext.ensureActive()
