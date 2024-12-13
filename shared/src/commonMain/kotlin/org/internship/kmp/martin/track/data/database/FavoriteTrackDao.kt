@@ -25,4 +25,6 @@ interface FavoriteTrackDao {
     @Query("SELECT * FROM TrackEntity ORDER BY addedAt DESC LIMIT :limit OFFSET :offset")
     fun getFavoriteTracksPaged(limit: Int, offset: Int): Flow<List<TrackEntity>>
 
+    @Query("DELETE FROM TrackEntity")
+    suspend fun removeAllFavTracks()
 }

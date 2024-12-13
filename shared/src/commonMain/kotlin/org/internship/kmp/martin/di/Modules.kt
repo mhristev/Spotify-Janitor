@@ -16,30 +16,18 @@ import org.internship.kmp.martin.spotify_user.domain.SpotifyUserRepositoryImpl
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 import org.internship.kmp.martin.track.domain.TrackRepositoryImpl
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 expect val platformModule: Module
 
 val sharedModule = module {
     single { HttpClientFactory.create(get()) }
-   // single { KVaultAuthManager(get<KVaultFactory>().create()) }
-//    single { KVaultFactory.create() } // Provide KVault instance
     single<AuthManager> { KVaultAuthManager(get<KVaultFactory>().create()) }
-
-
-//    singleOf(::KtorSpotifyApi) { bind<SpotifyApi>() }
-//    singleOf(::TrackRepositoryImpl(get(), get())) { bind<TrackRepository>() }
-//    singleOf(::MyTestInterfaceImpl) { bind<MyTestInterface>() }
     single<MyTestInterface> { MyTestInterfaceImpl(get()) }
-
-
 
     single<SpotifyUserRepository> { SpotifyUserRepositoryImpl(get(), get()) }
 
-
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
     single {
         get<DatabaseFactory>().createFavTracksDatabase()
             .setDriver(BundledSQLiteDriver())
@@ -66,6 +54,5 @@ val sharedModule = module {
     single { get<RoomAppDatabase>().favoriteTrackDao }
     single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
     single<SpotifyApi> { KtorSpotifyApi(get(), get()) }
-
 }
 

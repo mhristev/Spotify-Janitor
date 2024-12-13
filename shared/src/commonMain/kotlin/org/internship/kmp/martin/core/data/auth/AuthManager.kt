@@ -11,8 +11,5 @@ interface AuthManager {
     fun getUserId(): String?
     fun logoutClear()
     fun getValidAccessToken(): Result<String, DataError.Local>
-    fun login(accessToken: String, userId: String, expiresIn: Int)
-    fun isTokenExpired(): StateFlow<Boolean>
     fun getAccessToken(): String?
-    fun hasTokenExpired(): StateFlow<Boolean>
 }
