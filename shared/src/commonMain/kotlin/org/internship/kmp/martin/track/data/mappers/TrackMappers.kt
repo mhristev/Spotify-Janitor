@@ -1,5 +1,6 @@
 package org.internship.kmp.martin.track.data.mappers
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -29,7 +30,8 @@ fun Track.toEntity(): TrackEntity {
         name = this.name,
         artists = this.artists.map { it.toEntity() },
         album = this.album.toEntity(),
-        addedAt = this.addedAt
+        addedAt = this.addedAt ?: Clock.System.now().toLocalDateTime(TimeZone.UTC)
+
     )
 }
 

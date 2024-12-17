@@ -1,7 +1,6 @@
 package org.internship.kmp.martin.track.domain
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.internship.kmp.martin.core.domain.DataError
 import org.internship.kmp.martin.track.data.database.FavoriteTrackDao
@@ -18,47 +17,27 @@ import org.internship.kmp.martin.track.data.mappers.toEntity
 class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val spotifyApi: SpotifyApi):
     TrackRepository {
 
-    override suspend fun getNextFavoriteTracks(currentTrackOffset: Int): Result<Flow<List<Track>>, DataError> {
+    override suspend fun getNextFavoriteTracks(currentTrackCount: Int, desiredIncreaseWith: Int): Result<Unit, DataError> {
         val localTracks = trackDao.getFavoriteTracksHandle()
 
-        if (localTracks.size > currentTrackOffset) {
-            return Result.Success(
-                getFavoriteTracksPaged(currentTrackOffset + 50, 0)
-            )
+        if (localTracks.size > currentTrackCount && (localTracks.size - currentTrackCount) >= desiredIncreaseWith) {
+            return Result.Success(Unit)
         } else {
-            fetchAndStoreAdditionalTracks(currentTrackOffset)
-                .onSuccess {
-                    return Result.Success(
-                        getFavoriteTracksPaged(currentTrackOffset + 50, 0)
-                    )
-                }
+            fetchAndStoreAdditionalTracks(currentTrackCount)
                 .onError {
                     return Result.Error(it)
                 }
+                .onSuccess {
+                    return Result.Success(Unit)
+                }
         }
-
         return Result.Error(DataError.Local.UNKNOWN)
     }
 
-    override suspend fun fetchInitialFavoriteTracks(): Result<Flow<List<Track>>, DataError> {
-        fetchAndStoreAdditionalTracks(0)
-            .onSuccess {
-                return Result.Success(
-                    getFavoriteTracksPaged(50, 0)
-                )
-            }
-            .onError {
-                return Result.Error(it)
-            }
 
-
-        val localTracks = getFavoriteTracksPaged(50, 0)
-        val doesExist = localTracks.first().isNotEmpty()
-        if (!doesExist) {
-            return Result.Error(DataError.Local.NO_DATA)
-        } else {
-            return Result.Success(localTracks)
-        }
+    override suspend fun getFavoriteTracksFlow(limit: Int): Flow<List<Track>> {
+        return trackDao.getFavoriteTracksPaged(limit)
+            .map { entities -> entities.map { it.toDomain() } }
     }
 
     override suspend fun restoreTrackLocally(track: Track) {
@@ -79,17 +58,15 @@ class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val sp
         return Result.Error(DataError.Local.UNKNOWN)
     }
 
-    private fun getFavoriteTracksPaged(limit: Int, offset: Int): Flow<List<Track>> {
-        return trackDao.getFavoriteTracksPaged(limit, offset)
-            .map { it.map { trackEntity -> trackEntity.toDomain() } }
-    }
 
     override suspend fun addTrackToFavorites(track: Track): Result<Unit, DataError> {
-        trackDao.upsert(track.toEntity())
+
         spotifyApi.addFavoriteTrack(track)
             .onError {
                 return Result.Error(it)
             }
+
+        trackDao.upsert(track.toEntity())
         return Result.Success(Unit)
     }
 

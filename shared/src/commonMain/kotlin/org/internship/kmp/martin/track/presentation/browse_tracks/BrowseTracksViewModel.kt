@@ -5,16 +5,22 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.rickclephas.kmp.observableviewmodel.stateIn
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.UIEvent
 
 class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
     private val _state = MutableStateFlow(BrowseTracksState())
+
+    private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    val uiEvents = _uiEvents.asSharedFlow()
 
     @NativeCoroutinesState
     val state = _state
@@ -28,8 +34,6 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
         when(action) {
             is BrowseTracksAction.onTrackAddToFavorites -> addTrackToFavorites(action.track)
             is BrowseTracksAction.onSearch -> searchTracks(action.query)
-            is BrowseTracksAction.OnErrorMessageShown -> setErrorString(null)
-            BrowseTracksAction.OnSaveSuccessShown -> setIsSavingToFavoritesSuccessful(false)
         }
     }
 
@@ -70,14 +74,18 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
     }
 
     private fun setIsSavingToFavoritesSuccessful(isSavingSuccessful: Boolean) {
-        _state.update {
-            it.copy(isSavingToFavoritesSuccess = isSavingSuccessful)
+        if (isSavingSuccessful) {
+            viewModelScope.launch {
+                _uiEvents.emit(UIEvent.ShowSuccess("Added to favorites!"))
+            }
         }
     }
 
     private fun setErrorString(errorStr: String?) {
-        _state.update {
-            it.copy(errorString = errorStr)
+        if (errorStr != null) {
+            viewModelScope.launch {
+                _uiEvents.emit(UIEvent.ShowError(errorStr))
+            }
         }
     }
 

@@ -4,58 +4,82 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.rickclephas.kmp.observableviewmodel.stateIn
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import org.internship.kmp.martin.core.domain.onError
 import org.internship.kmp.martin.core.domain.onSuccess
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 
+sealed class UIEvent {
+    data class ShowError(val message: String) : UIEvent()
+    data class ShowSuccess(val message: String) : UIEvent()
+}
 
-class FavoriteTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
+
+class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
     private val _state = MutableStateFlow(FavoriteTracksState())
+
+    private val limitFlow = MutableStateFlow(0)
+
+    private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    val uiEvents = _uiEvents.asSharedFlow()
 
     @NativeCoroutinesState
     val state = _state
         .onStart {
             loadNextFavoriteTracks()
+            observeFavoriteTracks()
             syncAllTracks()
         }
-        .stateIn (
+        .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.WhileSubscribed(10000L),
             _state.value
         )
 
     fun onAction(action: FavoriteTracksAction) {
         when (action) {
             is FavoriteTracksAction.OnSyncTracks -> syncAllTracks()
-            is  FavoriteTracksAction.OnGetNextFavoriteTracks -> loadNextFavoriteTracks()
+            is FavoriteTracksAction.OnGetNextFavoriteTracks -> loadNextFavoriteTracks()
             is FavoriteTracksAction.OnRemoveTrackByIdGlobally -> removeTrackGlobally(action.trackId)
             is FavoriteTracksAction.OnRemoveTrackLocally -> removeTrackLocally(action.track)
             is FavoriteTracksAction.OnRestoreLastRemovedTrackLocally -> restoreLastRemovedTrackLocally()
             is FavoriteTracksAction.OnHideUndoOption -> setShowingUndoButton(false)
             is FavoriteTracksAction.OnHideDeletionDialog -> setShowingDeleteConfirmation(false)
             is FavoriteTracksAction.OnShowDeletionDialog -> setShowingDeleteConfirmation(true)
-            is FavoriteTracksAction.OnErrorMessageShown -> setErrorMessage(null)
+        }
+    }
+    /* This function observes the favorite tracks and updates the state
+    limitFlow is the upstream flow. Whenever limitFlow emits a new integer (e.g., when you increase your limit from 50 to 100),
+    flatMapLatest cancels the old inner flow and starts collecting a new one returned by getFavoriteTracksFlow(newLimit).
+
+    getFavoriteTracksFlow(limit) returns a Flow<List<Track>> that continuously emits updates as data changes in the database.
+    As long as limitFlow doesn't change, flatMapLatest will keep collecting from the current getFavoriteTracksFlow(limit) and will receive all new data emitted by that flow.
+    */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeFavoriteTracks() {
+        viewModelScope.launch {
+            limitFlow
+                .flatMapLatest { limit ->
+                    trackRepository.getFavoriteTracksFlow(limit)
+                }
+                .collect { tracks ->
+                    setCashedTracksFlow(tracks)
+                }
         }
     }
 
     private fun loadNextFavoriteTracks() {
         viewModelScope.launch {
             setLoadingGetTracks(true)
-            val tracksCount = _state.value.cashedTracksFlow.firstOrNull()?.size ?: 0
-            trackRepository.getNextFavoriteTracks(tracksCount)
-                .onSuccess { tracksFlow ->
-                    setCashedTracksFlow(tracksFlow)
-                }
-                .onError {
-                    setErrorMessage(it.toString())
-                }
+            val desiredLimit = limitFlow.value + 50
+
+            trackRepository.getNextFavoriteTracks(currentTrackCount = limitFlow.value, desiredIncreaseWith = 50)
+                .onError { setErrorMessage(it.toString()) }
+
+            limitFlow.value = desiredLimit
             setLoadingGetTracks(false)
         }
     }
@@ -107,9 +131,9 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
         }
     }
 
-    private fun setCashedTracksFlow(tracksFlow: Flow<List<Track>>) {
+    private fun setCashedTracksFlow(tracks: List<Track>) {
         _state.update {
-            it.copy(cashedTracksFlow = tracksFlow)
+            it.copy(cashedTracks = tracks)
         }
     }
 
@@ -138,9 +162,10 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository): Vie
     }
 
     private fun setErrorMessage(errorStr: String?) {
-        _state.update {
-            it.copy(errorString = errorStr)
+        if (errorStr != null) {
+            viewModelScope.launch {
+                _uiEvents.emit(UIEvent.ShowError(errorStr))
+            }
         }
     }
-
 }

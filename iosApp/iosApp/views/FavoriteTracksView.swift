@@ -10,6 +10,9 @@ import BackgroundTasks
 import Shared
 import KMPObservableViewModelSwiftUI
 import AuthenticationServices
+import KMPNativeCoroutinesCombine
+import KMPNativeCoroutinesRxSwift
+import KMPNativeCoroutinesAsync
 
 struct FavoriteTracksView: View {
     
@@ -19,15 +22,16 @@ struct FavoriteTracksView: View {
     @State private var isUndoVisible = false  // Flag for showing the undo button
     @State private var isShowingConfirmation = false  // Flag for showing confirmation dialog
     @State private var trackToDelete: Track? = nil  // Track pending deletion
+    @State private var trackList: [Track] = []
     
     var body: some View {
             VStack {
                 TopBarView(title: "Favorite Tracks", imageName: "arrow.clockwise", onAction: {
-                    viewModel.onAction(action: FavoriteTracksActionSyncronizeTracks())
+                    viewModel.onAction(action: FavoriteTracksActionOnSyncTracks())
                 })
-                
+
                 List {
-                    ForEach(viewModel.state.tracks, id: \.id) { track in
+                    ForEach(trackList, id: \.id) { track in
                         TrackRow(track: track)
                             .listRowSeparator(.hidden)
                             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -35,7 +39,7 @@ struct FavoriteTracksView: View {
                     .onDelete(perform: prepareForDelete)
                     // Load More Button
                     Button(action: {
-                        viewModel.onAction(action: FavoriteTracksActionGetNextFavoriteTracks())
+                        viewModel.onAction(action: FavoriteTracksActionOnGetNextFavoriteTracks())
                     }) {
                         Text("Load More")
                             .padding()
@@ -56,6 +60,9 @@ struct FavoriteTracksView: View {
                     .transition(.opacity)
                 }
         }.background(Color(.PRIMARY_DARK))
+            .onAppear {
+                observeCashedTracksFlow()
+            }
             .shadow(radius: 5)
             .alert("Confirm Deletion", isPresented: $isShowingConfirmation) {
                         Button("Delete", role: .destructive) {
@@ -67,35 +74,57 @@ struct FavoriteTracksView: View {
                     } message: {
                         Text("Are you sure you want to delete this track?")
                     }
+                    
+    }
+    
+    private func observeFavoriteTracks() {
+       
+        createPublisher(for: viewModel.state.cashedTracksFlow)
+            .sink { completion in
+            } receiveValue: { newValue in
+                self.trackList = newValue
+            }
+
+    }
+    
+    func observeCashedTracksFlow() {
+        Task {
+            do {
+                let sequence = asyncSequence(for: viewModel.state.cashedTracksFlow)
+                for try await tracks in sequence {
+                    self.trackList = tracks
+                }
+            } catch {
+                // Handle errors
+            }
+        }
     }
     
     private func prepareForDelete(at offsets: IndexSet) {
             guard let index = offsets.first else { return }
-            trackToDelete = viewModel.state.tracks[index]
+        trackToDelete = trackList[index]
             isShowingConfirmation = true
         }
     
     private func deleteTrack(_ trackToDelete: Track) {
-//            guard let index = offsets.first else { return }
-//            let trackToDelete = viewModel.state.tracks[index]
+        UserDefaults.standard.set(trackToDelete.id, forKey: "backgroundDeleteTrackID")
             
-            UserDefaults.standard.set(trackToDelete.id, forKey: "backgroundDeleteTrackID")
+        viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackLocally(track: trackToDelete))
             
-        viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackFromCashedList(track: trackToDelete))
-            
-            withAnimation {
-                isUndoVisible = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                if self.isUndoVisible {
-                    withAnimation {
-                        self.isUndoVisible = false
-                    }
+        withAnimation {
+            isUndoVisible = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if self.isUndoVisible {
+                withAnimation {
+                    self.isUndoVisible = false
                 }
+                viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackByIdGlobally(trackId: trackToDelete.id))
             }
+        }
             
-            scheduleBackgroundDeleteTask(track: trackToDelete)
+//        scheduleBackgroundDeleteTask(track: trackToDelete)
         }
         
         // Schedule the background task to delete the track
@@ -113,7 +142,7 @@ struct FavoriteTracksView: View {
         }
         
         private func restoreDeletedTrack() {
-            viewModel.onAction(action: FavoriteTracksActionOnRestoreLastRemovedTrackToCashedList())
+            viewModel.onAction(action: FavoriteTracksActionOnRestoreLastRemovedTrackLocally())
             
             isUndoVisible = false
             

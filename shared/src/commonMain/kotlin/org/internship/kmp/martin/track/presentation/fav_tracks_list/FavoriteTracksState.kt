@@ -1,11 +1,9 @@
 package org.internship.kmp.martin.track.presentation.fav_tracks_list
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import org.internship.kmp.martin.track.domain.Track
 
 data class FavoriteTracksState(
-    val cashedTracksFlow: Flow<List<Track>> = flowOf(emptyList()),
+    val cashedTracks: List<Track> = emptyList(),
     val trackToDelete: Track? = null,
     val errorString: String? = null,
 

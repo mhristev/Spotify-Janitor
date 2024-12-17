@@ -25,7 +25,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let viewModel = KoinDependencies.shared.getFavoriteTracksViewModel()
             
             Task {
-                viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackById(trackId: trackID))
+                viewModel.onAction(action: FavoriteTracksActionOnRemoveTrackByIdGlobally(trackId: trackID))
                 UserDefaults.standard.removeObject(forKey: "backgroundDeleteTrackID")
                 task.setTaskCompleted(success: true)
             }

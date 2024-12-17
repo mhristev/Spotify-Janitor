@@ -1,6 +1,5 @@
 package org.internship.kmp.martin.views
 
-import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.foundation.BorderStroke
@@ -33,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +56,7 @@ import org.internship.kmp.martin.core.domain.AppConstants
 import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksViewModel
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.UIEvent
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -71,9 +72,10 @@ fun FavoriteTracksView() {
     var workRequestId by remember {mutableStateOf(UUID.randomUUID())}
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val trackList by state.cashedTracksFlow.collectAsStateWithLifecycle(emptyList())
 
     var trackToDelete by remember { mutableStateOf<Track?>(null) }
+
+    val uiEvents = viewModel.uiEvents
 
     fun cancelScheduledTrackDeletion() {
         WorkManager.getInstance(context).cancelWorkById(workRequestId)
@@ -99,10 +101,10 @@ fun FavoriteTracksView() {
         WorkManager.getInstance(context).enqueue(request)
     }
 
-    fun showUndoSnackbar(track: Track) {
+    fun showUndoSnackbar() {
         coroutineScope.launch {
             val result = snackbarHostState.showSnackbar(
-                message = "Track deleted ",
+                message = "Track removed ",
                 actionLabel = "Undo",
                 duration = SnackbarDuration.Short
             )
@@ -113,17 +115,6 @@ fun FavoriteTracksView() {
         }
     }
 
-    fun showErrorMessage() {
-        coroutineScope.launch {
-            state.errorString?.let {
-                snackbarHostState.showSnackbar(
-                    message = it,
-                    duration = SnackbarDuration.Short
-                )
-            }
-            viewModel.onAction(FavoriteTracksAction.OnErrorMessageShown)
-        }
-    }
 
     fun showUndoButton() {
         Handler(Looper.getMainLooper()).postDelayed({
@@ -137,7 +128,7 @@ fun FavoriteTracksView() {
         trackToDelete?.let {
             viewModel.onAction(FavoriteTracksAction.OnRemoveTrackLocally(it))
             scheduleTrackDeletion(it.id)
-            showUndoSnackbar(it)
+            showUndoSnackbar()
         }
          viewModel.onAction(FavoriteTracksAction.OnHideDeletionDialog)
         showUndoButton()
@@ -146,6 +137,8 @@ fun FavoriteTracksView() {
      fun onDeleteDialogCancelled() {
         viewModel.onAction(FavoriteTracksAction.OnHideDeletionDialog)
     }
+
+
 
     Scaffold(
         topBar = {
@@ -184,7 +177,7 @@ fun FavoriteTracksView() {
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
                 LazyColumn() {
-                    items(trackList, key = { it.id }) { track ->
+                    items(state.cashedTracks, key = { it.id }) { track ->
                         SwipeToDismiss(
                             state = rememberDismissState(
                                 confirmStateChange = {
@@ -232,8 +225,23 @@ fun FavoriteTracksView() {
                         )
                     }
                 }
-                if (state.errorString != null) {
-                    showErrorMessage()
+                LaunchedEffect(Unit) {
+                    uiEvents.collect { event ->
+                        when (event) {
+                            is UIEvent.ShowError -> {
+                                snackbarHostState.showSnackbar(
+                                    message = event.message,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                            is UIEvent.ShowSuccess -> {
+                                snackbarHostState.showSnackbar(
+                                    message = event.message,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

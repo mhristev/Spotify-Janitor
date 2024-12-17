@@ -19,6 +19,7 @@ import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksAction
 import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksViewModel
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.FavoriteTracksAction
+import org.internship.kmp.martin.track.presentation.fav_tracks_list.UIEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -32,10 +33,11 @@ fun BrowseTracksView() {
     val debouncePeriod = 500L
 
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
 
     val darkBackgroundColor = Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt())
     val whiteTextColor = Color(AppConstants.Colors.PRIMARY_TEXT_WHiTE_HEX.toColorInt())
+    val uiEvents = viewModel.uiEvents
+    val snackbarHostState = remember { SnackbarHostState() }
 
     fun performSearch(newQuery: String) {
         coroutineScope.launch {
@@ -47,41 +49,20 @@ fun BrowseTracksView() {
         }
     }
 
-    fun showErrorMessage() {
-        coroutineScope.launch {
-            state.errorString?.let {
-                scaffoldState.snackbarHostState.showSnackbar(
-                    message = it,
-                    duration = SnackbarDuration.Short
-                )
-            }
-            viewModel.onAction(BrowseTracksAction.OnErrorMessageShown)
-        }
-    }
 
     fun performAddToFavorites(track: Track) {
         viewModel.onAction(BrowseTracksAction.onTrackAddToFavorites(track))
     }
 
 
-    fun showBla() {
-        coroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = "added to favorites!",
-                duration = SnackbarDuration.Short
-            )
-        }
-        viewModel.onAction(BrowseTracksAction.OnSaveSuccessShown)
-    }
-
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = { Text("Search", color = whiteTextColor) },
                 backgroundColor = darkBackgroundColor
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         content = { padding ->
             Column(
                 modifier = Modifier
@@ -127,11 +108,23 @@ fun BrowseTracksView() {
                         }
                     }
                 }
-                if (state.isSavingToFavoritesSuccess) {
-                    showBla()
-                }
-                if (state.errorString != null) {
-                    showErrorMessage()
+                LaunchedEffect(Unit) {
+                    uiEvents.collect { event ->
+                        when (event) {
+                            is UIEvent.ShowError -> {
+                                snackbarHostState.showSnackbar(
+                                    message = event.message,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                            is UIEvent.ShowSuccess -> {
+                                snackbarHostState.showSnackbar(
+                                    message = event.message,
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -11,5 +11,4 @@ sealed interface FavoriteTracksAction {
     data object OnHideUndoOption: FavoriteTracksAction
     data object OnShowDeletionDialog: FavoriteTracksAction
     data object OnHideDeletionDialog: FavoriteTracksAction
-    data object OnErrorMessageShown: FavoriteTracksAction
 }

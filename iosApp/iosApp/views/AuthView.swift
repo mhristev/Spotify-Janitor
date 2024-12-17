@@ -11,6 +11,7 @@ import KMPObservableViewModelSwiftUI
 import Shared
 import KMPNativeCoroutinesCombine
 import KMPNativeCoroutinesRxSwift
+import KMPObservableViewModelSwiftUI
 
 import AuthenticationServices
 

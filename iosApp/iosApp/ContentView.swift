@@ -33,11 +33,11 @@ struct ContentView: View {
                 print("Received error: \(error)")
             })
         
-        createPublisher(for: authViewModel.isUserLoggedInFlow)
-            .sink { completion in
-            } receiveValue: { newValue in
-                self.isUserAuthenticated = newValue as! Bool
-            }
+//        createPublisher(for: authViewModel.isUserLoggedInFlow)
+//            .sink { completion in
+//            } receiveValue: { newValue in
+//                self.isUserAuthenticated = newValue as! Bool
+//            }
 
     }
 }
