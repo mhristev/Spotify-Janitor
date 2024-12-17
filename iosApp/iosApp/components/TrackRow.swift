@@ -30,31 +30,6 @@ struct TrackRow: View {
                 .transition(.fade(duration: 0.5))
                 .scaledToFit()
                 .frame(width: 60, height: 60, alignment: .center)
-                
-            
-//            AsyncImage(url: URL(string: track.album.imageUrl)) { phase in
-//                switch phase {
-//                case .empty:
-//                    ProgressView()
-//                        .progressViewStyle(CircularProgressViewStyle())
-//                        .frame(width: 60, height: 60)
-//                case .success(let image):
-//               
-//                    image
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 60, height: 60)
-//                        .cornerRadius(8)
-//                case .failure:
-//                    // This is the error state
-//                    Image(systemName: "exclamationmark.triangle.fill")
-//                        .foregroundColor(.red)
-//                        .frame(width: 60, height: 60)
-//                @unknown default:
-//                    // Handle unknown future states
-//                    EmptyView()
-//                }
-//            }
             
             VStack(alignment: .leading) {
                 Text(track.name)

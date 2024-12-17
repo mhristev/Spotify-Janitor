@@ -8,37 +8,10 @@
 import SwiftUI
 import KMPObservableViewModelSwiftUI
 import Shared
-import Combine
-
-import SwiftUI
-import Combine
 
 struct BrowseTracksView: View {
-    @StateViewModel
-    var viewModel = KoinDependencies.shared.getBrowseTracksViewModel()
-    
+    @StateObject private var viewModel = BrowseTracksViewModelIOSImpl()
     @State private var searchQuery: String = ""
-    @State private var timer: Timer? = nil
-    @State private var showMessage: Bool = false
-    @State private var messageText: String = ""
-    
-    func performRequest(with query: String) {
-        viewModel.onAction(action: BrowseTracksActionOnSearch(query: query))
-    }
-    
-    private func handleAddToFavoritesSuccess(trackName: String) {
-            withAnimation {
-                messageText = "\(trackName) added to favorites!"
-                showMessage = true
-            }
-            
-            // Hide the message after 3 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                withAnimation {
-                    showMessage = false
-                }
-            }
-        }
     
     var body: some View {
   
@@ -60,41 +33,32 @@ struct BrowseTracksView: View {
                            )
                            .padding(.horizontal, 10)
                            .onChange(of: searchQuery) { oldvalue, newValue in
-                               timer?.invalidate()
-                               timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                                   performRequest(with: newValue)
-                               }
+                               viewModel.searchTimer(newValue: newValue)
                            }
-                List(viewModel.state.tracks, id: \.id) { track in
+                List(viewModel.stateIOS.tracks, id: \.id) { track in
                     TrackRow(track: track,
                              onAddToFavoritesClick: { _ in
                         viewModel.onAction(action: BrowseTracksActionOnTrackAddToFavorites(track: track))
-                        handleAddToFavoritesSuccess(trackName: track.name)
+                        
                     })
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .listStyle(.plain)
-                if showMessage {
-                    Text(messageText)
-                        .padding()
-                        .background(Color.green.opacity(0.8))
-                        .foregroundStyle(Color(.PRIMARY_TEXT_WHITE))
-                        .cornerRadius(8)
-                        .transition(.opacity)
+                if viewModel.message != nil {
+                    KMPUIAction(message: viewModel.message ?? "", color: viewModel.messageColor)
                 }
             }
             .navigationBarHidden(true)
             .navigationTitle("Search")
             .background(Color(.PRIMARY_DARK))
             .shadow(radius: 5)
-        
-  
-        
+            .onAppear {
+                viewModel.observeUIEvents()
+            }
     }
 }
     
-
 
 #Preview {
     BrowseTracksView()

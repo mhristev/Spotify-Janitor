@@ -1,5 +1,6 @@
 package org.internship.kmp.martin.track.presentation.fav_tracks_list
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -17,13 +18,13 @@ sealed class UIEvent {
     data class ShowSuccess(val message: String) : UIEvent()
 }
 
-
-class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
+open class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
     private val _state = MutableStateFlow(FavoriteTracksState())
 
     private val limitFlow = MutableStateFlow(0)
 
     private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    @NativeCoroutines
     val uiEvents = _uiEvents.asSharedFlow()
 
     @NativeCoroutinesState

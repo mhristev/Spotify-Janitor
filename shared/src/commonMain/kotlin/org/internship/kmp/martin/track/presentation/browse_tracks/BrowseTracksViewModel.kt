@@ -1,6 +1,7 @@
 package org.internship.kmp.martin.track.presentation.browse_tracks
 
 import androidx.compose.runtime.mutableStateOf
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -16,10 +17,11 @@ import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 import org.internship.kmp.martin.track.presentation.fav_tracks_list.UIEvent
 
-class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
+open class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewModel() {
     private val _state = MutableStateFlow(BrowseTracksState())
 
     private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    @NativeCoroutines
     val uiEvents = _uiEvents.asSharedFlow()
 
     @NativeCoroutinesState
@@ -57,7 +59,9 @@ class BrowseTracksViewModel(private val trackRepository: TrackRepository): ViewM
                 .onError {
                     setErrorString(it.toString())
                 }
-            setIsSavingToFavoritesSuccessful(true)
+                .onSuccess {
+                    setIsSavingToFavoritesSuccessful(true)
+                }
         }
     }
 

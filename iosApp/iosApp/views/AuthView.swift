@@ -12,7 +12,7 @@ import Shared
 import KMPNativeCoroutinesCombine
 import KMPNativeCoroutinesRxSwift
 import KMPObservableViewModelSwiftUI
-
+import SDWebImageSwiftUI
 import AuthenticationServices
 
 struct AuthView: View {
@@ -36,16 +36,26 @@ struct AuthView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    AsyncImage(url: URL(string: "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png")) { image in
-                        image
-                            .resizable()
+//                    AsyncImage(url: URL(string: "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png")) { image in
+//                        image
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 120, height: 120)
+//                    } placeholder: {
+//                        ProgressView()
+//                            .progressViewStyle(CircularProgressViewStyle())
+//                            .frame(width: 120, height: 120)
+//                    }
+                    
+                    WebImage(url: URL(string: "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png")) { image in
+                            image.resizable()
                             .scaledToFit()
                             .frame(width: 120, height: 120)
-                    } placeholder: {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .frame(width: 120, height: 120)
-                    }
+                        } placeholder: {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .frame(width: 120, height: 120)
+                        }
                     
                     Spacer().frame(height: 16)
                     
@@ -85,15 +95,10 @@ struct AuthView: View {
         }.onAppear(perform: {
             observeUserAuthentication()
         })
-//        .fullScreenCover(isPresented: $isLoggedIn) {
-//            AppRootView()
-//        }
     }
     private func observeUserAuthentication() {
-        //             Access the generated CFlow property
         let observable = createObservable(for: viewModel.isUserLoggedInFlow)
         
-        // Subscribe to the observable
         observable
             .subscribe(onNext: { isLoggedIn in
                 self.isLoggedIn = isLoggedIn as! Bool
