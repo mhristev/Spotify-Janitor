@@ -8,7 +8,4 @@ sealed interface FavoriteTracksAction {
     data class OnRemoveTrackByIdGlobally(val trackId: String): FavoriteTracksAction
     data class OnRemoveTrackLocally(val track: Track): FavoriteTracksAction
     data object OnRestoreLastRemovedTrackLocally: FavoriteTracksAction
-    data object OnHideUndoOption: FavoriteTracksAction
-    data object OnShowDeletionDialog: FavoriteTracksAction
-    data object OnHideDeletionDialog: FavoriteTracksAction
 }

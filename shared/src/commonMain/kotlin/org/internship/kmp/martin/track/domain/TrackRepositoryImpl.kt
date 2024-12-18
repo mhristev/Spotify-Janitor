@@ -17,10 +17,10 @@ import org.internship.kmp.martin.track.data.mappers.toEntity
 class TrackRepositoryImpl(private val trackDao: FavoriteTrackDao, private val spotifyApi: SpotifyApi):
     TrackRepository {
 
-    override suspend fun getNextFavoriteTracks(currentTrackCount: Int, desiredIncreaseWith: Int): Result<Unit, DataError> {
+    override suspend fun checkAndFetchFavoriteTracks(currentTrackCount: Int, increaseWith: Int): Result<Unit, DataError> {
         val localTracks = trackDao.getFavoriteTracksHandle()
 
-        if (localTracks.size > currentTrackCount && (localTracks.size - currentTrackCount) >= desiredIncreaseWith) {
+        if (localTracks.size > currentTrackCount && (localTracks.size - currentTrackCount) >= increaseWith) {
             return Result.Success(Unit)
         } else {
             fetchAndStoreAdditionalTracks(currentTrackCount)

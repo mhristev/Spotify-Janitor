@@ -21,6 +21,10 @@
 		478A1DF62CE739CA0071B73D /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 478A1DF52CE739CA0071B73D /* SpotifyiOS */; };
 		478BF6422CFE056B00595EF4 /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6412CFE056500595EF4 /* TrackRow.swift */; };
 		478BF6452CFE082500595EF4 /* BrowseTracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6442CFE081F00595EF4 /* BrowseTracksView.swift */; };
+		478CE17E2D1194B000A34D77 /* ShowMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478CE17D2D1194A900A34D77 /* ShowMoreButton.swift */; };
+		478CE1802D11A3A500A34D77 /* KMPUIAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478CE17F2D11A3A000A34D77 /* KMPUIAction.swift */; };
+		478CE1842D11B30A00A34D77 /* BrowseTracksViewModelIOSImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478CE1832D11B30300A34D77 /* BrowseTracksViewModelIOSImpl.swift */; };
+		478CE1862D11BF6B00A34D77 /* FavoriteTracksViewModelIOSImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478CE1852D11BF6200A34D77 /* FavoriteTracksViewModelIOSImpl.swift */; };
 		479EDC9F2CFEFD7B00C67B76 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDC9E2CFEFD7300C67B76 /* AuthView.swift */; };
 		479EDCA12CFF0B9A00C67B76 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDCA02CFF0B9700C67B76 /* AppRootView.swift */; };
 		479EDCA32CFF14A900C67B76 /* KMPObservableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */; };
@@ -106,6 +110,10 @@
 		4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTestInterfaceImpl.kt; sourceTree = "<group>"; };
 		478BF6412CFE056500595EF4 /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
 		478BF6442CFE081F00595EF4 /* BrowseTracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseTracksView.swift; sourceTree = "<group>"; };
+		478CE17D2D1194A900A34D77 /* ShowMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreButton.swift; sourceTree = "<group>"; };
+		478CE17F2D11A3A000A34D77 /* KMPUIAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMPUIAction.swift; sourceTree = "<group>"; };
+		478CE1832D11B30300A34D77 /* BrowseTracksViewModelIOSImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseTracksViewModelIOSImpl.swift; sourceTree = "<group>"; };
+		478CE1852D11BF6200A34D77 /* FavoriteTracksViewModelIOSImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTracksViewModelIOSImpl.swift; sourceTree = "<group>"; };
 		479EDC9E2CFEFD7300C67B76 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		479EDCA02CFF0B9700C67B76 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMPObservableViewModel.swift; sourceTree = "<group>"; };
@@ -209,6 +217,8 @@
 		47035E672CFDE9C600ABD3F3 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				478CE1852D11BF6200A34D77 /* FavoriteTracksViewModelIOSImpl.swift */,
+				478CE1832D11B30300A34D77 /* BrowseTracksViewModelIOSImpl.swift */,
 				479EDCA02CFF0B9700C67B76 /* AppRootView.swift */,
 				479EDC9E2CFEFD7300C67B76 /* AuthView.swift */,
 				478BF6442CFE081F00595EF4 /* BrowseTracksView.swift */,
@@ -222,6 +232,7 @@
 		47035E692CFDE9DF00ABD3F3 /* components */ = {
 			isa = PBXGroup;
 			children = (
+				478CE17F2D11A3A000A34D77 /* KMPUIAction.swift */,
 				47DC66712D08447B00B94A61 /* ProfileRow.swift */,
 				475A2FC12D00A772004C8AB7 /* TopBarView.swift */,
 				478BF6412CFE056500595EF4 /* TrackRow.swift */,
@@ -695,6 +706,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				478CE17D2D1194A900A34D77 /* ShowMoreButton.swift */,
 				479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */,
 				47035E692CFDE9DF00ABD3F3 /* components */,
 				47035E672CFDE9C600ABD3F3 /* views */,
@@ -885,11 +897,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				478CE17E2D1194B000A34D77 /* ShowMoreButton.swift in Sources */,
 				478BF6422CFE056B00595EF4 /* TrackRow.swift in Sources */,
 				478BF6452CFE082500595EF4 /* BrowseTracksView.swift in Sources */,
 				479EDCA12CFF0B9A00C67B76 /* AppRootView.swift in Sources */,
 				47078FF62CFDF312001B85E1 /* UserProfileView.swift in Sources */,
+				478CE1802D11A3A500A34D77 /* KMPUIAction.swift in Sources */,
 				479EDCA32CFF14A900C67B76 /* KMPObservableViewModel.swift in Sources */,
+				478CE1842D11B30A00A34D77 /* BrowseTracksViewModelIOSImpl.swift in Sources */,
 				47DC66722D08448400B94A61 /* ProfileRow.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				475A2FC22D00A77C004C8AB7 /* TopBarView.swift in Sources */,
@@ -897,6 +912,7 @@
 				47035E6B2CFDEA0400ABD3F3 /* FavoriteTracksView.swift in Sources */,
 				479EDC9F2CFEFD7B00C67B76 /* AuthView.swift in Sources */,
 				476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */,
+				478CE1862D11BF6B00A34D77 /* FavoriteTracksViewModelIOSImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

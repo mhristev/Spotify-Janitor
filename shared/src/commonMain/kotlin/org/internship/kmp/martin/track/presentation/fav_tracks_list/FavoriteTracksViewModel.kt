@@ -1,5 +1,6 @@
 package org.internship.kmp.martin.track.presentation.fav_tracks_list
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
@@ -18,19 +19,46 @@ sealed class UIEvent {
 }
 
 
-class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
+open class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
     private val _state = MutableStateFlow(FavoriteTracksState())
 
     private val limitFlow = MutableStateFlow(0)
 
     private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    @NativeCoroutines
     val uiEvents = _uiEvents.asSharedFlow()
 
+    val trackToDelete = MutableStateFlow<Track?>(null)
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val cachedTracks = limitFlow
+        .flatMapLatest { limit ->
+            trackRepository.getFavoriteTracksFlow(limit)
+        }
+
+    val isLoadingSync = MutableStateFlow(false)
+    val isLoadingNextTracks = MutableStateFlow(false)
+
     @NativeCoroutinesState
-    val state = _state
+    val state =
+        combine(
+            cachedTracks,
+            trackToDelete,
+            limitFlow,
+            isLoadingSync,
+            isLoadingNextTracks,
+        ) { tracks, trackToDelete, limitFlow, isLoadingSync, isLoadingNextTracks ->
+
+            FavoriteTracksState(
+                cachedTracks = tracks,
+                isShowingUndoButton = trackToDelete != null,
+                isLoadingSync = isLoadingSync,
+                isLoadingNextTracks = isLoadingNextTracks
+            )
+        }
         .onStart {
             loadNextFavoriteTracks()
-            observeFavoriteTracks()
             syncAllTracks()
         }
         .stateIn(
@@ -46,67 +74,43 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : Vi
             is FavoriteTracksAction.OnRemoveTrackByIdGlobally -> removeTrackGlobally(action.trackId)
             is FavoriteTracksAction.OnRemoveTrackLocally -> removeTrackLocally(action.track)
             is FavoriteTracksAction.OnRestoreLastRemovedTrackLocally -> restoreLastRemovedTrackLocally()
-            is FavoriteTracksAction.OnHideUndoOption -> setShowingUndoButton(false)
-            is FavoriteTracksAction.OnHideDeletionDialog -> setShowingDeleteConfirmation(false)
-            is FavoriteTracksAction.OnShowDeletionDialog -> setShowingDeleteConfirmation(true)
-        }
-    }
-    /* This function observes the favorite tracks and updates the state
-    limitFlow is the upstream flow. Whenever limitFlow emits a new integer (e.g., when you increase your limit from 50 to 100),
-    flatMapLatest cancels the old inner flow and starts collecting a new one returned by getFavoriteTracksFlow(newLimit).
-
-    getFavoriteTracksFlow(limit) returns a Flow<List<Track>> that continuously emits updates as data changes in the database.
-    As long as limitFlow doesn't change, flatMapLatest will keep collecting from the current getFavoriteTracksFlow(limit) and will receive all new data emitted by that flow.
-    */
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun observeFavoriteTracks() {
-        viewModelScope.launch {
-            limitFlow
-                .flatMapLatest { limit ->
-                    trackRepository.getFavoriteTracksFlow(limit)
-                }
-                .collect { tracks ->
-                    setCashedTracksFlow(tracks)
-                }
         }
     }
 
     private fun loadNextFavoriteTracks() {
         viewModelScope.launch {
-            setLoadingGetTracks(true)
+            isLoadingSync.value = true
             val desiredLimit = limitFlow.value + 50
 
-            trackRepository.getNextFavoriteTracks(currentTrackCount = limitFlow.value, desiredIncreaseWith = 50)
+            trackRepository.checkAndFetchFavoriteTracks(currentTrackCount = limitFlow.value, increaseWith = 50)
                 .onError { setErrorMessage(it.toString()) }
 
             limitFlow.value = desiredLimit
-            setLoadingGetTracks(false)
+            isLoadingSync.value = false
         }
     }
 
     private fun removeTrackLocally(track: Track) {
         viewModelScope.launch {
-            setTrackToDelete(track)
+            trackToDelete.value = track
             trackRepository.removeFavoriteTrackLocally(track)
-            setShowingUndoButton(true)
         }
     }
 
     private fun restoreLastRemovedTrackLocally() {
-        val track = _state.value.trackToDelete ?: return
+        val track = trackToDelete.value ?: return
         viewModelScope.launch {
             trackRepository.restoreTrackLocally(track)
-            setTrackToDelete(null)
-            setShowingUndoButton(false)
+            trackToDelete.value = null
         }
     }
 
     private fun removeTrackGlobally(id: String) {
         viewModelScope.launch {
-            val track = _state.value.trackToDelete?.takeIf { it.id == id } ?: return@launch
+            val track = trackToDelete.value?.takeIf { it.id == id } ?: return@launch
             trackRepository.removeFavoriteTrackGlobally(track)
                 .onSuccess {
-                    setTrackToDelete(null)
+                    trackToDelete.value = null
                 }
                 .onError {
                     setErrorMessage(it.toString())
@@ -116,48 +120,12 @@ class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : Vi
 
     private fun syncAllTracks() {
         viewModelScope.launch {
-            setLoadingSync(true)
+            isLoadingSync.value = true
             trackRepository.syncAllTracks()
                 .onError {
                     setErrorMessage(it.toString())
                 }
-            setLoadingSync(false)
-        }
-    }
-
-    private fun setTrackToDelete(track: Track?) {
-        _state.update {
-            it.copy(trackToDelete = track)
-        }
-    }
-
-    private fun setCashedTracksFlow(tracks: List<Track>) {
-        _state.update {
-            it.copy(cashedTracks = tracks)
-        }
-    }
-
-    private fun setLoadingSync(isLoading: Boolean) {
-        _state.update {
-            it.copy(isLoadingSync = isLoading)
-        }
-    }
-
-    private fun setLoadingGetTracks(isLoading: Boolean) {
-        _state.update {
-            it.copy(isLoadingGetTracks = isLoading)
-        }
-    }
-
-    private fun setShowingDeleteConfirmation(isShowing: Boolean) {
-        _state.update {
-            it.copy(isShowingDeleteConfirmation = isShowing)
-        }
-    }
-
-    private fun setShowingUndoButton(isShowing: Boolean) {
-        _state.update {
-            it.copy(isShowingUndoButton = isShowing)
+            isLoadingSync.value = false
         }
     }
 

@@ -13,17 +13,10 @@ import org.koin.core.component.inject
 import org.koin.core.component.get
 
 object KoinDependencies : KoinComponent {
-//        fun getTrackRepository(): TrackRepository = get()
-//        fun myTestInterface(): MyTestInterface = get()
-//        fun getFavoriteTracksViewModel(): FavoriteTracksViewModel = get()
-        val favoriteTracksViewModel: FavoriteTracksViewModel by inject()
         fun getFavoriteTracksViewModel() = getKoin().get<FavoriteTracksViewModel>()
-        val authViewModel: AuthViewModel by inject()
         fun getAuthViewModel() = getKoin().get<AuthViewModel>()
-        val userProfileViewModel: UserProfileViewModel by inject()
         fun getUserProfileViewModel() = getKoin().get<UserProfileViewModel>()
-        val browseTracksViewModel: BrowseTracksViewModel by inject()
         fun getBrowseTracksViewModel() = getKoin().get<BrowseTracksViewModel>()
-        val authRepository: AuthRepository by inject()
         fun getAuthRepository() = getKoin().get<AuthRepository>()
+        fun getTrackRepository() = getKoin().get<TrackRepository>()
 }

@@ -64,30 +64,6 @@ struct UserProfileView: View {
                         .scaledToFit()
                         .frame(width: 128, height: 128, alignment: .center)
                     
-//                    AsyncImage(url: URL(string: viewModel.state.user?.imageUrl ?? "")) { phase in
-//                        switch phase {
-//                        case .empty:
-//                            // This is the loading state
-//                            ProgressView()
-//                                .progressViewStyle(CircularProgressViewStyle())
-//                                .frame(width: 128, height: 128)
-//                        case .success(let image):
-//                            // Successfully loaded image
-//                            image
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 188, height: 188)                                .clipShape(Circle())
-//                                .overlay(Circle().stroke(Color(.PRIMARY_TEXT_WHITE), lineWidth: 1))
-//                                .shadow(radius: 10)
-//                        case .failure:
-//                            
-//                            Image(systemName: "exclamationmark.triangle.fill")
-//                                .foregroundStyle(.red)
-//                                .frame(width: 60, height: 60)
-//                        @unknown default:
-//                            EmptyView()
-//                        }
-//                    }
                     
                     Text(viewModel.state.user?.displayName ?? "")
                         .font(.title)
