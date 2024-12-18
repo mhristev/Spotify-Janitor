@@ -6,7 +6,7 @@ import org.internship.kmp.martin.track.domain.Track
 import org.internship.kmp.martin.core.domain.Result
 
 interface TrackRepository {
-    suspend fun getNextFavoriteTracks(currentTrackCount: Int, desiredIncreaseWith: Int): Result<Unit, DataError>
+    suspend fun checkAndFetchFavoriteTracks(currentTrackCount: Int, increaseWith: Int): Result<Unit, DataError>
 
     suspend fun getFavoriteTracksFlow(limit: Int): Flow<List<Track>>
 

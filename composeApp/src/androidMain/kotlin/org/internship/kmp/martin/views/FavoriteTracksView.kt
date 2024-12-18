@@ -68,7 +68,7 @@ fun FavoriteTracksView() {
     val context = LocalContext.current
     val viewModel: FavoriteTracksViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-
+    val isShowingDeleteConfirmation = remember { mutableStateOf(false) }
     var workRequestId by remember {mutableStateOf(UUID.randomUUID())}
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -83,7 +83,7 @@ fun FavoriteTracksView() {
 
     fun confirmDelete(track: Track) {
         trackToDelete = track
-        viewModel.onAction(FavoriteTracksAction.OnShowDeletionDialog)
+        isShowingDeleteConfirmation.value = true
     }
 
     fun scheduleTrackDeletion(trackId: String) {
@@ -115,30 +115,19 @@ fun FavoriteTracksView() {
         }
     }
 
-
-    fun showUndoButton() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (state.isShowingUndoButton) {
-                viewModel.onAction(FavoriteTracksAction.OnHideUndoOption)
-            }
-        }, 3000)
-    }
-
      fun onDeleteConfirmed() {
         trackToDelete?.let {
             viewModel.onAction(FavoriteTracksAction.OnRemoveTrackLocally(it))
             scheduleTrackDeletion(it.id)
             showUndoSnackbar()
         }
-         viewModel.onAction(FavoriteTracksAction.OnHideDeletionDialog)
-        showUndoButton()
+        isShowingDeleteConfirmation.value = false
+//        showUndoButton()
     }
 
      fun onDeleteDialogCancelled() {
-        viewModel.onAction(FavoriteTracksAction.OnHideDeletionDialog)
+        isShowingDeleteConfirmation.value = false
     }
-
-
 
     Scaffold(
         topBar = {
@@ -177,7 +166,7 @@ fun FavoriteTracksView() {
                     .background(Color(AppConstants.Colors.PRIMARY_DARK_HEX.toColorInt()))
             ) {
                 LazyColumn() {
-                    items(state.cashedTracks, key = { it.id }) { track ->
+                    items(state.cachedTracks, key = { it.id }) { track ->
                         SwipeToDismiss(
                             state = rememberDismissState(
                                 confirmStateChange = {
@@ -212,7 +201,7 @@ fun FavoriteTracksView() {
                         }
                     }
                 }
-                if (state.isShowingDeleteConfirmation) {
+                if (isShowingDeleteConfirmation.value) {
                     trackToDelete?.let {
                         RemoveConfirmationDialog(
                             track = it,
