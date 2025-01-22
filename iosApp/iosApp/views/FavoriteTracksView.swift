@@ -10,14 +10,14 @@ struct FavoriteTracksView: View {
             })
 
             List {
-                ForEach(viewModel.stateIOS.cashedTracks, id: \.id) { track in
+                ForEach(viewModel.stateIOS.cachedTracks, id: \.id) { track in
                     TrackRow(track: track)
                         .listRowSeparator(.hidden)
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .onDelete { offsets in
                     if let index = offsets.first {
-                        let track = viewModel.stateIOS.cashedTracks[index]
+                        let track = viewModel.stateIOS.cachedTracks[index]
                         viewModel.confirmDeleteTrack(track)
                     }
                 }

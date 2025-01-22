@@ -20,15 +20,16 @@ sealed class UIEvent {
 
 
 open class FavoriteTracksViewModel(private val trackRepository: TrackRepository) : ViewModel() {
-    private val _state = MutableStateFlow(FavoriteTracksState())
 
-    private val limitFlow = MutableStateFlow(0)
-
+    private val trackToDelete = MutableStateFlow<Track?>(null)
     private val _uiEvents = MutableSharedFlow<UIEvent>(replay = 0)
+    private val limitFlow = MutableStateFlow(0)
+    private val _state = MutableStateFlow(FavoriteTracksState())
+    private val isLoadingSync = MutableStateFlow(false)
+    private val isLoadingNextTracks = MutableStateFlow(false)
+
     @NativeCoroutines
     val uiEvents = _uiEvents.asSharedFlow()
-
-    val trackToDelete = MutableStateFlow<Track?>(null)
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -36,9 +37,6 @@ open class FavoriteTracksViewModel(private val trackRepository: TrackRepository)
         .flatMapLatest { limit ->
             trackRepository.getFavoriteTracksFlow(limit)
         }
-
-    val isLoadingSync = MutableStateFlow(false)
-    val isLoadingNextTracks = MutableStateFlow(false)
 
     @NativeCoroutinesState
     val state =

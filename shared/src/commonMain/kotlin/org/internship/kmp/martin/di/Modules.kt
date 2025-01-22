@@ -23,7 +23,6 @@ expect val platformModule: Module
 val sharedModule = module {
     single { HttpClientFactory.create(get()) }
     single<AuthManager> { KVaultAuthManager(get<KVaultFactory>().create()) }
-    single<MyTestInterface> { MyTestInterfaceImpl(get()) }
 
     single<SpotifyUserRepository> { SpotifyUserRepositoryImpl(get(), get()) }
 

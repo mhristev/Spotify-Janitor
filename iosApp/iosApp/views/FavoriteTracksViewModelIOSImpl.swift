@@ -14,12 +14,12 @@ import SwiftUI
 
 class FavoriteTracksViewModelIOSImpl: Shared.FavoriteTracksViewModel {
     
-    @Published var stateIOS: FavoriteTracksState = FavoriteTracksState(cashedTracks: [], trackToDelete: nil, errorString: nil, isLoadingSync: false, isLoadingGetTracks: false, isShowingDeleteConfirmation: false, isShowingUndoButton: false)
+    @Published var stateIOS: FavoriteTracksState = FavoriteTracksState(cachedTracks: [], errorString: nil, isLoadingSync: false, isLoadingNextTracks: false, isShowingUndoButton: false)
 
 
     @Published var isUndoVisible = false
     @Published var isShowingConfirmation = false
-    @Published var trackToDelete: Track? = nil
+    @Published var trackToDelete2: Track? = nil
     @Published var errorMessage: String? = nil
 
 
@@ -66,12 +66,12 @@ class FavoriteTracksViewModelIOSImpl: Shared.FavoriteTracksViewModel {
     }
     
     func confirmDeleteTrack(_ track: Track) {
-        self.trackToDelete = track
+        self.trackToDelete2 = track
         self.isShowingConfirmation = true
     }
     
     func deleteConfirmedTrack() {
-        guard let track = trackToDelete else { return }
+        guard let track = trackToDelete2 else { return }
         // Locally remove track first
         self.onAction(action: FavoriteTracksActionOnRemoveTrackLocally(track: track))
         

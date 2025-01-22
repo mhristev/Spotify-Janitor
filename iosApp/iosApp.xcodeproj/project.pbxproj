@@ -16,8 +16,6 @@
 		475A2FBE2D009E40004C8AB7 /* BrowseTracksState.kt in Resources */ = {isa = PBXBuildFile; fileRef = 475A2FBA2D009E40004C8AB7 /* BrowseTracksState.kt */; };
 		475A2FC22D00A77C004C8AB7 /* TopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475A2FC12D00A772004C8AB7 /* TopBarView.swift */; };
 		476BE1592CE73FE9008D833D /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */; };
-		4770416E2CFFB7CF002EFFD6 /* MyTestInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */; };
-		4770416F2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt in Resources */ = {isa = PBXBuildFile; fileRef = 4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */; };
 		478A1DF62CE739CA0071B73D /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 478A1DF52CE739CA0071B73D /* SpotifyiOS */; };
 		478BF6422CFE056B00595EF4 /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6412CFE056500595EF4 /* TrackRow.swift */; };
 		478BF6452CFE082500595EF4 /* BrowseTracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478BF6442CFE081F00595EF4 /* BrowseTracksView.swift */; };
@@ -106,8 +104,6 @@
 		475A2FC12D00A772004C8AB7 /* TopBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarView.swift; sourceTree = "<group>"; };
 		476BE1582CE73FE3008D833D /* SpotifyLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
 		476BE15A2CE74742008D833D /* iosApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iosApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTestInterface.kt; sourceTree = "<group>"; };
-		4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTestInterfaceImpl.kt; sourceTree = "<group>"; };
 		478BF6412CFE056500595EF4 /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
 		478BF6442CFE081F00595EF4 /* BrowseTracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseTracksView.swift; sourceTree = "<group>"; };
 		478CE17D2D1194A900A34D77 /* ShowMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreButton.swift; sourceTree = "<group>"; };
@@ -474,8 +470,6 @@
 		479EDCEA2CFF204200C67B76 /* di */ = {
 			isa = PBXGroup;
 			children = (
-				4770416C2CFFB7CF002EFFD6 /* MyTestInterface.kt */,
-				4770416D2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt */,
 				479EDCE82CFF204200C67B76 /* initKoin.kt */,
 				479EDCE92CFF204200C67B76 /* Modules.kt */,
 			);
@@ -834,8 +828,6 @@
 				479EDD372CFF204200C67B76 /* DatabaseFactory.kt in Resources */,
 				479EDD382CFF204200C67B76 /* TrackRepository.kt in Resources */,
 				479EDD392CFF204200C67B76 /* TrackRepositoryImpl.kt in Resources */,
-				4770416E2CFFB7CF002EFFD6 /* MyTestInterface.kt in Resources */,
-				4770416F2CFFB7CF002EFFD6 /* MyTestInterfaceImpl.kt in Resources */,
 				479EDD3A2CFF204200C67B76 /* Error.kt in Resources */,
 				479EDD3B2CFF204200C67B76 /* KtorSpotifyApi.kt in Resources */,
 				479EDD3C2CFF204200C67B76 /* Track.kt in Resources */,

@@ -17,6 +17,8 @@ actual val platformModule: Module
         single<HttpClientEngine> { Darwin.create() }
         single { DatabaseFactory() }
         single { KVaultFactory() }
+
+
         single { FavoriteTracksViewModel(get()) }
         factory { AuthViewModel(get()) }
         factory {UserProfileViewModel(get(), get())}

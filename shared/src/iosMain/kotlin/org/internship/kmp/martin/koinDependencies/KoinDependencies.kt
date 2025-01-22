@@ -3,7 +3,6 @@ package org.internship.kmp.martin.koinDependencies
 import org.internship.kmp.martin.core.data.database.AuthRepository
 import org.internship.kmp.martin.core.presentation.AuthViewModel
 import org.internship.kmp.martin.core.presentation.LoginViewModel
-import org.internship.kmp.martin.di.MyTestInterface
 import org.internship.kmp.martin.spotify_user.presentation.UserProfileViewModel
 import org.internship.kmp.martin.track.data.repository.TrackRepository
 import org.internship.kmp.martin.track.presentation.browse_tracks.BrowseTracksViewModel
