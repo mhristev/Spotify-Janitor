@@ -7,7 +7,7 @@ Spotify Janitor is a cross-platform mobile application built with **Kotlin Multi
 ## Features
 
 - **Spotify Authentication**: Secure login using Spotify's OAuth system.
-- **Saved Tracks Management**: View, search, and remove liked tracks with an undo option.
+- **Saved Tracks Management**: View, search, add, and remove liked tracks with an undo option.
 - **Offline Data Storage**: Cached data to minimize API calls and improve performance.
 - **Profile Management**: View user profile details, including name, premium status, and country.
 - **Cross-Platform Support**: Available for both Android and iOS with a shared codebase.
@@ -37,6 +37,7 @@ The app is structured using the **MVI (Model-View-Intent)** architecture.
 - **NativeCoroutines**: Coroutine interoperability for Swift.
 - **WorkManager (Android)** and **BGTaskScheduler (iOS)**: Background task scheduling.
 - **KMP-ObservableViewModel**: Shared ViewModels between platforms.
+- **KVault**: Secure storage for sensitive data.
 
 ---
 
@@ -44,7 +45,7 @@ The app is structured using the **MVI (Model-View-Intent)** architecture.
 
 ### Authentication
 1. Users log in via Spotify's OAuth.
-2. Tokens are stored securely and refreshed as needed.
+2. Tokens are stored securely.
 
 ### Track Management
 - Displays saved tracks in batches (50 tracks at a time).
@@ -54,6 +55,8 @@ The app is structured using the **MVI (Model-View-Intent)** architecture.
 - Tracks are flagged for removal and scheduled for deletion.
 - Users have a brief window to undo the action.
 
+### Add New Tracks
+- Users can search for new tracks and add them to their library.
 ---
 
 ## Setup and Installation
