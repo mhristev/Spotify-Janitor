@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -71,6 +72,32 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildFeatures {
+        buildConfig = true // Enable BuildConfig feature
+    }
+
+    val secretsFile = file("secrets.properties")
+    if (secretsFile.exists()) {
+        val secrets = Properties().apply {
+            load(secretsFile.inputStream())
+        }
+
+        val clientId = secrets["CLIENT_ID"] as String
+        val redirectUri = secrets["REDIRECT_URI"] as String
+
+        buildTypes {
+            getByName("debug") {
+                buildConfigField("String", "CLIENT_ID", "\"$clientId\"")
+                buildConfigField("String", "REDIRECT_URI", "\"$redirectUri\"")
+            }
+            getByName("release") {
+                buildConfigField("String", "CLIENT_ID", "\"$clientId\"")
+                buildConfigField("String", "REDIRECT_URI", "\"$redirectUri\"")
+            }
+        }
+    } else {
+        throw GradleException("Missing secrets.properties file!")
+    }
 }
 
 dependencies {
@@ -83,4 +110,3 @@ dependencies {
 
     debugImplementation(compose.uiTooling)
 }
-

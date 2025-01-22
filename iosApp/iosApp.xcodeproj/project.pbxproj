@@ -89,6 +89,7 @@
 		479EDD562CFF204200C67B76 /* AuthViewModel.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCE22CFF204200C67B76 /* AuthViewModel.kt */; };
 		479EDD572CFF204200C67B76 /* ImageManager.kt in Resources */ = {isa = PBXBuildFile; fileRef = 479EDCEB2CFF204200C67B76 /* ImageManager.kt */; };
 		47A97BD02D07A939000BDCCC /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 47A97BCF2D07A939000BDCCC /* SDWebImageSwiftUI */; };
+		47BD96A92D410E3300A94750 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47BD96A82D410E2900A94750 /* Secrets.plist */; };
 		47DC66722D08448400B94A61 /* ProfileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DC66712D08447B00B94A61 /* ProfileRow.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
@@ -169,6 +170,7 @@
 		479EDD122CFF204200C67B76 /* FavoriteTracksAction.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksAction.kt; sourceTree = "<group>"; };
 		479EDD132CFF204200C67B76 /* FavoriteTracksState.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksState.kt; sourceTree = "<group>"; };
 		479EDD142CFF204200C67B76 /* FavoriteTracksViewModel.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoriteTracksViewModel.kt; sourceTree = "<group>"; };
+		47BD96A82D410E2900A94750 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Secrets.plist; sourceTree = "<group>"; };
 		47DC66712D08447B00B94A61 /* ProfileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRow.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* KMP-Spotify-Janitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KMP-Spotify-Janitor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -700,6 +702,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				47BD96A82D410E2900A94750 /* Secrets.plist */,
 				478CE17D2D1194A900A34D77 /* ShowMoreButton.swift */,
 				479EDCA22CFF149E00C67B76 /* KMPObservableViewModel.swift */,
 				47035E692CFDE9DF00ABD3F3 /* components */,
@@ -818,6 +821,7 @@
 				479EDD2A2CFF204200C67B76 /* SpotifyUserRepositoryImpl.kt in Resources */,
 				479EDD2C2CFF204200C67B76 /* SpotifyUserDao.kt in Resources */,
 				479EDD2D2CFF204200C67B76 /* KVaultFactory.kt in Resources */,
+				47BD96A92D410E3300A94750 /* Secrets.plist in Resources */,
 				479EDD2F2CFF204200C67B76 /* UserProfileState.kt in Resources */,
 				479EDD302CFF204200C67B76 /* SpotifyUserMappers.kt in Resources */,
 				479EDD312CFF204200C67B76 /* Result.kt in Resources */,

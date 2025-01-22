@@ -25,8 +25,16 @@ struct AuthView: View {
     var viewModel = KoinDependencies.shared.getAuthViewModel()
     
     
-    private let clientID = "91be3576121a482e9ad00bb97888f3e8"
-    private let redirectURI = URL(string: "org.internship.kmp.martin://callback")!
+    private var clientID: String {
+            Bundle.main.value(for: "CLIENT_ID") ?? ""
+        }
+    
+    private var redirectURI: URL {
+            if let uriString = Bundle.main.value(for: "REDIRECT_URI") {
+                return URL(string: uriString) ?? URL(string: "https://default-fallback-uri.com")!
+            }
+            return URL(string: "https://default-fallback-uri.com")!
+        }
 
     
     var body: some View {
@@ -149,9 +157,20 @@ class PresentationContextProvider: NSObject, ASWebAuthenticationPresentationCont
     }
 }
 
+extension Bundle {
+    func value(for key: String) -> String? {
+        guard let path = self.path(forResource: "Secrets", ofType: "plist"),
+              let dictionary = NSDictionary(contentsOfFile: path) else {
+            return nil
+        }
+        return dictionary[key] as? String
+    }
+}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         AuthView()
     }
 }
+

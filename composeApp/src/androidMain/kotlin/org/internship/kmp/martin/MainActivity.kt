@@ -10,6 +10,7 @@ import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type.ERROR
+import com.spotify.sdk.android.auth.BuildConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,8 +24,8 @@ import org.koin.compose.koinInject
 
 
 class MainActivity : ComponentActivity() {
-    private val CLIENT_ID = "91be3576121a482e9ad00bb97888f3e8"
-    private val REDIRECT_URI = "org.internship.kmp.martin://callback"
+    private val CLIENT_ID = org.internship.kmp.martin.BuildConfig.CLIENT_ID
+    private val REDIRECT_URI = org.internship.kmp.martin.BuildConfig.REDIRECT_URI
 
     private var isAuthenticated = MutableStateFlow(false)
 
