@@ -15,3 +15,7 @@ ios.xcworkspace/
 .DS_Store
 .externalNativeBuild
 .kotlin
+
+.idea
+secrets.properties
+Secrets.plist
